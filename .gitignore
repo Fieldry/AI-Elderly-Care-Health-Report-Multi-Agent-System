@@ -21,6 +21,7 @@ __pycache__/
 # Runtime and download caches
 corpora/
 logs/
+workspace/
 # 大数据文件（Excel原始数据）
 data/*.xlsx
 data/*.csv
