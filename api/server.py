@@ -332,6 +332,14 @@ async def lifespan(app: FastAPI):
         # 初始化对话管理器
         conversation_manager = ConversationManager(db_path=db_path)
 
+        # 初始化家属端管理器
+        from memory.family_caregiver_manager import FamilyCaregiverManager
+        family_manager = FamilyCaregiverManager(db_path=db_path)
+        
+        # 设置全局 family_manager
+        from api.family_routes import set_family_manager
+        set_family_manager(family_manager)
+
         # 初始化工作区管理器
         backend_root = Path(__file__).parent.parent
         workspace_manager = WorkspaceManager(base_dir=str(backend_root / "workspace"))
