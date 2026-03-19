@@ -35,7 +35,7 @@ class WorkspaceManager:
     def save_report(self, session_id: str, report_data: Dict[str, Any], format: str = "json") -> Path:
         """保存报告文件"""
         session_dir = self.get_session_dir(session_id)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         filename = f"report_{timestamp}.{format}"
         filepath = session_dir / filename
         with open(filepath, 'w', encoding='utf-8') as f:

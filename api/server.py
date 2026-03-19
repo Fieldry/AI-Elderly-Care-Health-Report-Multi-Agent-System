@@ -36,11 +36,19 @@ sys.path.insert(0, str(api_dir))
 sys.path.insert(0, str(core_dir))
 
 from auth_routes import auth_router
+from auth_service import AuthService, ELDERLY_ROLE
+from elderly_routes import elderly_router
 from family_routes import family_router
 from mappers import to_backend_profile, to_frontend_report_data
 from memory.conversation_manager import ConversationManager, SessionState
 from memory.family_caregiver_manager import FamilyCaregiverManager
-from report_utils import profile_to_dict, save_report_bundle
+from report_utils import (
+    list_reports_for_user,
+    load_report_payload,
+    profile_to_dict,
+    resolve_report_owner,
+    save_report_bundle,
+)
 from schemas import (
     AgentStatusEvent,
     ChatMessageRequest,
@@ -50,6 +58,13 @@ from schemas import (
     ReportData,
     ReportGenerateByElderlyResponse,
     ReportGenerateRequest,
+)
+from security import (
+    ensure_actor_can_access_session,
+    ensure_actor_can_access_user,
+    require_authenticated_actor,
+    require_elderly_session_access,
+    require_state,
 )
 from workspace_manager import WorkspaceManager
 
@@ -118,13 +133,6 @@ def _env_first(*names: str, default: str = "") -> str:
         if value is not None and value.strip():
             return value.strip()
     return default
-
-
-def _require_state(request: Request, attr: str, error_message: str):
-    manager = getattr(request.app.state, attr, None)
-    if manager is None:
-        raise HTTPException(status_code=500, detail=error_message)
-    return manager
 
 
 def _require_ws_state(websocket: WebSocket, attr: str, error_message: str):
@@ -231,6 +239,30 @@ async def _run_report_workflow(
     return await asyncio.to_thread(conversation_manager.orchestrator.run, profile, False)
 
 
+def _visible_user_ids_for_actor(request: Request, actor) -> set[str]:
+    if actor.role == ELDERLY_ROLE:
+        return {actor.subject_id}
+    auth_service = require_state(request, "auth_service", "认证服务未初始化")
+    return set(auth_service.list_family_elderly_ids(actor.subject_id))
+
+
+def _load_accessible_report_payload(request: Request, report_id: str) -> Dict[str, Any]:
+    actor = require_authenticated_actor(request)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
+    payload = load_report_payload(report_id, reports_dir, workspace_manager)
+    if payload is None:
+        raise HTTPException(status_code=404, detail="报告不存在")
+
+    owner_id = resolve_report_owner(payload, workspace_manager)
+    if owner_id is None:
+        raise HTTPException(status_code=404, detail="报告归属缺失")
+
+    if owner_id not in _visible_user_ids_for_actor(request, actor):
+        raise HTTPException(status_code=403, detail="无权访问该报告")
+    return payload
+
+
 def build_google_speech_config(language_code: Optional[str] = None):
     if GoogleSpeechStreamConfig is None:
         raise GoogleSpeechStreamError(
@@ -283,6 +315,8 @@ async def lifespan(app: FastAPI):
     app.state.conversation_manager = ConversationManager(db_path=DB_PATH)
     app.state.family_manager = FamilyCaregiverManager(db_path=DB_PATH)
     app.state.workspace_manager = WorkspaceManager(base_dir=str(Path(__file__).parent.parent / "workspace"))
+    app.state.auth_service = AuthService(db_path=DB_PATH)
+    app.state.reports_dir = REPORTS_DIR
 
     print("✓ FastAPI 服务器已启动")
     print(f"✓ 数据库路径: {DB_PATH}")
@@ -315,14 +349,16 @@ report_router = APIRouter(prefix="/report")
 
 @chat_router.post("/start", response_model=ChatStartResponse)
 async def start_chat(request: Request) -> ChatStartResponse:
-    """开始新的健康评估对话。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
+    """开始新的健康评估对话，并签发老人访问 token。"""
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    auth_service = require_state(request, "auth_service", "认证服务未初始化")
 
     user_id = conversation_manager.new_user()
     session_id = conversation_manager.new_session(user_id)
     result = conversation_manager.chat(session_id, "")
     history = conversation_manager.get_history(session_id)
+    issued_token = auth_service.issue_elderly_token(user_id)
 
     _persist_workspace_snapshot(
         workspace_manager,
@@ -336,13 +372,17 @@ async def start_chat(request: Request) -> ChatStartResponse:
         userId=user_id,
         sessionId=session_id,
         welcomeMessage=result.get("reply", "您好！我是AI养老健康助手。"),
+        accessToken=issued_token.token,
+        userType=ELDERLY_ROLE,
+        expiresAt=issued_token.expires_at,
     )
 
 
 @chat_router.post("/message", response_model=ChatMessageResponse)
 async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMessageResponse:
     """发送聊天消息。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
+    _, owner_user_id = require_elderly_session_access(request, payload.sessionId)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
     workspace_manager = getattr(request.app.state, "workspace_manager", None)
 
     try:
@@ -356,15 +396,13 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
     completed = state == SessionState.REPORT_DONE
 
     if workspace_manager is not None:
-        session = conversation_manager.store.get_session(payload.sessionId)
-        if session is not None:
-            _persist_workspace_snapshot(
-                workspace_manager,
-                payload.sessionId,
-                session["user_id"],
-                profile=conversation_manager.get_profile(payload.sessionId),
-                history=conversation_manager.get_history(payload.sessionId),
-            )
+        _persist_workspace_snapshot(
+            workspace_manager,
+            payload.sessionId,
+            owner_user_id,
+            profile=conversation_manager.get_profile(payload.sessionId),
+            history=conversation_manager.get_history(payload.sessionId),
+        )
 
     return ChatMessageResponse(
         message=result.get("reply", ""),
@@ -376,18 +414,17 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
 
 @chat_router.get("/history/{session_id}")
 async def get_chat_history(request: Request, session_id: str) -> List[Dict[str, Any]]:
-    """获取对话历史。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
-    session = conversation_manager.store.get_session(session_id)
-    if session is None:
-        raise HTTPException(status_code=404, detail="会话不存在")
+    """获取会话历史。"""
+    require_elderly_session_access(request, session_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
     return _serialize_history(conversation_manager.store.get_session_history(session_id))
 
 
 @chat_router.get("/progress/{session_id}", response_model=ChatProgressResponse)
 async def get_chat_progress(request: Request, session_id: str) -> ChatProgressResponse:
     """获取会话当前进度。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
+    require_elderly_session_access(request, session_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
 
     try:
         progress = conversation_manager.get_progress(session_id)
@@ -408,7 +445,8 @@ async def get_chat_progress(request: Request, session_id: str) -> ChatProgressRe
 @chat_router.get("/profile/{session_id}")
 async def get_chat_profile(request: Request, session_id: str) -> Dict[str, Any]:
     """获取会话当前用户画像。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
+    require_elderly_session_access(request, session_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
 
     try:
         profile = conversation_manager.get_profile(session_id)
@@ -425,15 +463,25 @@ async def get_chat_profile(request: Request, session_id: str) -> Dict[str, Any]:
 @chat_router.get("/stream")
 async def stream_chat(request: Request, message: str, sessionId: str):
     """流式聊天 (SSE)。"""
+    _, owner_user_id = require_elderly_session_access(request, sessionId)
 
     async def event_generator() -> AsyncGenerator[str, None]:
         conversation_manager = getattr(request.app.state, "conversation_manager", None)
+        workspace_manager = getattr(request.app.state, "workspace_manager", None)
         if conversation_manager is None:
             yield f"data: {json.dumps({'error': '对话管理器未初始化'})}\n\n"
             return
 
         try:
             result = conversation_manager.chat(sessionId, message)
+            if workspace_manager is not None:
+                _persist_workspace_snapshot(
+                    workspace_manager,
+                    sessionId,
+                    owner_user_id,
+                    profile=conversation_manager.get_profile(sessionId),
+                    history=conversation_manager.get_history(sessionId),
+                )
             reply = result.get("reply", "")
             for char in reply:
                 yield f"data: {json.dumps({'content': char})}\n\n"
@@ -539,30 +587,35 @@ async def stream_speech_to_text(websocket: WebSocket):
 @report_router.post("/generate", response_model=ReportData)
 async def generate_report(request: Request, payload: ReportGenerateRequest) -> ReportData:
     """根据给定画像生成标准报告。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
-    workspace_manager = getattr(request.app.state, "workspace_manager", None)
+    require_authenticated_actor(request)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
+
+    if not payload.sessionId:
+        raise HTTPException(status_code=400, detail="生成报告必须提供 sessionId")
+
+    _, session_owner_id = ensure_actor_can_access_session(request, payload.sessionId)
 
     try:
         profile = to_backend_profile(payload.profile)
         results = await _run_report_workflow(conversation_manager, profile)
         report_data = to_frontend_report_data(results)
         save_report_bundle(
-            reports_dir=REPORTS_DIR,
+            reports_dir=reports_dir,
             workspace_manager=workspace_manager,
             profile=profile_to_dict(profile),
             results=results,
             report_data=report_data,
             session_id=payload.sessionId,
+            user_id=session_owner_id,
         )
-        if payload.sessionId and workspace_manager is not None:
-            session = conversation_manager.store.get_session(payload.sessionId)
-            if session is not None:
-                _persist_workspace_snapshot(
-                    workspace_manager,
-                    payload.sessionId,
-                    session["user_id"],
-                    profile=profile_to_dict(profile),
-                )
+        _persist_workspace_snapshot(
+            workspace_manager,
+            payload.sessionId,
+            session_owner_id,
+            profile=profile_to_dict(profile),
+        )
         return ReportData(**report_data)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"生成报告失败: {exc}") from exc
@@ -571,10 +624,16 @@ async def generate_report(request: Request, payload: ReportGenerateRequest) -> R
 @report_router.post("/stream")
 async def stream_report(request: Request, payload: ReportGenerateRequest):
     """流式生成报告 (SSE)。"""
+    require_authenticated_actor(request)
+    if not payload.sessionId:
+        raise HTTPException(status_code=400, detail="生成报告必须提供 sessionId")
+
+    _, session_owner_id = ensure_actor_can_access_session(request, payload.sessionId)
 
     async def event_generator() -> AsyncGenerator[str, None]:
         conversation_manager = getattr(request.app.state, "conversation_manager", None)
-        workspace_manager = getattr(request.app.state, "workspace_manager", None)
+        workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+        reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
         if conversation_manager is None:
             yield f"data: {json.dumps({'type': 'error', 'data': {'message': '对话管理器未初始化'}})}\n\n"
             return
@@ -662,12 +721,19 @@ async def stream_report(request: Request, payload: ReportGenerateRequest):
 
             report_data = to_frontend_report_data(results)
             save_report_bundle(
-                reports_dir=REPORTS_DIR,
+                reports_dir=reports_dir,
                 workspace_manager=workspace_manager,
                 profile=profile_dict,
                 results=results,
                 report_data=report_data,
                 session_id=payload.sessionId,
+                user_id=session_owner_id,
+            )
+            _persist_workspace_snapshot(
+                workspace_manager,
+                payload.sessionId,
+                session_owner_id,
+                profile=profile_dict,
             )
 
             report_text = str(results.get("report") or "")
@@ -701,8 +767,10 @@ async def generate_report_for_elderly(
     profile_data: Dict[str, Any],
 ) -> ReportGenerateByElderlyResponse:
     """合并老人画像并生成报告。"""
-    conversation_manager = _require_state(request, "conversation_manager", "对话管理器未初始化")
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
+    ensure_actor_can_access_user(request, elderly_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
     store = conversation_manager.store
 
     if not store.user_exists(elderly_id):
@@ -729,12 +797,13 @@ async def generate_report_for_elderly(
         results = await _run_report_workflow(conversation_manager, merged_profile)
         report_data = to_frontend_report_data(results)
         payload = save_report_bundle(
-            reports_dir=REPORTS_DIR,
+            reports_dir=reports_dir,
             workspace_manager=workspace_manager,
             profile=profile_to_dict(merged_profile),
             results=results,
             report_data=report_data,
             session_id=session_id,
+            user_id=elderly_id,
         )
 
         return ReportGenerateByElderlyResponse(
@@ -748,32 +817,10 @@ async def generate_report_for_elderly(
         raise HTTPException(status_code=500, detail=f"报告生成失败: {exc}") from exc
 
 
-def _load_report_payload(report_id: str, workspace_manager: WorkspaceManager | None) -> Dict[str, Any] | None:
-    for report_file in REPORTS_DIR.rglob("*.json"):
-        with open(report_file, "r", encoding="utf-8") as file_obj:
-            payload = json.load(file_obj)
-        if payload.get("report_id") == report_id:
-            return payload
-
-    if workspace_manager is None:
-        return None
-
-    for session_id in workspace_manager.list_sessions():
-        for report_file in workspace_manager.get_report_files(session_id):
-            with open(report_file, "r", encoding="utf-8") as file_obj:
-                payload = json.load(file_obj)
-            if payload.get("report_id") == report_id:
-                return payload
-    return None
-
-
 @report_router.get("/{report_id}")
 async def get_report(request: Request, report_id: str) -> ReportData:
-    """根据报告 ID 返回标准化报告数据。"""
-    workspace_manager = getattr(request.app.state, "workspace_manager", None)
-    payload = _load_report_payload(report_id, workspace_manager)
-    if payload is None:
-        raise HTTPException(status_code=404, detail="报告不存在")
+    """根据报告 ID 返回当前登录主体可访问的标准化报告。"""
+    payload = _load_accessible_report_payload(request, report_id)
     report_data = payload.get("report_data")
     if not isinstance(report_data, dict):
         raise HTTPException(status_code=404, detail="报告不存在")
@@ -781,20 +828,23 @@ async def get_report(request: Request, report_id: str) -> ReportData:
 
 
 @report_router.get("/{report_id}/export/pdf")
-async def export_report_pdf(report_id: str):
+async def export_report_pdf(request: Request, report_id: str):
     """导出报告为 PDF。"""
+    _load_accessible_report_payload(request, report_id)
     raise HTTPException(status_code=501, detail="PDF 导出功能待实现")
 
 
 @api_router.get("/sessions")
 async def list_sessions(request: Request):
-    """获取所有会话列表。"""
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
+    """获取当前主体可见的会话列表。"""
+    actor = require_authenticated_actor(request)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
 
+    visible_user_ids = _visible_user_ids_for_actor(request, actor)
     sessions_metadata = []
     for session_id in workspace_manager.list_sessions():
         metadata = workspace_manager.get_session_metadata(session_id)
-        if metadata:
+        if metadata and metadata.get("user_id") in visible_user_ids:
             sessions_metadata.append(metadata)
     sessions_metadata.sort(key=lambda item: item.get("created_at", ""), reverse=True)
     return {"sessions": sessions_metadata}
@@ -802,11 +852,12 @@ async def list_sessions(request: Request):
 
 @api_router.get("/sessions/{session_id}")
 async def get_session(request: Request, session_id: str):
-    """获取指定会话的完整数据。"""
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
+    """获取当前主体可见的指定会话数据。"""
+    _, owner_user_id = ensure_actor_can_access_session(request, session_id)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
 
     metadata = workspace_manager.get_session_metadata(session_id)
-    if not metadata:
+    if not metadata or metadata.get("user_id") != owner_user_id:
         raise HTTPException(status_code=404, detail="会话不存在")
 
     return {
@@ -820,14 +871,20 @@ async def get_session(request: Request, session_id: str):
 @api_router.post("/sessions/{session_id}/profile")
 async def save_session_profile(request: Request, session_id: str, profile: Dict[str, Any]):
     """保存用户画像到工作区。"""
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
-    conversation_manager = getattr(request.app.state, "conversation_manager", None)
+    _, owner_user_id = ensure_actor_can_access_session(request, session_id)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
 
     workspace_manager.save_user_profile(session_id, profile)
 
-    session = conversation_manager.store.get_session(session_id) if conversation_manager is not None else None
+    session = conversation_manager.store.get_session(session_id)
     if session is not None:
-        _ensure_workspace_metadata(workspace_manager, session_id, session["user_id"], created_at=session.get("created_at"))
+        _ensure_workspace_metadata(
+            workspace_manager,
+            session_id,
+            owner_user_id,
+            created_at=session.get("created_at"),
+        )
     workspace_manager.update_metadata(session_id, {"has_profile": True})
 
     return {"success": True}
@@ -836,7 +893,8 @@ async def save_session_profile(request: Request, session_id: str, profile: Dict[
 @api_router.delete("/sessions/{session_id}")
 async def delete_session(request: Request, session_id: str):
     """删除指定会话。"""
-    workspace_manager = _require_state(request, "workspace_manager", "工作区管理器未初始化")
+    ensure_actor_can_access_session(request, session_id)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
     deleted = workspace_manager.delete_session(session_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="会话不存在")
@@ -858,6 +916,7 @@ app.include_router(chat_router)
 app.include_router(report_router)
 app.include_router(auth_router)
 app.include_router(family_router)
+app.include_router(elderly_router)
 
 
 def main():

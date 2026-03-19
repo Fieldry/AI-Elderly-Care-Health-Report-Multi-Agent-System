@@ -85,6 +85,19 @@ def require_family_elderly_access(request: Request, elderly_user_id: str) -> Aut
     return actor
 
 
+def require_elderly_user_access(request: Request, elderly_user_id: str) -> AuthActor:
+    actor = require_elderly_actor(request)
+    if actor.subject_id != elderly_user_id:
+        raise HTTPException(status_code=403, detail="仅老人本人可访问")
+    return actor
+
+
+def require_elderly_session_access(request: Request, session_id: str) -> tuple[AuthActor, str]:
+    owner_user_id = _get_session_owner_user_id(request, session_id)
+    actor = require_elderly_user_access(request, owner_user_id)
+    return actor, owner_user_id
+
+
 def require_family_session_access(request: Request, session_id: str) -> tuple[AuthActor, str]:
     owner_user_id = _get_session_owner_user_id(request, session_id)
     actor = require_family_elderly_access(request, owner_user_id)

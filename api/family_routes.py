@@ -12,33 +12,23 @@ from typing import Any, Dict
 
 from fastapi import APIRouter, HTTPException, Request
 
+from report_utils import list_reports_for_user
+from security import (
+    require_family_actor,
+    require_family_elderly_access,
+    require_family_session_access,
+    require_state,
+)
+
 
 family_router = APIRouter(prefix="/family")
 
 
-def _require_state(request: Request, attr: str, error_message: str):
-    manager = getattr(request.app.state, attr, None)
-    if manager is None:
-        raise HTTPException(status_code=500, detail=error_message)
-    return manager
-
-
-def _get_family_manager(request: Request):
-    return _require_state(request, "family_manager", "家属管理器未初始化")
-
-
-def _get_conversation_manager(request: Request):
-    return _require_state(request, "conversation_manager", "对话管理器未初始化")
-
-
-def _get_workspace_manager(request: Request):
-    return _require_state(request, "workspace_manager", "工作区管理器未初始化")
-
-
 @family_router.post("/session/start/{elderly_id}")
 async def start_family_session(request: Request, elderly_id: str):
-    """为老人启动家属端评估会话。"""
-    family_manager = _get_family_manager(request)
+    """为已绑定老人启动家属端评估会话。"""
+    require_family_elderly_access(request, elderly_id)
+    family_manager = require_state(request, "family_manager", "家属管理器未初始化")
 
     try:
         session_id = family_manager.new_family_session(elderly_id)
@@ -67,7 +57,8 @@ async def start_family_session(request: Request, elderly_id: str):
 @family_router.post("/session/{session_id}/message")
 async def send_family_message(request: Request, session_id: str, message: Dict[str, str]):
     """发送家属消息。"""
-    family_manager = _get_family_manager(request)
+    require_family_session_access(request, session_id)
+    family_manager = require_state(request, "family_manager", "家属管理器未初始化")
 
     content = str(message.get("content") or "").strip()
     if not content:
@@ -84,7 +75,8 @@ async def send_family_message(request: Request, session_id: str, message: Dict[s
 @family_router.get("/session/{session_id}/info")
 async def get_family_session_info(request: Request, session_id: str):
     """获取家属会话信息。"""
-    family_manager = _get_family_manager(request)
+    require_family_session_access(request, session_id)
+    family_manager = require_state(request, "family_manager", "家属管理器未初始化")
 
     try:
         return family_manager.get_session_info(session_id)
@@ -96,31 +88,39 @@ async def get_family_session_info(request: Request, session_id: str):
 
 @family_router.get("/elderly-list")
 async def get_elderly_list(request: Request):
-    """获取所有老年人列表（家属端）。"""
-    conversation_manager = _get_conversation_manager(request)
+    """获取当前家属已绑定的老人列表。"""
+    actor = require_family_actor(request)
+    auth_service = require_state(request, "auth_service", "认证服务未初始化")
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
     store = conversation_manager.store
+
+    relations = auth_service.list_family_relations(actor.subject_id)
+    if not relations:
+        return {"data": []}
 
     try:
         conn = sqlite3.connect(store.db_path)
         conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute("SELECT user_id, profile, created_at, updated_at FROM users ORDER BY updated_at DESC")
-        rows = cursor.fetchall()
-        conn.close()
-
         elderly_list = []
-        for row in rows:
+        for relation in relations:
+            elderly_id = relation["elderly_user_id"]
+            row = conn.execute(
+                "SELECT profile, created_at, updated_at FROM users WHERE user_id = ?",
+                (elderly_id,),
+            ).fetchone()
+            if row is None:
+                continue
             profile = json.loads(row["profile"]) if row["profile"] else {}
             elderly_list.append(
                 {
-                    "elderly_id": row["user_id"],
+                    "elderly_id": elderly_id,
                     "name": profile.get("name", "未命名"),
-                    "relation": "家庭成员",
-                    "completion_rate": store.get_completion_rate(row["user_id"]),
+                    "relation": relation.get("relation") or "家庭成员",
+                    "completion_rate": store.get_completion_rate(elderly_id),
                     "created_at": row["created_at"] or row["updated_at"] or datetime.now().isoformat(),
                 }
             )
-
+        conn.close()
         return {"data": elderly_list}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"获取列表失败: {exc}") from exc
@@ -128,8 +128,9 @@ async def get_elderly_list(request: Request):
 
 @family_router.get("/elderly/{elderly_id}")
 async def get_elderly_detail(request: Request, elderly_id: str):
-    """获取老年人详细信息。"""
-    conversation_manager = _get_conversation_manager(request)
+    """获取已绑定老年人详细信息。"""
+    require_family_elderly_access(request, elderly_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
     profile = conversation_manager.store.get_profile(elderly_id)
     if not profile:
         raise HTTPException(status_code=404, detail="老年人不存在")
@@ -142,9 +143,10 @@ async def get_elderly_detail(request: Request, elderly_id: str):
 
 @family_router.put("/elderly/{elderly_id}")
 async def update_elderly_info(request: Request, elderly_id: str, updates: Dict[str, Any]):
-    """更新老年人信息。"""
-    conversation_manager = _get_conversation_manager(request)
-    workspace_manager = _get_workspace_manager(request)
+    """更新已绑定老人的画像。"""
+    require_family_elderly_access(request, elderly_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
     store = conversation_manager.store
 
     if not store.user_exists(elderly_id):
@@ -166,40 +168,15 @@ async def update_elderly_info(request: Request, elderly_id: str, updates: Dict[s
 
 @family_router.get("/reports/{elderly_id}")
 async def get_elderly_reports(request: Request, elderly_id: str):
-    """获取老年人的所有报告。"""
-    conversation_manager = _get_conversation_manager(request)
-    workspace_manager = _get_workspace_manager(request)
+    """获取当前家属可见的某位老人的所有报告。"""
+    require_family_elderly_access(request, elderly_id)
+    conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
 
     if not conversation_manager.store.user_exists(elderly_id):
         raise HTTPException(status_code=404, detail="老年人不存在")
 
     try:
-        reports = []
-        for metadata in workspace_manager.find_sessions_by_user(elderly_id):
-            session_id = metadata.get("session_id")
-            if not session_id:
-                continue
-
-            for report_file in workspace_manager.get_report_files(session_id):
-                with open(report_file, "r", encoding="utf-8") as file_obj:
-                    content = json.load(file_obj)
-
-                report_data = content.get("report_data") if isinstance(content, dict) else {}
-                title = "健康评估报告"
-                if isinstance(report_data, dict):
-                    title = report_data.get("summary") or title
-
-                reports.append(
-                    {
-                        "id": content.get("report_id", report_file.stem),
-                        "title": title,
-                        "created_at": content.get("generated_at")
-                        or datetime.fromtimestamp(report_file.stat().st_mtime).isoformat(),
-                        "content": content,
-                    }
-                )
-
-        reports.sort(key=lambda item: item.get("created_at") or "", reverse=True)
-        return {"data": reports}
+        return {"data": list_reports_for_user(workspace_manager, elderly_id)}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"获取报告失败: {exc}") from exc
