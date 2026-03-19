@@ -8,6 +8,9 @@ class ChatStartResponse(BaseModel):
     userId: str
     sessionId: str
     welcomeMessage: str
+    accessToken: Optional[str] = None
+    userType: Optional[str] = None
+    expiresAt: Optional[str] = None
 
 
 class ChatMessageRequest(BaseModel):
@@ -40,6 +43,19 @@ class ChatHistoryMessage(BaseModel):
 class ReportGenerateRequest(BaseModel):
     profile: Dict[str, Any] = Field(default_factory=dict)
     sessionId: Optional[str] = None
+
+
+class FamilyRegisterRequest(BaseModel):
+    name: str
+    phone: str
+    password: str
+    elderlyId: str
+    relation: str = "家属"
+
+
+class FamilyBindRequest(BaseModel):
+    elderlyId: str
+    relation: str = "家属"
 
 
 class RiskItem(BaseModel):
@@ -80,3 +96,12 @@ class AgentStatusEvent(BaseModel):
 class LoginRequest(BaseModel):
     phone: str
     password: str
+
+
+class AuthResponse(BaseModel):
+    token: str
+    expires_at: str
+    user_name: str
+    role: str
+    family_id: Optional[str] = None
+    elderly_ids: List[str] = Field(default_factory=list)
