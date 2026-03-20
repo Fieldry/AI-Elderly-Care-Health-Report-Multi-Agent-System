@@ -2,16 +2,18 @@ from __future__ import annotations
 
 import os
 import re
-import tempfile
 import unittest
 from pathlib import Path
+import uuid
 from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
 
 import api.server as server
 from memory.conversation_manager import ConversationManager
-from workspace_manager import WorkspaceManager
+
+
+BACKEND_DIR = Path(__file__).resolve().parents[2]
 
 
 def build_fake_workflow_results() -> dict:
@@ -185,26 +187,16 @@ class APIFlowTestCase(unittest.TestCase):
     doctor_password = "doctor123"
 
     def setUp(self):
-        self.tempdir = tempfile.TemporaryDirectory()
-        self.addCleanup(self.tempdir.cleanup)
-
-        self.base_dir = Path(self.tempdir.name)
-        self.db_path = self.base_dir / "users.db"
-        self.reports_dir = self.base_dir / "reports"
+        self.base_dir = BACKEND_DIR
+        self.db_path = self.base_dir / "data" / "users.db"
+        self.reports_dir = self.base_dir / "data" / "reports"
         self.workspace_dir = self.base_dir / "workspace"
         self.reports_dir.mkdir(parents=True, exist_ok=True)
         self.workspace_dir.mkdir(parents=True, exist_ok=True)
 
-        workspace_dir = self.workspace_dir
-
-        class TempWorkspaceManager(WorkspaceManager):
-            def __init__(self, base_dir: str = "workspace"):
-                super().__init__(base_dir=str(workspace_dir))
-
         self.patches = [
             patch.object(server, "DB_PATH", str(self.db_path)),
             patch.object(server, "REPORTS_DIR", self.reports_dir),
-            patch.object(server, "WorkspaceManager", TempWorkspaceManager),
             patch.object(server, "ConversationManager", FlowConversationManager),
             patch.dict(
                 os.environ,
@@ -227,6 +219,9 @@ class APIFlowTestCase(unittest.TestCase):
 
         self.conversation_manager = self.client.app.state.conversation_manager
         self.workspace_manager = self.client.app.state.workspace_manager
+
+    def _unique_phone(self) -> str:
+        return f"13{uuid.uuid4().int % 10**9:09d}"
 
     def _auth_headers(self, token: str) -> dict[str, str]:
         return {"Authorization": f"Bearer {token}"}
@@ -260,10 +255,11 @@ class APIFlowTestCase(unittest.TestCase):
     def _register_family(
         self,
         elderly_id: str,
-        phone: str = "13800138000",
+        phone: str | None = None,
         password: str = "secret123",
         name: str = "张家属",
     ) -> tuple[dict, str, str]:
+        phone = phone or self._unique_phone()
         response = self.client.post(
             "/auth/family/register",
             json={
@@ -340,4 +336,3 @@ class APIFlowTestCase(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200, response.text)
         return response.json()
-

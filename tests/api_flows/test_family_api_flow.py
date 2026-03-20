@@ -10,10 +10,7 @@ class FamilyApiFlowTestCase(APIFlowTestCase):
         elderly_one = self._start_chat()
         elderly_two = self._start_chat()
 
-        register_body, phone, password = self._register_family(
-            elderly_one["userId"],
-            phone="13800138010",
-        )
+        register_body, phone, password = self._register_family(elderly_one["userId"])
         self.assertEqual(register_body["role"], "family")
         self.assertEqual(register_body["elderly_ids"], [elderly_one["userId"]])
 
@@ -155,10 +152,7 @@ class FamilyApiFlowTestCase(APIFlowTestCase):
     def test_family_cannot_access_unbound_elderly_resources(self):
         elderly_one = self._start_chat()
         elderly_two = self._start_chat()
-        register_body, _, _ = self._register_family(
-            elderly_one["userId"],
-            phone="13800138011",
-        )
+        register_body, _, _ = self._register_family(elderly_one["userId"])
         family_token = register_body["token"]
 
         other_report = self._generate_report_for_elderly(

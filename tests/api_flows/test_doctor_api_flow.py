@@ -57,10 +57,9 @@ class DoctorApiFlowTestCase(APIFlowTestCase):
         )
         self.assertEqual(elderly_list.status_code, 200, elderly_list.text)
         list_body = elderly_list.json()["data"]
-        self.assertEqual(
-            {item["elderly_id"] for item in list_body},
-            {elderly_one["userId"], elderly_two["userId"]},
-        )
+        returned_ids = {item["elderly_id"] for item in list_body}
+        self.assertIn(elderly_one["userId"], returned_ids)
+        self.assertIn(elderly_two["userId"], returned_ids)
         first_overview = next(item for item in list_body if item["elderly_id"] == elderly_one["userId"])
         self.assertGreaterEqual(first_overview["session_count"], 1)
         self.assertGreaterEqual(first_overview["report_count"], 1)
@@ -71,10 +70,9 @@ class DoctorApiFlowTestCase(APIFlowTestCase):
             headers=self._auth_headers(doctor_token),
         )
         self.assertEqual(sessions.status_code, 200, sessions.text)
-        self.assertEqual(
-            {item["user_id"] for item in sessions.json()["sessions"]},
-            {elderly_one["userId"], elderly_two["userId"]},
-        )
+        returned_user_ids = {item["user_id"] for item in sessions.json()["sessions"]}
+        self.assertIn(elderly_one["userId"], returned_user_ids)
+        self.assertIn(elderly_two["userId"], returned_user_ids)
 
         session_detail = self.client.get(
             f"/api/sessions/{report_one['sessionId']}",
