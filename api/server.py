@@ -38,6 +38,7 @@ sys.path.insert(0, str(core_dir))
 from auth_routes import auth_router
 from auth_service import AuthService, DOCTOR_ROLE, ELDERLY_ROLE
 from doctor_routes import doctor_router
+from doctor_service import DoctorService
 from elderly_routes import elderly_router
 from family_routes import family_router
 from mappers import to_backend_profile, to_frontend_report_data
@@ -321,6 +322,7 @@ async def lifespan(app: FastAPI):
     app.state.family_manager = FamilyCaregiverManager(db_path=DB_PATH)
     app.state.workspace_manager = WorkspaceManager(base_dir=str(Path(__file__).parent.parent / "workspace"))
     app.state.auth_service = AuthService(db_path=DB_PATH)
+    app.state.doctor_service = DoctorService(db_path=DB_PATH)
     app.state.reports_dir = REPORTS_DIR
 
     print("✓ FastAPI 服务器已启动")

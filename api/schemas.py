@@ -106,3 +106,23 @@ class AuthResponse(BaseModel):
     role: str
     family_id: Optional[str] = None
     elderly_ids: List[str] = Field(default_factory=list)
+
+
+class DoctorFollowupCreateRequest(BaseModel):
+    visitType: str
+    findings: str
+    recommendations: List[str] = Field(default_factory=list)
+    contactedFamily: bool = False
+    arrangedRevisit: bool = False
+    referred: bool = False
+    nextFollowupAt: Optional[str] = None
+    notes: str = ""
+
+
+class DoctorManagementUpdateRequest(BaseModel):
+    isKeyCase: Optional[bool] = None
+    managementStatus: Optional[str] = None
+    contactedFamily: Optional[bool] = None
+    arrangedRevisit: Optional[bool] = None
+    referred: Optional[bool] = None
+    nextFollowupAt: Optional[str] = None
