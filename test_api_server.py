@@ -66,6 +66,27 @@ def build_fake_workflow_results() -> dict:
             "priority_b": [],
             "priority_c": [],
         },
+        "review": {
+            "consistency_check": {
+                "passed": False,
+                "issues": ["风险等级与重点问题之间需要医生复核。"],
+            },
+            "safety_check": {
+                "urgent": False,
+                "urgent_reason": "",
+            },
+            "executability_check": {
+                "passed": True,
+                "issues": [],
+            },
+            "completeness_check": {
+                "passed": True,
+                "missing": [],
+            },
+            "suggestions": ["建议两周后复评步态。"],
+            "overall_quality": "良",
+            "approved": True,
+        },
         "report": "## 1. 健康报告总结\n整体情况需要持续观察。\n\n## 2. 详细分析\n建议加强安全管理。",
     }
 
@@ -483,6 +504,18 @@ class APIServerTestCase(unittest.TestCase):
     def test_doctor_can_login_and_view_all_elderly_sessions_and_reports(self):
         elderly_one = self._start_chat()
         elderly_two = self._start_chat()
+        self.conversation_manager.store.update_profile(
+            elderly_one["userId"],
+            {
+                "age": 82,
+                "sex": "女",
+                "residence": "城市",
+                "living_arrangement": "独居",
+                "hypertension": "是",
+                "diabetes": "是",
+                "depression": "有时",
+            },
+        )
         report_one = self._generate_report_for_elderly(
             elderly_one["userId"],
             elderly_one["accessToken"],
@@ -506,6 +539,12 @@ class APIServerTestCase(unittest.TestCase):
         self.assertEqual(returned_ids, {elderly_one["userId"], elderly_two["userId"]})
         self.assertTrue(all(item["session_count"] >= 1 for item in body["data"]))
         self.assertTrue(all(item["report_count"] >= 1 for item in body["data"]))
+        overview_record = next(item for item in body["data"] if item["elderly_id"] == elderly_one["userId"])
+        self.assertEqual(overview_record["overview"]["current_risk_level"], "high")
+        self.assertIn("高血压", overview_record["overview"]["chronic_conditions"])
+        self.assertEqual(overview_record["management"]["management_status"], "normal")
+        self.assertEqual(overview_record["overview"]["recommended_actions"][0]["title"], "整理居家环境")
+        self.assertFalse(overview_record["overview"]["latest_report_review"]["consistency"]["passed"])
 
         sessions_response = self.client.get(
             "/api/sessions",
@@ -536,6 +575,10 @@ class APIServerTestCase(unittest.TestCase):
         self.assertEqual(detail_body["elderly_id"], elderly_one["userId"])
         self.assertEqual(detail_body["reports"][0]["id"], report_one["reportId"])
         self.assertTrue(detail_body["sessions"])
+        self.assertEqual(detail_body["overview"]["functional_status_level"], "medium")
+        self.assertEqual(detail_body["followups"], [])
+        self.assertEqual(detail_body["overview"]["latest_report_review"]["overall_quality"], "良")
+        self.assertEqual(detail_body["overview"]["latest_report_review"]["summary"], "存在 1 条一致性提示")
 
         shared_report = self.client.get(
             f"/report/{report_one['reportId']}",
@@ -583,6 +626,81 @@ class APIServerTestCase(unittest.TestCase):
             headers=self._auth_headers(doctor_token),
         )
         self.assertEqual(generate_for_elderly.status_code, 403)
+
+    def test_doctor_can_save_followups_and_management_without_mutating_patient_profile(self):
+        elderly = self._start_chat()
+        self.conversation_manager.store.update_profile(
+            elderly["userId"],
+            {
+                "age": 81,
+                "sex": "男",
+                "residence": "农村",
+                "living_arrangement": "与子女同住",
+                "hypertension": "是",
+            },
+        )
+        original_profile = self.conversation_manager.store.get_profile(elderly["userId"])
+        doctor = self._login_doctor()
+        doctor_token = doctor["token"]
+
+        followup_response = self.client.post(
+            f"/doctor/elderly/{elderly['userId']}/followups",
+            json={
+                "visitType": "电话",
+                "findings": "近一周夜间起身增多，家属反馈步态较前变慢。",
+                "recommendations": ["两周内复评步态", "提醒家属加强夜间照护"],
+                "contactedFamily": True,
+                "arrangedRevisit": True,
+                "referred": False,
+                "nextFollowupAt": "2026-04-05T10:00:00",
+                "notes": "建议继续观察夜间如厕风险",
+            },
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(followup_response.status_code, 200, followup_response.text)
+        followup_body = followup_response.json()
+        self.assertEqual(followup_body["visit_type"], "电话")
+        self.assertEqual(followup_body["recommendations"][0], "两周内复评步态")
+
+        management_response = self.client.patch(
+            f"/doctor/elderly/{elderly['userId']}/management",
+            json={
+                "isKeyCase": True,
+                "managementStatus": "priority_follow_up",
+                "contactedFamily": True,
+                "arrangedRevisit": True,
+                "referred": False,
+                "nextFollowupAt": "2026-04-05T10:00:00",
+            },
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(management_response.status_code, 200, management_response.text)
+        management_body = management_response.json()
+        self.assertTrue(management_body["is_key_case"])
+        self.assertEqual(management_body["management_status"], "priority_follow_up")
+
+        followups_response = self.client.get(
+            f"/doctor/elderly/{elderly['userId']}/followups",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(followups_response.status_code, 200, followups_response.text)
+        self.assertEqual(len(followups_response.json()["data"]), 1)
+
+        detail_response = self.client.get(
+            f"/doctor/elderly/{elderly['userId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(detail_response.status_code, 200, detail_response.text)
+        detail_body = detail_response.json()
+        self.assertEqual(detail_body["management"]["management_status"], "priority_follow_up")
+        self.assertEqual(detail_body["followups"][0]["visit_type"], "电话")
+        self.assertEqual(detail_body["overview"]["doctor_management"]["management_status"], "priority_follow_up")
+        self.assertEqual(detail_body["overview"]["latest_followup"]["visit_type"], "电话")
+
+        latest_profile = self.conversation_manager.store.get_profile(elderly["userId"])
+        self.assertEqual(original_profile.age, latest_profile.age)
+        self.assertEqual(original_profile.sex, latest_profile.sex)
+        self.assertEqual(original_profile.hypertension, latest_profile.hypertension)
 
 
 if __name__ == "__main__":
