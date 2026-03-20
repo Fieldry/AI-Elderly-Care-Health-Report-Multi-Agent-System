@@ -1,6 +1,6 @@
 # AI Elderly Care Backend API Guide
 
-> 更新时间：2026-03-19
+> 更新时间：2026-03-20
 >
 > 本文档基于当前 FastAPI 实际路由与后端实现整理，适合前端和联调使用。
 
@@ -12,15 +12,17 @@
 2. 基于多 Agent 的报告生成
 3. 会话工作区管理
 4. 家属账号注册、登录与老人绑定
-5. 基于 token 的访问控制
-6. 语音流式转文字
+5. 医生账号登录与全量老人只读总览
+6. 基于 token 的访问控制
+7. 语音流式转文字
 
 核心文件：
 
 - `api/server.py`：FastAPI 入口与主路由
-- `api/auth_service.py`：家属账号、绑定关系、token 签发与校验
+- `api/auth_service.py`：家属/医生账号、绑定关系、token 签发与校验
 - `api/security.py`：权限校验辅助函数
 - `api/auth_routes.py`：认证接口
+- `api/doctor_routes.py`：医生侧聚合接口
 - `api/family_routes.py`：家属侧接口
 - `api/elderly_routes.py`：老人本人视角接口
 - `core/workspace_manager.py`：工作区文件存储
@@ -89,10 +91,46 @@ Authorization: Bearer <elderly-token>
 Authorization: Bearer <family-token>
 ```
 
-### 2.3 权限规则
+### 2.3 医生端
+
+医生端走独立账号登录：
+
+- `POST /auth/login`
+
+请求体需要显式带：
+
+```json
+{
+  "phone": "13900139000",
+  "password": "doctor123",
+  "role": "doctor"
+}
+```
+
+当前后端不开放医生注册接口，而是在服务启动时读取以下环境变量初始化默认医生账号：
+
+- `DOCTOR_DEFAULT_NAME`
+- `DOCTOR_DEFAULT_PHONE`
+- `DOCTOR_DEFAULT_PASSWORD`
+
+医生登录成功后返回 doctor token：
+
+```json
+{
+  "token": "<doctor-token>",
+  "expires_at": "2026-04-19T08:00:00+00:00",
+  "user_name": "李医生",
+  "role": "doctor",
+  "elderly_ids": []
+}
+```
+
+### 2.4 权限规则
 
 - 老人 token 只能访问自己的会话、画像、报告。
 - 家属 token 只能访问与当前家属绑定的老人数据。
+- 医生 token 可读取全部老人、全部会话、全部报告。
+- 医生 token 不可修改画像、删除会话、生成报告。
 - `GET /report/{report_id}`、`GET /api/sessions/{session_id}` 等接口都会按报告/会话归属做校验。
 - `POST /report/generate` 与 `POST /report/stream` 现在必须提供 `sessionId`，避免生成无归属报告。
 
@@ -121,6 +159,8 @@ Authorization: Bearer <family-token>
 - `POST /auth/family/bind`
 - `POST /auth/login`
 - `POST /auth/logout`
+- `GET /doctor/elderly-list`
+- `GET /doctor/elderly/{elderly_id}`
 - `POST /family/session/start/{elderly_id}`
 - `POST /family/session/{session_id}/message`
 - `GET /family/session/{session_id}/info`
@@ -154,19 +194,22 @@ Authorization: Bearer <family-token>
 - `GET /elderly/me/reports`
 - `GET /elderly/me/reports/{report_id}`
 
-### 4.3 老人本人或已绑定家属可访问
+### 4.3 老人本人、已绑定家属或医生可访问
 
 - `GET /api/sessions`
 - `GET /api/sessions/{session_id}`
+- `GET /report/{report_id}`
+- `GET /report/{report_id}/export/pdf`
+
+### 4.4 仅老人本人或已绑定家属可写
+
 - `POST /api/sessions/{session_id}/profile`
 - `DELETE /api/sessions/{session_id}`
 - `POST /report/generate`
 - `POST /report/stream`
 - `POST /report/generate/{elderly_id}`
-- `GET /report/{report_id}`
-- `GET /report/{report_id}/export/pdf`
 
-### 4.4 仅家属账号可访问
+### 4.5 仅家属账号可访问
 
 - `POST /auth/family/bind`
 - `POST /family/session/start/{elderly_id}`
@@ -176,6 +219,11 @@ Authorization: Bearer <family-token>
 - `GET /family/elderly/{elderly_id}`
 - `PUT /family/elderly/{elderly_id}`
 - `GET /family/reports/{elderly_id}`
+
+### 4.6 仅医生账号可访问
+
+- `GET /doctor/elderly-list`
+- `GET /doctor/elderly/{elderly_id}`
 
 ## 5. 接口说明
 
@@ -260,6 +308,7 @@ Authorization: Bearer <family-token>
 
 - 老人只看到自己的会话
 - 家属只看到已绑定老人对应的会话
+- 医生可以看到全部会话
 
 ### `GET /api/sessions/{session_id}`
 
@@ -269,9 +318,19 @@ Authorization: Bearer <family-token>
 
 保存工作区画像文件。
 
+说明：
+
+- 老人和已绑定家属可写
+- 医生只读，调用会返回 `403`
+
 ### `DELETE /api/sessions/{session_id}`
 
 删除指定工作区会话。
+
+说明：
+
+- 老人和已绑定家属可删
+- 医生只读，调用会返回 `403`
 
 ## 5.4 报告
 
@@ -295,6 +354,7 @@ Authorization: Bearer <family-token>
 说明：
 
 - 该接口会校验当前 token 是否有权访问这个 `sessionId`
+- 医生没有生成权限，调用会返回 `403`
 - 生成的报告会记录归属老人，后续查询按归属做鉴权
 
 ### `POST /report/stream`
@@ -309,6 +369,7 @@ Authorization: Bearer <family-token>
 
 - 老人只能给自己生成
 - 家属只能给已绑定老人生成
+- 医生没有生成权限
 
 响应示例：
 
@@ -341,6 +402,7 @@ Authorization: Bearer <family-token>
 
 - 老人只能读取自己的报告
 - 家属只能读取已绑定老人报告
+- 医生可以读取所有报告
 
 ### `GET /report/{report_id}/export/pdf`
 
@@ -387,7 +449,28 @@ Authorization: Bearer <family-token>
 
 ### `POST /auth/login`
 
-家属账号密码登录。
+按角色执行登录。
+
+默认 `role = "family"`，如果是医生端必须显式传 `role = "doctor"`。
+
+家属登录示例：
+
+```json
+{
+  "phone": "13800138000",
+  "password": "secret123"
+}
+```
+
+医生登录示例：
+
+```json
+{
+  "phone": "13900139000",
+  "password": "doctor123",
+  "role": "doctor"
+}
+```
 
 ### `POST /auth/logout`
 
@@ -443,7 +526,35 @@ Authorization: Bearer <family-token>
 
 返回当前老人自己的指定报告。
 
-## 5.8 语音转文字
+## 5.8 医生端接口
+
+### `GET /doctor/elderly-list`
+
+返回医生可查看的老人聚合总览。
+
+响应字段：
+
+- `elderly_id`
+- `name`
+- `created_at`
+- `updated_at`
+- `has_profile`
+- `has_report`
+- `session_count`
+- `report_count`
+- `latest_session_id`
+- `latest_report_id`
+
+### `GET /doctor/elderly/{elderly_id}`
+
+返回医生视角的单个老人详情，包含：
+
+- 基础标识信息
+- 当前结构化画像
+- 该老人全部工作区会话元数据
+- 该老人全部报告摘要
+
+## 5.9 语音转文字
 
 ### `WS /ws/stt`
 
@@ -481,9 +592,13 @@ Authorization: Bearer <family-token>
 4. `POST /report/generate` 和 `POST /report/stream` 必须提供 `sessionId`。
 5. `POST /report/generate/{elderly_id}` 已可用，不再是不可用接口。
 6. `GET /chat/progress/{session_id}` 已返回真实进度，可用于前端进度展示。
+7. 医生端登录调用 `POST /auth/login` 时必须传 `role: "doctor"`。
+8. 如需默认医生账号，部署时必须提供 `DOCTOR_DEFAULT_NAME`、`DOCTOR_DEFAULT_PHONE`、`DOCTOR_DEFAULT_PASSWORD`。
 
 ## 7. 当前限制
 
 1. 老人端 token 由 `POST /chat/start` 直接签发，当前没有单独的老人登录页。
 2. `POST /auth/logout` 目前不做服务端 token 撤销。
 3. `GET /report/{report_id}/export/pdf` 尚未实现 PDF 导出，仅完成鉴权。
+4. 医生端当前仅支持只读，不支持编辑老人画像、删除会话、生成报告。
+5. 医生账号当前不开放注册，只支持环境变量初始化默认账号。
