@@ -235,6 +235,32 @@ def _extract_profile_updates(raw_profile: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _save_generated_chat_report_if_needed(
+    result: Dict[str, Any],
+    reports_dir: Path,
+    workspace_manager: WorkspaceManager,
+    session_id: str,
+    user_id: str,
+) -> Optional[Dict[str, Any]]:
+    generated_results = result.get("generated_report_results")
+    generated_profile = result.get("generated_report_profile")
+    if not isinstance(generated_results, dict) or not isinstance(generated_profile, dict):
+        return None
+
+    normalized_profile = dict(generated_profile)
+    normalized_profile.pop("user_type", None)
+    report_data = to_frontend_report_data(generated_results)
+    return save_report_bundle(
+        reports_dir=reports_dir,
+        workspace_manager=workspace_manager,
+        profile=normalized_profile,
+        results=generated_results,
+        report_data=report_data,
+        session_id=session_id,
+        user_id=user_id,
+    )
+
+
 async def _run_report_workflow(
     conversation_manager: ConversationManager,
     profile,
@@ -390,7 +416,8 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
     """发送聊天消息。"""
     _, owner_user_id = require_elderly_session_access(request, payload.sessionId)
     conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
-    workspace_manager = getattr(request.app.state, "workspace_manager", None)
+    workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+    reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
 
     try:
         result = conversation_manager.chat(payload.sessionId, payload.message)
@@ -402,14 +429,20 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
     state = result.get("state")
     completed = state == SessionState.REPORT_DONE
 
-    if workspace_manager is not None:
-        _persist_workspace_snapshot(
-            workspace_manager,
-            payload.sessionId,
-            owner_user_id,
-            profile=conversation_manager.get_profile(payload.sessionId),
-            history=conversation_manager.get_history(payload.sessionId),
-        )
+    _save_generated_chat_report_if_needed(
+        result=result,
+        reports_dir=reports_dir,
+        workspace_manager=workspace_manager,
+        session_id=payload.sessionId,
+        user_id=owner_user_id,
+    )
+    _persist_workspace_snapshot(
+        workspace_manager,
+        payload.sessionId,
+        owner_user_id,
+        profile=conversation_manager.get_profile(payload.sessionId),
+        history=conversation_manager.get_history(payload.sessionId),
+    )
 
     return ChatMessageResponse(
         message=result.get("reply", ""),
@@ -474,21 +507,28 @@ async def stream_chat(request: Request, message: str, sessionId: str):
 
     async def event_generator() -> AsyncGenerator[str, None]:
         conversation_manager = getattr(request.app.state, "conversation_manager", None)
-        workspace_manager = getattr(request.app.state, "workspace_manager", None)
+        workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
+        reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
         if conversation_manager is None:
             yield f"data: {json.dumps({'error': '对话管理器未初始化'})}\n\n"
             return
 
         try:
             result = conversation_manager.chat(sessionId, message)
-            if workspace_manager is not None:
-                _persist_workspace_snapshot(
-                    workspace_manager,
-                    sessionId,
-                    owner_user_id,
-                    profile=conversation_manager.get_profile(sessionId),
-                    history=conversation_manager.get_history(sessionId),
-                )
+            _save_generated_chat_report_if_needed(
+                result=result,
+                reports_dir=reports_dir,
+                workspace_manager=workspace_manager,
+                session_id=sessionId,
+                user_id=owner_user_id,
+            )
+            _persist_workspace_snapshot(
+                workspace_manager,
+                sessionId,
+                owner_user_id,
+                profile=conversation_manager.get_profile(sessionId),
+                history=conversation_manager.get_history(sessionId),
+            )
             reply = result.get("reply", "")
             for char in reply:
                 yield f"data: {json.dumps({'content': char})}\n\n"

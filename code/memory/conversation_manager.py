@@ -12,7 +12,7 @@ from dataclasses import asdict
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from multi_agent_system_v2 import OrchestratorAgentV2, save_results
+from multi_agent_system_v2 import OrchestratorAgentV2
 from memory.user_profile_store import UserProfileStore
 from memory.profile_extract_agent import (
     ProfileExtractAgent,
@@ -131,21 +131,26 @@ class ConversationManager:
         history = self.store.get_session_messages(session_id)
 
         # ── 状态路由 ──────────────────────────────
+        handler_metadata: Dict[str, Any] = {}
         if state == SessionState.GREETING:
-            reply, new_state = self._handle_greeting(user_id, session_id, user_message, history)
+            handler_result = self._handle_greeting(user_id, session_id, user_message, history)
 
         elif state == SessionState.COLLECTING:
-            reply, new_state = self._handle_collecting(user_id, session_id, user_message, history)
+            handler_result = self._handle_collecting(user_id, session_id, user_message, history)
 
         elif state == SessionState.CONFIRMING:
-            reply, new_state = self._handle_confirming(user_id, session_id, user_message, history)
+            handler_result = self._handle_confirming(user_id, session_id, user_message, history)
 
         elif state == SessionState.REPORT_DONE:
-            reply, new_state = self._handle_followup(user_id, session_id, user_message, history)
+            handler_result = self._handle_followup(user_id, session_id, user_message, history)
 
         else:
-            reply = "系统处理中，请稍候..."
-            new_state = state
+            handler_result = ("系统处理中，请稍候...", state)
+
+        if len(handler_result) == 3:
+            reply, new_state, handler_metadata = handler_result
+        else:
+            reply, new_state = handler_result
 
         # 更新状态
         ctx["state"] = new_state
@@ -169,13 +174,15 @@ class ConversationManager:
                         report_content = msg["content"]
                         break
 
-        return {
+        response = {
             "reply": reply,
             "state": new_state,
             "progress": progress,
             "report": report_content,
             "profile_updates": {},  # 由各 handler 填充（可选）
         }
+        response.update(handler_metadata)
+        return response
 
     # ─────────────────────────────────────────────
     # 状态处理器
@@ -314,12 +321,12 @@ class ConversationManager:
 
     def _run_agent_workflow(
         self, user_id: str, session_id: str
-    ) -> Tuple[str, SessionState]:
+    ) -> Tuple[str, SessionState, Dict[str, Any]]:
         """触发 OrchestratorAgentV2 生成报告"""
 
         profile = self.store.get_profile(user_id)
         if profile is None:
-            return "找不到用户信息，请重新开始。", SessionState.GREETING
+            return "找不到用户信息，请重新开始。", SessionState.GREETING, {}
 
         # 更新会话状态
         self.store.update_session_status(session_id, "GENERATING")
@@ -338,16 +345,6 @@ class ConversationManager:
 
             report_text = results.get("report", "报告生成失败，请重试。")
 
-            # 保存结果到文件（可选）
-            output_dir = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-                "data", "output_chat"
-            )
-            try:
-                save_results(results, profile, output_dir=output_dir)
-            except Exception as e:
-                print(f"[ConversationManager] 保存文件失败（不影响主流程）: {e}")
-
             # 更新会话状态为完成
             self.store.update_session_status(session_id, "DONE")
 
@@ -359,7 +356,14 @@ class ConversationManager:
                 "报告已生成完毕✅ 如果有任何疑问，或者想修改某项信息重新生成，"
                 "直接告诉我就好😊"
             )
-            return final_reply, SessionState.REPORT_DONE
+            return (
+                final_reply,
+                SessionState.REPORT_DONE,
+                {
+                    "generated_report_results": results,
+                    "generated_report_profile": asdict(profile),
+                },
+            )
 
         except Exception as e:
             print(f"[ConversationManager] 工作流执行失败: {e}")
@@ -369,7 +373,8 @@ class ConversationManager:
             return (
                 f"抱歉，生成报告时遇到了一点问题（{str(e)[:50]}）。"
                 "请稍后再试，或者说'重试'重新生成。",
-                SessionState.COLLECTING
+                SessionState.COLLECTING,
+                {},
             )
 
     # ─────────────────────────────────────────────

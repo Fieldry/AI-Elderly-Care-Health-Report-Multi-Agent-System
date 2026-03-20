@@ -32,12 +32,17 @@ class WorkspaceManager:
         """获取会话元数据文件路径。"""
         return self._session_dir(session_id) / "metadata.json"
 
-    def save_report(self, session_id: str, report_data: Dict[str, Any], format: str = "json") -> Path:
+    def save_report(
+        self,
+        session_id: str,
+        report_data: Dict[str, Any] | str,
+        format: str = "json",
+        filename: str | None = None,
+    ) -> Path:
         """保存报告文件"""
         session_dir = self.get_session_dir(session_id)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        filename = f"report_{timestamp}.{format}"
-        filepath = session_dir / filename
+        target_name = filename or f"report_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.{format}"
+        filepath = session_dir / target_name
         with open(filepath, 'w', encoding='utf-8') as f:
             if format == "json":
                 json.dump(report_data, f, ensure_ascii=False, indent=2)

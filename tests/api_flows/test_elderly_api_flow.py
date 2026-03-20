@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
-from tests.api_flows.support import APIFlowTestCase
+import api.server as server
+from tests.api_flows.support import APIFlowTestCase, build_fake_workflow_results
 
 
 class ElderlyApiFlowTestCase(APIFlowTestCase):
@@ -109,6 +111,11 @@ class ElderlyApiFlowTestCase(APIFlowTestCase):
         self.assertTrue(detail_body["metadata"]["has_profile"])
         self.assertEqual(len(detail_body["reports"]), 1)
         report_id = detail_body["reports"][0]["report_id"]
+        expected_stem = f"report_{report_id}_82岁男"
+        self.assertTrue((self.workspace_dir / session_id / f"{expected_stem}.json").exists())
+        self.assertTrue((self.workspace_dir / session_id / f"{expected_stem}.md").exists())
+        self.assertTrue(any(self.reports_dir.rglob(f"{expected_stem}.json")))
+        self.assertTrue(any(self.reports_dir.rglob(f"{expected_stem}.md")))
 
         shared_report = self.client.get(
             f"/report/{report_id}",
@@ -143,6 +150,48 @@ class ElderlyApiFlowTestCase(APIFlowTestCase):
             headers=self._auth_headers(elderly_token),
         )
         self.assertEqual(export_response.status_code, 501)
+
+    def test_chat_generated_report_uses_unified_storage_and_filename(self):
+        start = self._start_chat()
+        session_id = start["sessionId"]
+        elderly_id = start["userId"]
+        elderly_token = start["accessToken"]
+
+        self.conversation_manager.store.update_profile(
+            elderly_id,
+            {
+                "age": 83,
+                "sex": "女",
+                "residence": "城市",
+                "education_years": 9,
+                "hypertension": "是",
+            },
+        )
+        self.conversation_manager._session_cache[session_id]["state"] = server.SessionState.CONFIRMING
+
+        with patch.object(
+            self.conversation_manager.orchestrator,
+            "run",
+            return_value=build_fake_workflow_results(),
+        ):
+            response = self._send_elderly_message(elderly_token, session_id, "确认")
+
+        self.assertEqual(response["state"], "completed")
+        self.assertTrue(response["completed"])
+
+        session_detail = self.client.get(
+            f"/api/sessions/{session_id}",
+            headers=self._auth_headers(elderly_token),
+        )
+        self.assertEqual(session_detail.status_code, 200, session_detail.text)
+        detail_body = session_detail.json()
+        self.assertTrue(detail_body["reports"])
+        report_id = detail_body["reports"][-1]["report_id"]
+        expected_stem = f"report_{report_id}_83岁女"
+        self.assertTrue((self.workspace_dir / session_id / f"{expected_stem}.json").exists())
+        self.assertTrue((self.workspace_dir / session_id / f"{expected_stem}.md").exists())
+        self.assertTrue(any(self.reports_dir.rglob(f"{expected_stem}.json")))
+        self.assertTrue(any(self.reports_dir.rglob(f"{expected_stem}.md")))
 
     def test_elderly_can_delete_own_session_workspace(self):
         start = self._start_chat()

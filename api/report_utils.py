@@ -21,6 +21,13 @@ def profile_to_dict(profile: UserProfile) -> Dict[str, Any]:
     return payload
 
 
+def build_report_file_stem(report_id: str, profile: Dict[str, Any]) -> str:
+    """构造统一的报告文件名 stem。"""
+    age = profile.get("age", "未知")
+    sex = profile.get("sex", "未知")
+    return f"report_{report_id}_{age}岁{sex}"
+
+
 def save_report_bundle(
     reports_dir: Path,
     workspace_manager,
@@ -36,13 +43,10 @@ def save_report_bundle(
     timestamp = datetime.now()
     report_id = timestamp.strftime("%Y%m%d_%H%M%S_%f")
 
-    age = profile.get("age", "未知")
-    sex = profile.get("sex", "未知")
-
     date_dir = reports_dir / timestamp.strftime("%Y%m")
     date_dir.mkdir(parents=True, exist_ok=True)
 
-    base_filename = f"report_{report_id}_{age}岁{sex}"
+    file_stem = build_report_file_stem(report_id, profile)
     payload = {
         "report_id": report_id,
         "session_id": session_id,
@@ -53,18 +57,18 @@ def save_report_bundle(
         "report_data": report_data,
     }
 
-    json_file = date_dir / f"{base_filename}.json"
+    json_file = date_dir / f"{file_stem}.json"
     with open(json_file, "w", encoding="utf-8") as file_obj:
         json.dump(payload, file_obj, ensure_ascii=False, indent=2)
 
-    markdown_file = date_dir / f"{base_filename}.md"
+    markdown_file = date_dir / f"{file_stem}.md"
     markdown_content = generate_markdown_report(profile, results, report_data, timestamp)
     with open(markdown_file, "w", encoding="utf-8") as file_obj:
         file_obj.write(markdown_content)
 
     if session_id and workspace_manager is not None:
-        workspace_manager.save_report(session_id, payload, "json")
-        workspace_manager.save_report(session_id, markdown_content, "md")
+        workspace_manager.save_report(session_id, payload, "json", f"{file_stem}.json")
+        workspace_manager.save_report(session_id, markdown_content, "md", f"{file_stem}.md")
         workspace_manager.update_metadata(session_id, {"has_report": True})
 
     return payload
