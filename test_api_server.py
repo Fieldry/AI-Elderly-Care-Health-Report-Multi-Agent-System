@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -79,6 +80,9 @@ class APIServerTestCase(unittest.TestCase):
         self.reports_dir = self.base_dir / "reports"
         self.workspace_dir = self.base_dir / "workspace"
         self.reports_dir.mkdir(parents=True, exist_ok=True)
+        self.doctor_name = "李医生"
+        self.doctor_phone = "13900139000"
+        self.doctor_password = "doctor123"
 
         workspace_dir = self.workspace_dir
 
@@ -90,6 +94,15 @@ class APIServerTestCase(unittest.TestCase):
             patch.object(server, "DB_PATH", str(self.db_path)),
             patch.object(server, "REPORTS_DIR", self.reports_dir),
             patch.object(server, "WorkspaceManager", TempWorkspaceManager),
+            patch.dict(
+                os.environ,
+                {
+                    "DOCTOR_DEFAULT_NAME": self.doctor_name,
+                    "DOCTOR_DEFAULT_PHONE": self.doctor_phone,
+                    "DOCTOR_DEFAULT_PASSWORD": self.doctor_password,
+                },
+                clear=False,
+            ),
         ]
 
         for patcher in self.patches:
@@ -186,6 +199,20 @@ class APIServerTestCase(unittest.TestCase):
                 json=request_payload,
                 headers=self._auth_headers(token),
             )
+
+    def _login_doctor(self) -> dict:
+        response = self.client.post(
+            "/auth/login",
+            json={
+                "phone": self.doctor_phone,
+                "password": self.doctor_password,
+                "role": "doctor",
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertEqual(body["role"], "doctor")
+        return body
 
     def test_chat_start_issues_elderly_token_and_scopes_session_endpoints(self):
         start = self._start_chat()
@@ -452,6 +479,110 @@ class APIServerTestCase(unittest.TestCase):
             token=elderly["accessToken"],
         )
         self.assertEqual(cross_session.status_code, 403)
+
+    def test_doctor_can_login_and_view_all_elderly_sessions_and_reports(self):
+        elderly_one = self._start_chat()
+        elderly_two = self._start_chat()
+        report_one = self._generate_report_for_elderly(
+            elderly_one["userId"],
+            elderly_one["accessToken"],
+        )
+        report_two = self._generate_report_for_elderly(
+            elderly_two["userId"],
+            elderly_two["accessToken"],
+        )
+
+        doctor = self._login_doctor()
+        doctor_token = doctor["token"]
+        self.assertEqual(doctor.get("elderly_ids"), [])
+
+        doctor_list = self.client.get(
+            "/doctor/elderly-list",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(doctor_list.status_code, 200, doctor_list.text)
+        body = doctor_list.json()
+        returned_ids = {item["elderly_id"] for item in body["data"]}
+        self.assertEqual(returned_ids, {elderly_one["userId"], elderly_two["userId"]})
+        self.assertTrue(all(item["session_count"] >= 1 for item in body["data"]))
+        self.assertTrue(all(item["report_count"] >= 1 for item in body["data"]))
+
+        sessions_response = self.client.get(
+            "/api/sessions",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(sessions_response.status_code, 200, sessions_response.text)
+        self.assertEqual(
+            {item["user_id"] for item in sessions_response.json()["sessions"]},
+            {elderly_one["userId"], elderly_two["userId"]},
+        )
+
+        session_detail = self.client.get(
+            f"/api/sessions/{report_one['sessionId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(session_detail.status_code, 200, session_detail.text)
+        self.assertEqual(
+            session_detail.json()["metadata"]["user_id"],
+            elderly_one["userId"],
+        )
+
+        doctor_detail = self.client.get(
+            f"/doctor/elderly/{elderly_one['userId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(doctor_detail.status_code, 200, doctor_detail.text)
+        detail_body = doctor_detail.json()
+        self.assertEqual(detail_body["elderly_id"], elderly_one["userId"])
+        self.assertEqual(detail_body["reports"][0]["id"], report_one["reportId"])
+        self.assertTrue(detail_body["sessions"])
+
+        shared_report = self.client.get(
+            f"/report/{report_one['reportId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(shared_report.status_code, 200, shared_report.text)
+
+        another_report = self.client.get(
+            f"/report/{report_two['reportId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(another_report.status_code, 200, another_report.text)
+
+    def test_doctor_is_read_only_on_sessions_and_report_generation(self):
+        elderly = self._start_chat()
+        doctor = self._login_doctor()
+        doctor_token = doctor["token"]
+
+        save_profile = self.client.post(
+            f"/api/sessions/{elderly['sessionId']}/profile",
+            json={"age": 88},
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(save_profile.status_code, 403)
+
+        delete_session = self.client.delete(
+            f"/api/sessions/{elderly['sessionId']}",
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(delete_session.status_code, 403)
+
+        generate_with_session = self.client.post(
+            "/report/generate",
+            json={
+                "sessionId": elderly["sessionId"],
+                "profile": {"age": 88, "sex": "男"},
+            },
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(generate_with_session.status_code, 403)
+
+        generate_for_elderly = self.client.post(
+            f"/report/generate/{elderly['userId']}",
+            json={"age": 88, "sex": "男"},
+            headers=self._auth_headers(doctor_token),
+        )
+        self.assertEqual(generate_for_elderly.status_code, 403)
 
 
 if __name__ == "__main__":
