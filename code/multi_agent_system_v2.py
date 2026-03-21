@@ -11,18 +11,71 @@ V3修改部分：
 """
 
 import json
+import logging
 import pandas as pd
 import os
 from openai import OpenAI
-from typing import Dict, Any, List, Optional
+import time
+from typing import Callable, Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
+from pathlib import Path
+
+try:
+    from rag import PageIndexRAGAgent
+except Exception:
+    PageIndexRAGAgent = None
 
 # DeepSeek API 配置 - 优先使用环境变量
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
-DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+
+# 临时清除代理环境变量（因为 Cursor 的代理返回 403）
+for key in ['HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'http_proxy', 'https_proxy', 'all_proxy']:
+    if key in os.environ:
+        del os.environ[key]
 
 client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
+logger = logging.getLogger(__name__)
+
+
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_int(name: str, default: int) -> int:
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        return default
+
+
+def _env_float(name: str, default: float) -> float:
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        return default
+    try:
+        return float(value)
+    except ValueError:
+        return default
+
+
+LLM_TIMEOUT_SECONDS = max(_env_float("DEEPSEEK_TIMEOUT_SECONDS", 180.0), 1.0)
+LLM_MAX_RETRIES = max(_env_int("DEEPSEEK_MAX_RETRIES", 2), 0)
+LLM_RETRY_DELAY_SECONDS = max(_env_float("DEEPSEEK_RETRY_DELAY_SECONDS", 2.0), 0.0)
+
+
+RAG_ENABLED = _env_flag("RAG_ENABLED", False)
+DEFAULT_RAG_INDEX_PATH = Path(__file__).resolve().parent.parent / "data" / "rag_indexes" / "default_index.json"
+RAG_INDEX_PATH = Path(os.getenv("RAG_INDEX_PATH", str(DEFAULT_RAG_INDEX_PATH))).expanduser()
+RAG_TOP_K = max(int(os.getenv("RAG_TOP_K", "3")), 1)
 
 
 @dataclass
@@ -176,27 +229,125 @@ def completeness_score(profile: UserProfile) -> dict:
 
 # ============ Agent 基类 ============
 class BaseAgent:
-    """Agent 基类"""
+    """Agent 基类（增强版 - 支持 RAG）"""
 
-    def __init__(self, name: str, system_prompt: str):
+    def __init__(self, name: str, system_prompt: str, knowledge_agent=None):
         self.name = name
         self.system_prompt = system_prompt
+        self.knowledge_agent = knowledge_agent  # 可选的知识检索能力
+
+    @staticmethod
+    def _is_retryable_error(error: Exception) -> bool:
+        error_name = error.__class__.__name__.lower()
+        error_text = str(error).lower()
+        retry_markers = (
+            "connection",
+            "timeout",
+            "timed out",
+            "rate limit",
+            "temporarily unavailable",
+            "server disconnected",
+            "502",
+            "503",
+            "504",
+        )
+        return (
+            "connection" in error_name
+            or "timeout" in error_name
+            or any(marker in error_text for marker in retry_markers)
+        )
 
     def call_llm(self, user_prompt: str, temperature: float = 0.3, max_tokens: int = 2048) -> str:
         """调用 LLM"""
-        try:
-            response = client.chat.completions.create(
-                model="deepseek-chat",
-                messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=temperature,
-                max_tokens=max_tokens
-            )
-            return response.choices[0].message.content.strip()
-        except Exception as e:
-            return f"Error: {str(e)}"
+        total_attempts = LLM_MAX_RETRIES + 1
+        for attempt in range(1, total_attempts + 1):
+            started_at = time.monotonic()
+            try:
+                logger.info(
+                    "[%s] LLM request started attempt=%s/%s model=%s prompt_chars=%s timeout=%.1fs",
+                    self.name,
+                    attempt,
+                    total_attempts,
+                    DEEPSEEK_MODEL,
+                    len(user_prompt),
+                    LLM_TIMEOUT_SECONDS,
+                )
+                response = client.chat.completions.create(
+                    model=DEEPSEEK_MODEL,
+                    messages=[
+                        {"role": "system", "content": self.system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    timeout=LLM_TIMEOUT_SECONDS,
+                )
+                duration = time.monotonic() - started_at
+                logger.info(
+                    "[%s] LLM request finished attempt=%s/%s duration=%.2fs",
+                    self.name,
+                    attempt,
+                    total_attempts,
+                    duration,
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as error:
+                duration = time.monotonic() - started_at
+                retryable = attempt < total_attempts and self._is_retryable_error(error)
+                logger.warning(
+                    "[%s] LLM request failed attempt=%s/%s duration=%.2fs retryable=%s error=%s",
+                    self.name,
+                    attempt,
+                    total_attempts,
+                    duration,
+                    retryable,
+                    error,
+                )
+                if not retryable:
+                    raise
+                sleep_seconds = LLM_RETRY_DELAY_SECONDS * attempt
+                if sleep_seconds > 0:
+                    time.sleep(sleep_seconds)
+
+    def call_llm_with_rag(
+        self,
+        user_prompt: str,
+        rag_query: Optional[str] = None,
+        rag_top_k: int = 2,
+        temperature: float = 0.3
+    ) -> str:
+        """
+        调用 LLM，可选地使用 RAG 增强
+
+        Args:
+            user_prompt: 用户提示词
+            rag_query: RAG 检索查询（如果为 None 则不使用 RAG）
+            rag_top_k: RAG 返回结果数量
+            temperature: LLM 温度参数
+
+        Returns:
+            LLM 响应文本
+        """
+        # 如果提供了 RAG 查询且知识代理可用
+        if rag_query and self.knowledge_agent:
+            try:
+                rag_result = self.knowledge_agent.retrieve(rag_query, top_k=rag_top_k)
+                knowledge_context = rag_result.get('context', '')
+
+                if knowledge_context:
+                    # 将知识注入到 prompt 中
+                    enhanced_prompt = f"""{user_prompt}
+
+【专业知识参考】
+{knowledge_context}
+
+请结合以上专业标准和指南进行分析，确保建议的科学性和权威性。"""
+                    user_prompt = enhanced_prompt
+            except Exception as e:
+                print(f"⚠️ {self.name} RAG 检索失败: {e}")
+
+        # 调用 LLM
+        return self.call_llm(user_prompt, temperature)
 
 
     def parse_json(self, text: str) -> Dict:
@@ -249,6 +400,7 @@ IADL（工具性日常生活活动）8项：串门、购物、做饭、洗衣、
 {
     "status": 0或1或2,
     "status_name": "功能完好/需要部分协助/需要全面照护",
+    "status_description": "生活自理/需要较多协助/需要全面照护支持",
     "health_limitation_impact": "健康限制对功能的影响说明",
     "badl_depend_count": BADL完全依赖数量,
     "iadl_unable_count": IADL完全不能数量,
@@ -282,7 +434,7 @@ IADL（工具性日常生活活动）8项：串门、购物、做饭、洗衣、
 - 蹲起: {profile.iadl_crouching}
 - 公共交通: {profile.iadl_transport}
 """
-        result = self.call_llm(f"判定以下老人的失能状态：\n{badl_info}")
+        result = self.call_llm(f"请判定以下老人的失能状态：\n{badl_info}")
         return self.parse_json(result)
 
 
@@ -336,7 +488,7 @@ class RiskAgentV3(BaseAgent):
         super().__init__("RiskAgentV3", system_prompt)
 
     def predict(self, profile: UserProfile, current_status: int) -> Dict:
-        """预测风险"""
+        """预测风险（增强版 - 支持 RAG）"""
         risk_factors = f"""
 【基本信息】
 当前失能状态: {current_status} (0=无失能, 1=部分失能, 2=严重失能)
@@ -389,7 +541,33 @@ class RiskAgentV3(BaseAgent):
 - 照护者: {profile.caregiver}
 - 医保: {profile.medical_insurance}
 """
-        result = self.call_llm(f"评估以下老人的短期和中期风险：\n{risk_factors}")
+
+        # 构建 RAG 查询：针对高风险因素
+        rag_query = None
+        if self.knowledge_agent:
+            # 识别关键风险因素
+            risk_keywords = []
+            age = int(profile.age) if profile.age else 0
+            if age >= 85:
+                risk_keywords.append("高龄老人")
+            if profile.stroke in ["是", "有"]:
+                risk_keywords.append("中风")
+            if profile.heart_disease in ["是", "有"]:
+                risk_keywords.append("心脏病")
+            if profile.diabetes in ["是", "有"]:
+                risk_keywords.append("糖尿病")
+            if current_status >= 1:
+                risk_keywords.append("失能")
+
+            if risk_keywords:
+                rag_query = f"{age}岁 {' '.join(risk_keywords[:3])} 风险预防 健康标准"
+
+        # 使用 RAG 增强的 LLM 调用
+        result = self.call_llm_with_rag(
+            f"请评估以下老人的短期和中期风险：\n{risk_factors}",
+            rag_query=rag_query,
+            rag_top_k=2
+        )
         return self.parse_json(result)
 
 
@@ -541,6 +719,7 @@ class ActionPlanAgentV3(BaseAgent):
         system_prompt = """你是照护行动计划专家。将健康建议转化为可执行的行动计划。
 
 【行动计划要素】
+- 负责人：明确谁来做（家属/照护者/老人自己）
 - 怎么做：具体步骤，可直接执行
 - 完成标准：可验证的结果
 - 时间框架：建议完成时间
@@ -589,8 +768,9 @@ class ActionPlanAgentV3(BaseAgent):
         super().__init__("ActionPlanAgentV3", system_prompt)
 
     def generate(self, profile: UserProfile, status_result: Dict,
-                 risk_result: Dict, factor_result: Dict) -> Dict:
-        """生成行动计划"""
+                 risk_result: Dict, factor_result: Dict,
+                 knowledge_context: str = "") -> Dict:
+        """生成行动计划（增强版 - 支持 RAG）"""
         context = f"""
 【用户画像】
 年龄: {profile.age}岁, 性别: {profile.sex}
@@ -622,7 +802,7 @@ class ActionPlanAgentV3(BaseAgent):
 居住地: {profile.residence}
 
 【用户类型】
-{profile.user_type}（根据用户类型调整语言风格）
+{profile.user_type}（请根据用户类型调整语言风格）
 
 生成8-12个具体的行动计划，涵盖：
 1. 医疗保障与就医通道
@@ -632,7 +812,45 @@ class ActionPlanAgentV3(BaseAgent):
 5. 情绪与社交
 6. 照护资源对接
 """
-        result = self.call_llm(user_prompt=context, max_tokens=4096)
+
+        # 构建 RAG 查询：针对最紧迫的行动需求
+        rag_query = None
+        if self.knowledge_agent:
+            # 提取高风险项
+            high_risks = [r for r in risk_result.get('short_term_risks', [])
+                         if r.get('severity') == '高']
+
+            age = int(profile.age) if profile.age else 0
+
+            if high_risks:
+                # 针对高风险生成查询
+                risk_name = high_risks[0].get('risk', '')
+                rag_query = f"{age}岁老人 {risk_name} 预防措施 具体方法"
+            else:
+                # 针对慢性病管理生成查询
+                diseases = []
+                if profile.hypertension in ["是", "有"]:
+                    diseases.append("高血压")
+                if profile.diabetes in ["是", "有"]:
+                    diseases.append("糖尿病")
+                if diseases:
+                    rag_query = f"老年人 {' '.join(diseases[:2])} 日常管理 居家照护"
+
+        if knowledge_context:
+            context += f"""
+
+【RAG知识库参考】
+以下内容来自项目内置知识库，仅作辅助参考。请结合当前老人的具体情况吸收使用，不要逐字照抄，也不要生成与个体情况矛盾的建议。
+
+{knowledge_context}
+"""
+
+        # 使用 RAG 增强的 LLM 调用
+        result = self.call_llm_with_rag(
+            context,
+            rag_query=rag_query,
+            rag_top_k=2
+        )
         return self.parse_json(result)
 
 
@@ -854,7 +1072,7 @@ class ReportAgentV2(BaseAgent):
 - 口语化、接地气
 - 避免医学术语
 - 强调"可以做什么"
-- 每个建议都有怎么做、完成标准
+- 每个建议都要具体到怎么做、完成标准
 
 【输出格式】
 直接输出 Markdown 格式的报告，不要 JSON。"""
@@ -863,7 +1081,7 @@ class ReportAgentV2(BaseAgent):
     def generate_report(self, profile: UserProfile, status_result: Dict,
                         risk_result: Dict, factor_result: Dict,
                         action_result: Dict, priority_result: Dict,
-                        review_result: Dict) -> str:
+                        review_result: Dict, knowledge_context: str = "") -> str:
         """生成最终报告"""
 
         # 检查是否有紧急情况
@@ -871,14 +1089,15 @@ class ReportAgentV2(BaseAgent):
         urgent_reason = review_result.get('safety_check', {}).get('urgent_reason', '')
 
         context = f"""
-根据以下评估结果，生成一份完整的"健康评估与照护行动计划"。
+请根据以下评估结果，生成一份完整的"健康评估与照护行动计划"。
 
 【用户信息】
 年龄: {profile.age}岁, 性别: {profile.sex}
-用户类型: {profile.user_type}（据此调整语言风格）
+用户类型: {profile.user_type}（请据此调整语言风格）
 
 【状态判定】
 当前状态: {status_result.get('status_name', '未知')}
+状态描述: {status_result.get('status_description', '')}
 判定依据: {status_result.get('explanation', '')}
 
 【健康画像】
@@ -900,12 +1119,12 @@ C级（第三优先）: {priority_result.get('priority_c', [])}
 是否紧急: {urgent}
 紧急原因: {urgent_reason}
 
-按以下结构生成报告：
+请按以下结构生成报告：
 
 # 健康评估与照护行动计划
 
 ## 0. 报告说明
-本报告基于您/家属提供的信息进行风险提示与照护建议，不能替代医生面诊；涉及用药与检查，以医生意见为准。
+本报告基于您/家属提供的信息进行风险提示与照护建议，不能替代医生面诊；涉及用药与检查，请以医生意见为准。
 
 ## 1. 健康报告总结
 用3句话总结：
@@ -937,6 +1156,7 @@ C级（第三优先）: {priority_result.get('priority_c', [])}
 ### A. 第一优先级
 [对每个行动，按以下格式输出]
 **1）[行动标题]**
+- 负责人：[谁来做]
 - 怎么做：[具体步骤]
 - 完成标准：[如何验证]
 
@@ -949,31 +1169,136 @@ C级（第三优先）: {priority_result.get('priority_c', [])}
 ## 5. 温馨寄语
 [一段温暖、鼓励的话，强调"按计划慢慢来，能做多少就做多少"]
 """
+        if knowledge_context:
+            context += f"""
+
+【RAG知识库参考】
+以下材料来自项目知识库，请仅在与当前老人情况一致时吸收为通俗建议，不要照抄原文，也不要引用过于学术化的表述：
+
+{knowledge_context}
+"""
         return self.call_llm(user_prompt=context, temperature=0.5, max_tokens=8192)
 
 
 
 # ============ 调度中心 Orchestrator V2 ============
 class OrchestratorAgentV2:
-    """调度中心 V2 - 协调7个Agent的执行"""
+    """调度中心 V2 - 协调7个Agent的执行（增强版 - RAG 深度融合）"""
 
     def __init__(self):
-        self.status_agent = StatusAgentV3()
-        self.risk_agent = RiskAgentV3()
-        self.factor_agent = FactorAgentV3()
-        self.action_agent = ActionPlanAgentV3()
-        self.priority_agent = PriorityAgentV3()
-        self.review_agent = ReviewAgentV3()
-        self.report_agent = ReportAgentV2()
+        # 首先初始化知识代理
+        self.knowledge_agent = self._init_knowledge_agent()
 
-    def run(self, profile: UserProfile, verbose: bool = True) -> Dict:
+        # 初始化各个 Agent，并传递知识代理
+        self.status_agent = StatusAgentV3()
+        self.status_agent.knowledge_agent = self.knowledge_agent
+
+        self.risk_agent = RiskAgentV3()
+        self.risk_agent.knowledge_agent = self.knowledge_agent
+
+        self.factor_agent = FactorAgentV3()
+        self.factor_agent.knowledge_agent = self.knowledge_agent
+
+        self.action_agent = ActionPlanAgentV3()
+        self.action_agent.knowledge_agent = self.knowledge_agent
+
+        self.priority_agent = PriorityAgentV3()
+        self.priority_agent.knowledge_agent = self.knowledge_agent
+
+        self.review_agent = ReviewAgentV3()
+        self.review_agent.knowledge_agent = self.knowledge_agent
+
+        self.report_agent = ReportAgentV2()
+        self.report_agent.knowledge_agent = self.knowledge_agent
+
+    def _init_knowledge_agent(self):
+        """初始化知识代理（使用新的 KnowledgeAgent）"""
+        if not RAG_ENABLED or PageIndexRAGAgent is None:
+            return None
+        if not RAG_INDEX_PATH.exists():
+            print(f"⚠️ RAG 已启用，但索引文件不存在: {RAG_INDEX_PATH}")
+            return None
+        try:
+            from knowledge_agent import KnowledgeAgent
+            rag_agent = PageIndexRAGAgent(index_path=str(RAG_INDEX_PATH))
+            return KnowledgeAgent(rag_agent)
+        except Exception as error:
+            print(f"⚠️ Knowledge Agent 初始化失败: {error}")
+            return None
+
+    @staticmethod
+    def _emit_stage_event(
+        stage_callback: Optional[Callable[[Dict[str, Any]], None]],
+        agent: str,
+        status: str,
+        message: str,
+        duration_seconds: Optional[float] = None,
+    ) -> None:
+        if stage_callback is None:
+            return
+        payload: Dict[str, Any] = {
+            "agent": agent,
+            "status": status,
+            "message": message,
+        }
+        if duration_seconds is not None:
+            payload["duration_seconds"] = round(duration_seconds, 2)
+        stage_callback(payload)
+
+    def _run_stage(
+        self,
+        stage_key: str,
+        running_message: str,
+        completed_message: str,
+        func: Callable[[], Any],
+        stage_callback: Optional[Callable[[Dict[str, Any]], None]],
+    ) -> Any:
+        self._emit_stage_event(stage_callback, stage_key, "running", running_message)
+        started_at = time.monotonic()
+        try:
+            result = func()
+        except Exception as error:
+            duration = time.monotonic() - started_at
+            logger.exception("Orchestrator stage failed: %s", stage_key)
+            self._emit_stage_event(
+                stage_callback,
+                stage_key,
+                "failed",
+                f"{running_message}失败: {error}",
+                duration_seconds=duration,
+            )
+            raise
+
+        duration = time.monotonic() - started_at
+        self._emit_stage_event(
+            stage_callback,
+            stage_key,
+            "completed",
+            completed_message,
+            duration_seconds=duration,
+        )
+        return result
+
+    def run(
+        self,
+        profile: UserProfile,
+        verbose: bool = True,
+        stage_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    ) -> Dict:
         """执行完整评估流程"""
         results = {}
+        knowledge_context = ""
 
         # Stage 1: 状态判定（V3）
         if verbose:
-            print("🔍 Stage 1: 状态判定 Agent V3 执行中...")
-        results['status'] = self.status_agent.judge(profile)
+            print("🔍 Stage 1: 状态判定 Agent 执行中...")
+        results['status'] = self._run_stage(
+            "status",
+            "正在判定功能状态...",
+            "功能状态判定完成",
+            lambda: self.status_agent.judge(profile),
+            stage_callback,
+        )
         if verbose:
             print(f"   → 状态: {results['status'].get('status_name', '未知')}")
 
@@ -981,35 +1306,101 @@ class OrchestratorAgentV2:
         if verbose:
             print("📈 Stage 2: 风险预测 Agent V3 执行中...")
         current_status = results['status'].get('status', 0)
-        results['risk'] = self.risk_agent.predict(profile, current_status)
+        results['risk'] = self._run_stage(
+            "risk",
+            "正在进行风险预测...",
+            "风险预测完成",
+            lambda: self.risk_agent.predict(profile, current_status),
+            stage_callback,
+        )
         if verbose:
             print(f"   → 风险等级: {results['risk'].get('overall_risk_level', '未知')}")
             print(f"   → 短期风险数: {len(results['risk'].get('short_term_risks', []))}")
 
         # Stage 3: 因素分析（V3）
         if verbose:
-            print("🔬 Stage 3: 因素分析 Agent V3 执行中...")
-        results['factors'] = self.factor_agent.analyze(
-            profile, results['status'], results['risk']
+            print("🔬 Stage 3: 因素分析 Agent V2 执行中...")
+        results['factors'] = self._run_stage(
+            "factors",
+            "正在提取关键影响因素...",
+            "关键影响因素分析完成",
+            lambda: self.factor_agent.analyze(profile, results['status'], results['risk']),
+            stage_callback,
         )
         if verbose:
             print(f"   → 主要问题数: {len(results['factors'].get('main_problems', []))}")
 
-        # Stage 4: 行动计划生成（V3）
+        # Stage 3.5: RAG 知识检索（可选 - 使用新的 KnowledgeAgent）
+        if self.knowledge_agent is not None:
+            if verbose:
+                print("📚 Stage 3.5: 知识检索 Agent 执行中...")
+            results['knowledge'] = self._run_stage(
+                "knowledge",
+                "正在检索知识库参考...",
+                "知识库参考检索完成",
+                lambda: self.knowledge_agent.retrieve_comprehensive(
+                    profile,
+                    results['status'],
+                    results['risk'],
+                    results['factors'],
+                    top_k=RAG_TOP_K,
+                ),
+                stage_callback,
+            )
+            knowledge_context = results['knowledge'].get('combined_context', '')
+            if verbose:
+                total_hits = results['knowledge'].get('total_hits', 0)
+                print(f"   → 总命中文档片段数: {total_hits}")
+                risk_hits = len(results['knowledge'].get('risk_prevention', {}).get('hits', []))
+                disease_hits = len(results['knowledge'].get('disease_management', {}).get('hits', []))
+                training_hits = len(results['knowledge'].get('functional_training', {}).get('hits', []))
+                if risk_hits > 0:
+                    print(f"   → 风险预防知识: {risk_hits}条")
+                if disease_hits > 0:
+                    print(f"   → 疾病管理知识: {disease_hits}条")
+                if training_hits > 0:
+                    print(f"   → 功能训练知识: {training_hits}条")
+        else:
+            results['knowledge'] = {
+                "enabled": False,
+                "risk_prevention": {"hits": [], "context": ""},
+                "disease_management": {"hits": [], "context": ""},
+                "functional_training": {"hits": [], "context": ""},
+                "combined_context": "",
+                "total_hits": 0
+            }
+
+        # Stage 4: 行动计划生成（新增）
         if verbose:
-            print("💡 Stage 4: 行动计划 Agent V3 执行中...")
-        results['actions'] = self.action_agent.generate(
-            profile, results['status'], results['risk'], results['factors']
+            print("💡 Stage 4: 行动计划 Agent 执行中...")
+        results['actions'] = self._run_stage(
+            "actions",
+            "正在生成干预行动建议...",
+            "干预行动建议生成完成",
+            lambda: self.action_agent.generate(
+                profile,
+                results['status'],
+                results['risk'],
+                results['factors'],
+                knowledge_context=knowledge_context,
+            ),
+            stage_callback,
         )
         if verbose:
             print(f"   → 生成行动数: {len(results['actions'].get('actions', []))}")
 
         # Stage 5: 优先级排序（V3）
         if verbose:
-            print("🎯 Stage 5: 优先级排序 Agent V3 执行中...")
-        results['priority'] = self.priority_agent.rank(
-            results['actions'].get('actions', []),
-            results['risk']
+            print("🎯 Stage 5: 优先级排序 Agent 执行中...")
+        results['priority'] = self._run_stage(
+            "priority",
+            "正在排序建议优先级...",
+            "建议优先级排序完成",
+            lambda: self.priority_agent.rank(
+                results['actions'].get('actions', []),
+                results['risk'],
+            ),
+            stage_callback,
         )
         if verbose:
             print(f"   → A级优先: {len(results['priority'].get('priority_a', []))}项")
@@ -1018,10 +1409,19 @@ class OrchestratorAgentV2:
 
         # Stage 6: 反思校验（V3）
         if verbose:
-            print("✅ Stage 6: 反思校验 Agent V3 执行中...")
-        results['review'] = self.review_agent.review(
-            profile, results['status'], results['risk'],
-            results['factors'], results['actions'], results['priority']
+            print("✅ Stage 6: 反思校验 Agent 执行中...")
+        results['review'] = self._run_stage(
+            "review",
+            "正在进行结果复核...",
+            "结果复核完成",
+            lambda: self.review_agent.review(
+                results['status'],
+                results['risk'],
+                results['factors'],
+                results['actions'],
+                results['priority'],
+            ),
+            stage_callback,
         )
         if verbose:
             quality = results['review'].get('overall_quality', '未知')
@@ -1030,10 +1430,21 @@ class OrchestratorAgentV2:
         # Stage 7: 报告生成（V2）
         if verbose:
             print("📝 Stage 7: 报告生成 Agent V2 执行中...")
-        results['report'] = self.report_agent.generate_report(
-            profile, results['status'], results['risk'],
-            results['factors'], results['actions'],
-            results['priority'], results['review']
+        results['report'] = self._run_stage(
+            "report",
+            "正在整理最终报告文本...",
+            "最终报告文本整理完成",
+            lambda: self.report_agent.generate_report(
+                profile,
+                results['status'],
+                results['risk'],
+                results['factors'],
+                results['actions'],
+                results['priority'],
+                results['review'],
+                knowledge_context=knowledge_context,
+            ),
+            stage_callback,
         )
         if verbose:
             print("   → 报告生成完成")
