@@ -143,6 +143,7 @@ class PageIndexRAGAgent:
                     "line_num": chunk.get("line_num"),
                     "matched_terms": matched_terms,
                     "excerpt": excerpt,
+                    "text": chunk.get("text", ""),
                 }
             )
 
