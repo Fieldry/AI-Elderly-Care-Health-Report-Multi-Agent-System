@@ -126,3 +126,31 @@ class DoctorManagementUpdateRequest(BaseModel):
     arrangedRevisit: Optional[bool] = None
     referred: Optional[bool] = None
     nextFollowupAt: Optional[str] = None
+
+
+# ── 心理咨询 ──────────────────────────────────────────────
+
+
+class CounselingSessionCreateResponse(BaseModel):
+    sessionId: str
+    createdAt: str
+
+
+class CounselingMessageRequest(BaseModel):
+    message: str
+
+
+class CounselingMessageResponse(BaseModel):
+    messageId: str
+    role: str
+    content: str
+    createdAt: str
+
+
+class CounselingSessionInfo(BaseModel):
+    sessionId: str
+    userId: str
+    title: str
+    status: str
+    createdAt: str
+    updatedAt: str
