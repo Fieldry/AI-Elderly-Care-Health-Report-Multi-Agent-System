@@ -8,12 +8,19 @@ import json
 import uuid
 import os
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from dataclasses import asdict, fields
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from multi_agent_system_v2 import UserProfile
+from memory.questionnaire import (
+    CHRONIC_BOOLEAN_FIELDS,
+    FIELD_META,
+    GENDER_CONDITIONAL_FIELDS,
+    OPTIONAL_PROFILE_FIELDS,
+    QUESTION_GROUPS,
+)
 
 
 # 默认数据库路径
@@ -57,12 +64,18 @@ class UserProfileStore:
                     session_id  TEXT PRIMARY KEY,
                     user_id     TEXT NOT NULL,
                     messages    TEXT NOT NULL,        -- list of {role, content} JSON
+                    context     TEXT NOT NULL DEFAULT '{}',
                     status      TEXT NOT NULL,        -- COLLECTING / DONE
                     created_at  TEXT NOT NULL,
                     updated_at  TEXT NOT NULL,
                     FOREIGN KEY (user_id) REFERENCES users(user_id)
                 )
             """)
+            session_columns = {
+                row["name"] for row in conn.execute("PRAGMA table_info(sessions)").fetchall()
+            }
+            if "context" not in session_columns:
+                conn.execute("ALTER TABLE sessions ADD COLUMN context TEXT NOT NULL DEFAULT '{}'")
 
     def _conn(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path)
@@ -102,7 +115,12 @@ class UserProfileStore:
         data = json.loads(row["profile"])
         return self._dict_to_profile(data)
 
-    def update_profile(self, user_id: str, updates: Dict[str, Any]) -> UserProfile:
+    def update_profile(
+        self,
+        user_id: str,
+        updates: Dict[str, Any],
+        allow_none_overwrite: bool = False,
+    ) -> UserProfile:
         """
         增量更新用户画像
         只更新 updates 中不为 None 的字段，不覆盖已有数据
@@ -118,7 +136,7 @@ class UserProfileStore:
         # 如果想允许覆盖，把 if 条件去掉即可
         changed = False
         for key, value in updates.items():
-            if key in profile_dict and value is not None:
+            if key in profile_dict and (value is not None or allow_none_overwrite):
                 # cognition_calc 是 list，特殊处理：合并非空项
                 if key == "cognition_calc" and isinstance(value, list):
                     old = profile_dict.get("cognition_calc") or ["", "", ""]
@@ -176,9 +194,9 @@ class UserProfileStore:
         now = datetime.now().isoformat()
         with self._conn() as conn:
             conn.execute(
-                "INSERT INTO sessions (session_id, user_id, messages, status, created_at, updated_at) "
-                "VALUES (?, ?, ?, ?, ?, ?)",
-                (session_id, user_id, json.dumps([]), "COLLECTING", now, now)
+                "INSERT INTO sessions (session_id, user_id, messages, context, status, created_at, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (session_id, user_id, json.dumps([]), json.dumps({}, ensure_ascii=False), "COLLECTING", now, now)
             )
         return session_id
 
@@ -221,6 +239,29 @@ class UserProfileStore:
                 (json.dumps(messages, ensure_ascii=False), now, session_id)
             )
 
+    def get_session_context(self, session_id: str) -> Dict[str, Any]:
+        """获取会话上下文"""
+        with self._conn() as conn:
+            row = conn.execute(
+                "SELECT context FROM sessions WHERE session_id = ?", (session_id,)
+            ).fetchone()
+        if row is None or not row["context"]:
+            return {}
+        try:
+            parsed = json.loads(row["context"])
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+
+    def update_session_context(self, session_id: str, context: Dict[str, Any]):
+        """覆盖保存会话上下文"""
+        now = datetime.now().isoformat()
+        with self._conn() as conn:
+            conn.execute(
+                "UPDATE sessions SET context = ?, updated_at = ? WHERE session_id = ?",
+                (json.dumps(context, ensure_ascii=False), now, session_id)
+            )
+
     def update_session_status(self, session_id: str, status: str):
         """更新会话状态"""
         now = datetime.now().isoformat()
@@ -245,7 +286,77 @@ class UserProfileStore:
     # 缺失字段分析
     # ─────────────────────────────────────────────
 
-    def get_missing_fields(self, user_id: str) -> Dict[str, list]:
+    @staticmethod
+    def _is_blank(value: Any) -> bool:
+        if value is None:
+            return True
+        if isinstance(value, str):
+            return value.strip() == ""
+        if isinstance(value, list):
+            return len(value) == 0 or all(UserProfileStore._is_blank(item) for item in value)
+        return False
+
+    def _is_field_applicable(
+        self,
+        field_name: str,
+        profile_dict: Dict[str, Any],
+        session_context: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        if field_name in OPTIONAL_PROFILE_FIELDS:
+            return False
+
+        if field_name in GENDER_CONDITIONAL_FIELDS:
+            return profile_dict.get("sex") == GENDER_CONDITIONAL_FIELDS[field_name]
+
+        if field_name in {
+            "badl_bathing",
+            "badl_dressing",
+            "badl_toileting",
+            "badl_transferring",
+            "badl_continence",
+            "badl_eating",
+        }:
+            return profile_dict.get("health_limitation") != "完全没有影响"
+
+        if field_name in CHRONIC_BOOLEAN_FIELDS:
+            return profile_dict.get("chronic_disease_any") in {"有", "记不清"}
+
+        if field_name == "cancer_type":
+            return profile_dict.get("cancer") == "是"
+
+        if field_name == "other_chronic_note":
+            return bool((session_context or {}).get("needs_other_chronic_note"))
+
+        return field_name in FIELD_META
+
+    def _is_field_filled(self, field_name: str, value: Any) -> bool:
+        if field_name == "cognition_calc":
+            if not isinstance(value, list) or len(value) < 3:
+                return False
+            return all(not self._is_blank(item) for item in value[:3])
+        return not self._is_blank(value)
+
+    def _required_group_fields(
+        self,
+        profile_dict: Dict[str, Any],
+        session_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, List[str]]:
+        result: Dict[str, List[str]] = {}
+        for group in QUESTION_GROUPS:
+            required_fields = [
+                field
+                for field in group["fields"]
+                if self._is_field_applicable(field, profile_dict, session_context)
+            ]
+            if required_fields:
+                result[group["group_name"]] = required_fields
+        return result
+
+    def get_missing_fields(
+        self,
+        user_id: str,
+        session_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, list]:
         """
         返回 UserProfile 中各分组的缺失字段
         格式: { "group_name": ["field1", "field2", ...] }
@@ -256,45 +367,13 @@ class UserProfileStore:
 
         profile_dict = asdict(profile)
 
-        # 按分组定义字段
-        FIELD_GROUPS = {
-            "基本信息": ["age", "sex", "province", "residence", "education_years", "marital_status"],
-            "健康限制": ["health_limitation"],
-            "日常活动（BADL）": [
-                "badl_bathing", "badl_dressing", "badl_toileting",
-                "badl_transferring", "badl_continence", "badl_eating"
-            ],
-            "日常活动（IADL）": [
-                "iadl_visiting", "iadl_shopping", "iadl_cooking", "iadl_laundry",
-                "iadl_walking", "iadl_carrying", "iadl_crouching", "iadl_transport"
-            ],
-            "慢性病情况": [
-                "hypertension", "diabetes", "heart_disease", "stroke",
-                "cataract", "cancer", "arthritis"
-            ],
-            "认知功能": [
-                "cognition_time", "cognition_month", "cognition_season",
-                "cognition_place", "cognition_calc", "cognition_draw"
-            ],
-            "心理状态": ["depression", "anxiety", "loneliness"],
-            "生活方式": ["smoking", "drinking", "exercise", "sleep_quality"],
-            "身体指标": ["weight", "height", "vision", "hearing"],
-            "社会支持": [
-                "living_arrangement", "cohabitants", "financial_status",
-                "income", "medical_insurance", "caregiver"
-            ],
-        }
-
         missing = {}
-        for group, field_list in FIELD_GROUPS.items():
+        field_groups = self._required_group_fields(profile_dict, session_context)
+        for group, field_list in field_groups.items():
             empty = []
             for f in field_list:
                 val = profile_dict.get(f)
-                # cognition_calc 是 list，特殊判断
-                if f == "cognition_calc":
-                    if not val or all(v in (None, "") for v in val):
-                        empty.append(f)
-                elif val is None:
+                if not self._is_field_filled(f, val):
                     empty.append(f)
             if empty:
                 missing[group] = empty
@@ -305,23 +384,23 @@ class UserProfileStore:
         """判断用户画像是否已经全部填完"""
         return len(self.get_missing_fields(user_id)) == 0
 
-    def get_completion_rate(self, user_id: str) -> float:
+    def get_completion_rate(
+        self,
+        user_id: str,
+        session_context: Optional[Dict[str, Any]] = None,
+    ) -> float:
         """返回画像完成度 0.0 ~ 1.0"""
         profile = self.get_profile(user_id)
         if profile is None:
             return 0.0
         profile_dict = asdict(profile)
-        # 排除 user_type（系统字段，不计入）
-        all_fields = [k for k in profile_dict if k != "user_type"]
-        total = len(all_fields)
-        filled = 0
-        for k in all_fields:
-            v = profile_dict[k]
-            if k == "cognition_calc":
-                if v and any(x not in (None, "") for x in v):
-                    filled += 1
-            elif v is not None:
-                filled += 1
+        required_fields = []
+        for field_list in self._required_group_fields(profile_dict, session_context).values():
+            required_fields.extend(field_list)
+        total = len(required_fields)
+        filled = sum(
+            1 for field_name in required_fields if self._is_field_filled(field_name, profile_dict.get(field_name))
+        )
         return filled / total if total > 0 else 0.0
 
     # ─────────────────────────────────────────────

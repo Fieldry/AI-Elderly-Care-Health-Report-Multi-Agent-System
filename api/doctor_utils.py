@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 CHRONIC_FIELD_LABELS = {
     "hypertension": "高血压",
     "diabetes": "糖尿病",
-    "heart_disease": "心脏病",
+    "coronary_heart_disease": "冠心病",
     "stroke": "卒中/中风",
     "cancer": "肿瘤",
     "arthritis": "关节问题",
@@ -104,7 +104,7 @@ def derive_functional_status(profile: Dict[str, Any], latest_payload: Dict[str, 
         "iadl_transport",
     ]
     badl_deps = sum(1 for key in badl_keys if _safe_text(profile.get(key)) not in {"", "不需要帮助"})
-    iadl_deps = sum(1 for key in iadl_keys if _safe_text(profile.get(key)) not in {"", "能"})
+    iadl_deps = sum(1 for key in iadl_keys if _safe_text(profile.get(key)) not in {"", "能自己做"})
     if badl_deps >= 3 or iadl_deps >= 5:
         level = "high"
     elif badl_deps >= 1 or iadl_deps >= 2:
@@ -207,7 +207,9 @@ def derive_risk_tags(profile: Dict[str, Any], latest_payload: Dict[str, Any]) ->
         tags["social_support"] = _merge_level(tags["social_support"], "medium")
     if _safe_text(profile.get("depression")) not in {"", "从不"} or _safe_text(profile.get("anxiety")) not in {"", "从不"}:
         tags["mood"] = _merge_level(tags["mood"], "medium")
-    if _safe_text(profile.get("cognition_draw")) in {"错误", "不知道"}:
+    cognition_values = [_safe_text(profile.get("cognition_time")), _safe_text(profile.get("cognition_month")), _safe_text(profile.get("cognition_season")), _safe_text(profile.get("cognition_place"))]
+    calc_values = [str(item).strip() for item in _safe_list(profile.get("cognition_calc")) if str(item).strip()]
+    if any(value in {"错误", "不知道"} for value in cognition_values) or any(value in {"错误", "不知道"} for value in calc_values):
         tags["cognitive"] = _merge_level(tags["cognitive"], "medium")
 
     functional = derive_functional_status(profile, latest_payload)

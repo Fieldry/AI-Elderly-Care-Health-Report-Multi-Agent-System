@@ -414,7 +414,7 @@ async def start_chat(request: Request) -> ChatStartResponse:
 
     user_id = conversation_manager.new_user()
     session_id = conversation_manager.new_session(user_id)
-    result = conversation_manager.chat(session_id, "")
+    result = conversation_manager.start_session(session_id)
     history = conversation_manager.get_history(session_id)
     issued_token = auth_service.issue_elderly_token(user_id)
 
@@ -430,6 +430,7 @@ async def start_chat(request: Request) -> ChatStartResponse:
         userId=user_id,
         sessionId=session_id,
         welcomeMessage=result.get("reply", "您好！我是AI养老健康助手。"),
+        interaction=result.get("interaction"),
         accessToken=issued_token.token,
         userType=ELDERLY_ROLE,
         expiresAt=issued_token.expires_at,
@@ -445,7 +446,7 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
     reports_dir = require_state(request, "reports_dir", "报告目录未初始化")
 
     try:
-        result = conversation_manager.chat(payload.sessionId, payload.message)
+        result = conversation_manager.chat(payload.sessionId, payload.message, payload.answer)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except Exception as exc:
@@ -474,6 +475,7 @@ async def send_message(request: Request, payload: ChatMessageRequest) -> ChatMes
         state=_state_to_api(state),
         progress=result.get("progress", 0.0),
         completed=completed,
+        interaction=result.get("interaction"),
     )
 
 
@@ -504,6 +506,7 @@ async def get_chat_progress(request: Request, session_id: str) -> ChatProgressRe
         completedGroups=progress.get("completed_groups", []),
         pendingGroups=progress.get("pending_groups", []),
         missingFields=progress.get("missing_fields", {}),
+        interaction=progress.get("interaction"),
     )
 
 
@@ -558,6 +561,22 @@ async def stream_chat(request: Request, message: str, sessionId: str):
             for char in reply:
                 yield f"data: {json.dumps({'content': char})}\n\n"
                 await asyncio.sleep(0.02)
+            yield (
+                "data: "
+                + json.dumps(
+                    {
+                        "type": "meta",
+                        "data": {
+                            "state": _state_to_api(result.get("state")),
+                            "progress": result.get("progress", 0.0),
+                            "completed": result.get("state") == SessionState.REPORT_DONE,
+                            "interaction": result.get("interaction"),
+                        },
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n\n"
+            )
             yield "data: [DONE]\n\n"
         except Exception as exc:
             yield f"data: {json.dumps({'error': str(exc)})}\n\n"

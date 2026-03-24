@@ -8,15 +8,17 @@ class ChatStartResponse(BaseModel):
     userId: str
     sessionId: str
     welcomeMessage: str
+    interaction: Optional[Dict[str, Any]] = None
     accessToken: Optional[str] = None
     userType: Optional[str] = None
     expiresAt: Optional[str] = None
 
 
 class ChatMessageRequest(BaseModel):
-    message: str
+    message: str = ""
     sessionId: str
     context: Optional[Dict[str, Any]] = None
+    answer: Optional[Dict[str, Any]] = None
 
 
 class ChatMessageResponse(BaseModel):
@@ -24,6 +26,7 @@ class ChatMessageResponse(BaseModel):
     state: str
     progress: float
     completed: bool = False
+    interaction: Optional[Dict[str, Any]] = None
 
 
 class ChatProgressResponse(BaseModel):
@@ -32,6 +35,7 @@ class ChatProgressResponse(BaseModel):
     completedGroups: List[str] = Field(default_factory=list)
     pendingGroups: List[str] = Field(default_factory=list)
     missingFields: Dict[str, List[str]] = Field(default_factory=dict)
+    interaction: Optional[Dict[str, Any]] = None
 
 
 class ChatHistoryMessage(BaseModel):

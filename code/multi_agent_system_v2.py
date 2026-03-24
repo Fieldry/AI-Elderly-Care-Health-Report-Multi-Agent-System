@@ -93,8 +93,8 @@ class UserProfile:
     height: float = None
     vision: str = None
     hearing: str = None
-    waist_circumference: float = None  # 新增字段
-    hip_circumference: float = None  # 新增字段
+    waist_circumference: float = None
+    hip_circumference: float = None
 
     # 健康限制
     health_limitation: str = None
@@ -1585,7 +1585,6 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
         # 人口学
         age=safe_get('trueage'),
         sex=safe_get('a1'),
-        province=safe_get('prov'),
         residence=safe_get('residenc'),
         education_years=safe_get('f1'),
         marital_status=safe_get('f41'),
@@ -1614,7 +1613,7 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
         # 慢性病
         hypertension=safe_get('g15a1'),
         diabetes=safe_get('g15b1'),
-        heart_disease=safe_get('g15c1'),
+        coronary_heart_disease=safe_get('g15c1'),
         stroke=safe_get('g15d1'),
         cataract=safe_get('g15g1'),
         cancer=safe_get('g15i1'),
@@ -1626,7 +1625,6 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
         cognition_season=safe_get('c14'),
         cognition_place=safe_get('c15'),
         cognition_calc=[safe_get('c31a', ''), safe_get('c31b', ''), safe_get('c31c', '')],
-        cognition_draw=safe_get('c32'),
 
         # 心理状态
         depression=safe_get('b33'),
@@ -1647,9 +1645,7 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
 
         # 社会支持
         living_arrangement=safe_get('a51'),
-        cohabitants=safe_get('a52'),
         financial_status=safe_get('f34'),
-        income=safe_get('f35'),
         medical_insurance=f"城镇医保:{safe_get('f64e')}, 新农合:{safe_get('f64g')}",
         caregiver=safe_get('f5'),
 
@@ -1708,7 +1704,6 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
             profile = UserProfile(
                 age=safe_get('trueage'),
                 sex=safe_get('a1'),
-                province=safe_get('prov'),
                 residence=safe_get('residenc'),
                 education_years=safe_get('f1'),
                 marital_status=safe_get('f41'),
@@ -1729,7 +1724,7 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
                 iadl_transport=safe_get('e14'),
                 hypertension=safe_get('g15a1'),
                 diabetes=safe_get('g15b1'),
-                heart_disease=safe_get('g15c1'),
+                coronary_heart_disease=safe_get('g15c1'),
                 stroke=safe_get('g15d1'),
                 cataract=safe_get('g15g1'),
                 cancer=safe_get('g15i1'),
@@ -1739,7 +1734,6 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
                 cognition_season=safe_get('c14'),
                 cognition_place=safe_get('c15'),
                 cognition_calc=[safe_get('c31a', ''), safe_get('c31b', ''), safe_get('c31c', '')],
-                cognition_draw=safe_get('c32'),
                 depression=safe_get('b33'),
                 anxiety=safe_get('b36'),
                 loneliness=safe_get('b38'),
@@ -1752,9 +1746,7 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
                 vision=safe_get('g1'),
                 hearing=safe_get('g106'),
                 living_arrangement=safe_get('a51'),
-                cohabitants=safe_get('a52'),
                 financial_status=safe_get('f34'),
-                income=safe_get('f35'),
                 medical_insurance=f"城镇医保:{safe_get('f64e')}, 新农合:{safe_get('f64g')}",
                 caregiver=safe_get('f5'),
                 user_type="elderly"
@@ -2004,7 +1996,6 @@ def test_single_sample():
     test_profile = UserProfile(
         age=85,
         sex="女",
-        province="河南",
         residence="农村",
         education_years=0,
         marital_status="丧偶",
@@ -2033,7 +2024,7 @@ def test_single_sample():
         # 慢性病
         hypertension="否",
         diabetes="否",
-        heart_disease="是",
+        coronary_heart_disease="是",
         stroke="否",
         arthritis="是",
 
@@ -2063,7 +2054,6 @@ def test_single_sample():
 
         # 社会支持
         living_arrangement="与子女同住",
-        cohabitants=3,
         medical_insurance="城乡居民医保",
         caregiver="子女",
         financial_status="一般",

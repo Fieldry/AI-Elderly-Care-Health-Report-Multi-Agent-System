@@ -10,16 +10,16 @@ from multi_agent_system_v2 import UserProfile
 
 BADL_MAP = {
     0: "不需要帮助",
-    1: "部分帮助",
-    2: "多方面帮助",
-    3: "多方面帮助",
+    1: "需要别人搭把手",
+    2: "大部分要靠别人帮忙",
+    3: "大部分要靠别人帮忙",
 }
 
 IADL_MAP = {
-    0: "能",
-    1: "有点困难",
-    2: "不能做",
-    3: "不能做",
+    0: "能自己做",
+    1: "做起来有点困难",
+    2: "现在做不了",
+    3: "现在做不了",
 }
 
 GENDER_MAP = {
@@ -35,9 +35,9 @@ RESIDENCE_MAP = {
 
 LIVING_MAP = {
     "alone": "独居",
-    "with_spouse": "与配偶同住",
-    "with_children": "与子女同住",
-    "nursing_home": "养老院",
+    "with_spouse": "和老伴",
+    "with_children": "和子女",
+    "nursing_home": "住养老院",
 }
 
 LIFESTYLE_MAP = {
@@ -86,7 +86,7 @@ VISION_HEARING_MAP = {
 CHRONIC_FIELDS = {
     "hypertension": "hypertension",
     "diabetes": "diabetes",
-    "heart_disease": "heart_disease",
+    "heart_disease": "coronary_heart_disease",
     "stroke": "stroke",
     "cancer": "cancer",
     "arthritis": "arthritis",
@@ -173,7 +173,7 @@ def _from_frontend_profile(raw: Dict[str, Any]) -> UserProfile:
         iadl_transport=_map_score(iadl.get("transport"), IADL_MAP),
         hypertension="是" if "hypertension" in diseases else "否",
         diabetes="是" if "diabetes" in diseases else "否",
-        heart_disease="是" if "heart_disease" in diseases else "否",
+        coronary_heart_disease="是" if "heart_disease" in diseases else "否",
         stroke="是" if "stroke" in diseases else "否",
         cataract="否",
         cancer="是" if "cancer" in diseases else "否",
@@ -183,7 +183,6 @@ def _from_frontend_profile(raw: Dict[str, Any]) -> UserProfile:
         cognition_season=COGNITION_MAP.get(health.get("cognition"), None),
         cognition_place=COGNITION_MAP.get(health.get("cognition"), None),
         cognition_calc=None,
-        cognition_draw=COGNITION_MAP.get(health.get("cognition"), None),
         depression=MOOD_MAP.get(health.get("mood"), None),
         anxiety=MOOD_MAP.get(health.get("mood"), None),
         loneliness=MOOD_MAP.get(health.get("mood"), None),
@@ -196,9 +195,7 @@ def _from_frontend_profile(raw: Dict[str, Any]) -> UserProfile:
         vision=VISION_HEARING_MAP.get(health.get("vision"), None),
         hearing=VISION_HEARING_MAP.get(health.get("hearing"), None),
         living_arrangement=LIVING_MAP.get(demographics.get("livingStatus"), None),
-        cohabitants=None,
         financial_status=None,
-        income=None,
         medical_insurance=None,
         caregiver=support.get("primaryCaregiver") or None,
         user_type="elderly",
