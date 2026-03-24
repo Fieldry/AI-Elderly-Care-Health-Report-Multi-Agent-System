@@ -82,6 +82,7 @@ class ReportData(BaseModel):
     healthPortrait: Dict[str, Any]
     riskFactors: Dict[str, List[RiskItem]]
     recommendations: Dict[str, List[RecommendationItem]]
+    warmMessage: str = ""
     generatedAt: str
 
 

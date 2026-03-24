@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import fields
 from datetime import datetime
@@ -224,12 +225,50 @@ def _severity_to_level(text: Any) -> str:
 def _extract_summary_from_markdown(report_text: str) -> str:
     if not report_text:
         return ""
-    section = re.search(r"##\s*1\.\s*健康报告总结\s*(.+?)(?:\n##\s|\Z)", report_text, re.S)
+    section = _extract_markdown_section(report_text, r"1\.\s*健康报告总结")
     if not section:
         return ""
-    content = section.group(1)
+    content = section
     lines = [line.strip(" -*\t") for line in content.splitlines() if line.strip()]
     return " ".join(lines[:3]).strip()
+
+
+def _extract_markdown_section(report_text: str, title_pattern: str) -> str:
+    if not report_text:
+        return ""
+    section = re.search(rf"##\s*{title_pattern}\s*(.+?)(?=\n##\s|\n---\s*\n|\Z)", report_text, re.S)
+    if not section:
+        return ""
+    return section.group(1).strip()
+
+
+def _clean_markdown_text(value: Any) -> str:
+    text = str(value or "").strip()
+    text = re.sub(r"[*_`#>-]+", "", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip("：: ").strip()
+
+
+def _normalize_markdown_lines(lines: List[str]) -> str:
+    cleaned_lines: List[str] = []
+    for raw_line in lines:
+        line = str(raw_line or "").strip()
+        if not line:
+            continue
+        line = re.sub(r"^\s*[*+-]\s*", "", line)
+        line = re.sub(r"^\s*\d+[.)、]\s*", "", line)
+        line = _clean_markdown_text(line)
+        if line:
+            cleaned_lines.append(line)
+    return "；".join(cleaned_lines)
+
+
+def _extract_warm_message_from_markdown(report_text: str) -> str:
+    section = _extract_markdown_section(report_text, r"5\.\s*温馨寄语")
+    if not section:
+        return ""
+    paragraphs = [_clean_markdown_text(line) for line in section.splitlines() if _clean_markdown_text(line)]
+    return "\n".join(paragraphs).strip()
 
 
 def _problem_to_text(item: Any) -> str:
@@ -297,11 +336,129 @@ def _map_recommendation(action: Dict[str, Any], reason: str = "") -> Dict[str, A
     }
 
 
-def _map_recommendations(results: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
-    actions_payload = results.get("actions") if isinstance(results.get("actions"), dict) else {}
+def _parse_actions_from_payload(actions_payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     action_list = actions_payload.get("actions") if isinstance(actions_payload, dict) else []
-    if not isinstance(action_list, list):
-        action_list = []
+    if isinstance(action_list, list):
+        return [item for item in action_list if isinstance(item, dict)]
+
+    raw_payload = actions_payload.get("raw") if isinstance(actions_payload, dict) else ""
+    if not isinstance(raw_payload, str) or not raw_payload.strip():
+        return []
+
+    candidate = raw_payload.strip()
+    try:
+        parsed = json.loads(candidate)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", candidate, re.S)
+        if not match:
+            return []
+        try:
+            parsed = json.loads(match.group(0))
+        except json.JSONDecodeError:
+            return []
+
+    parsed_actions = parsed.get("actions") if isinstance(parsed, dict) else []
+    if not isinstance(parsed_actions, list):
+        return []
+    return [item for item in parsed_actions if isinstance(item, dict)]
+
+
+def _extract_recommendations_from_markdown(report_text: str) -> Dict[str, List[Dict[str, Any]]]:
+    recommendations = {
+        "priority1": [],
+        "priority2": [],
+        "priority3": [],
+    }
+    section = _extract_markdown_section(report_text, r"4\.\s*健康建议")
+    if not section:
+        return recommendations
+
+    priority_map = {
+        "A": "priority1",
+        "B": "priority2",
+        "C": "priority3",
+    }
+    section_pattern = re.compile(r"###\s*([ABC])\.\s*([^\n]+)\n(.*?)(?=\n###\s*[ABC]\.\s*|\Z)", re.S)
+    item_pattern = re.compile(r"\*\*\s*\d+[）\)]\s*(.+?)\s*\*\*\s*\n(.*?)(?=\n\*\*\s*\d+[）\)]|\Z)", re.S)
+
+    for section_match in section_pattern.finditer(section):
+        priority_code = section_match.group(1)
+        priority_title = re.sub(r"（.*?）", "", section_match.group(2)).strip()
+        body = section_match.group(3).strip()
+        target_key = priority_map.get(priority_code)
+        if not target_key:
+            continue
+
+        for index, item_match in enumerate(item_pattern.finditer(body), start=1):
+            title = _clean_markdown_text(item_match.group(1))
+            item_body = item_match.group(2).strip()
+            current_label = ""
+            current_lines: List[str] = []
+            labelled_blocks: Dict[str, str] = {}
+            loose_lines: List[str] = []
+
+            def flush_current_block():
+                nonlocal current_label, current_lines
+                if not current_label:
+                    return
+                normalized = _normalize_markdown_lines(current_lines)
+                if normalized:
+                    labelled_blocks[current_label] = normalized
+                current_label = ""
+                current_lines = []
+
+            for raw_line in item_body.splitlines():
+                line = str(raw_line or "").strip()
+                if not line:
+                    continue
+                line_no_prefix = re.sub(r"^\s*[*+-]\s*", "", line).strip()
+                label_match = re.match(r"\*\*(怎么做|完成标准)\*\*[:：]?\s*(.*)$", line_no_prefix)
+                if label_match:
+                    flush_current_block()
+                    current_label = label_match.group(1)
+                    current_lines = [label_match.group(2)] if label_match.group(2).strip() else []
+                    continue
+
+                if current_label:
+                    current_lines.append(line_no_prefix)
+                else:
+                    loose_lines.append(line_no_prefix)
+
+            flush_current_block()
+
+            description_parts: List[str] = []
+            how_to_do = labelled_blocks.get("怎么做")
+            completion = labelled_blocks.get("完成标准")
+            if how_to_do:
+                description_parts.append(f"怎么做：{how_to_do}")
+            if completion:
+                description_parts.append(f"完成标准：{completion}")
+            if not description_parts:
+                normalized_loose = _normalize_markdown_lines(loose_lines)
+                if normalized_loose:
+                    description_parts.append(normalized_loose)
+
+            recommendations[target_key].append(
+                {
+                    "id": f"{priority_code}{index}",
+                    "title": title or f"{priority_title}{index}",
+                    "description": "；".join(description_parts) or "请按计划逐步落实。",
+                    "category": priority_title or "健康建议",
+                    "completed": False,
+                }
+            )
+
+    return recommendations
+
+
+def _map_recommendations(results: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+    report_text = str(results.get("report") or "")
+    markdown_recommendations = _extract_recommendations_from_markdown(report_text)
+    if any(markdown_recommendations.values()):
+        return markdown_recommendations
+
+    actions_payload = results.get("actions") if isinstance(results.get("actions"), dict) else {}
+    action_list = _parse_actions_from_payload(actions_payload)
 
     action_by_id = {
         str(item.get("action_id")): item
@@ -325,17 +482,23 @@ def _map_recommendations(results: Dict[str, Any]) -> Dict[str, List[Dict[str, An
     p2 = _collect("priority_b")
     p3 = _collect("priority_c")
 
-    if not any([p1, p2, p3]) and action_list:
-        for idx, action in enumerate(action_list):
-            if not isinstance(action, dict):
-                continue
-            mapped = _map_recommendation(action)
-            if idx < 3:
-                p1.append(mapped)
-            elif idx < 7:
-                p2.append(mapped)
-            else:
-                p3.append(mapped)
+    used_ids = {
+        str(item.get("id") or "")
+        for group in (p1, p2, p3)
+        for item in group
+        if isinstance(item, dict)
+    }
+    remaining_actions = [
+        action for action in action_list if str(action.get("action_id") or action.get("id") or "") not in used_ids
+    ]
+    for action in remaining_actions:
+        mapped = _map_recommendation(action)
+        if len(p1) < 3:
+            p1.append(mapped)
+        elif len(p2) < 4:
+            p2.append(mapped)
+        else:
+            p3.append(mapped)
 
     return {
         "priority1": p1,
@@ -344,12 +507,13 @@ def _map_recommendations(results: Dict[str, Any]) -> Dict[str, List[Dict[str, An
     }
 
 
-def to_frontend_report_data(results: Dict[str, Any]) -> Dict[str, Any]:
+def to_frontend_report_data(results: Dict[str, Any], generated_at: str | None = None) -> Dict[str, Any]:
     status = results.get("status") if isinstance(results.get("status"), dict) else {}
     risk = results.get("risk") if isinstance(results.get("risk"), dict) else {}
     factors = results.get("factors") if isinstance(results.get("factors"), dict) else {}
+    report_text = str(results.get("report") or "")
 
-    summary = _extract_summary_from_markdown(str(results.get("report") or ""))
+    summary = _extract_summary_from_markdown(report_text)
     if not summary:
         summary = "；".join(
             [
@@ -384,5 +548,6 @@ def to_frontend_report_data(results: Dict[str, Any]) -> Dict[str, Any]:
             "midTerm": mid_term,
         },
         "recommendations": _map_recommendations(results),
-        "generatedAt": datetime.now().isoformat(),
+        "warmMessage": _extract_warm_message_from_markdown(report_text),
+        "generatedAt": generated_at or datetime.now().isoformat(),
     }

@@ -24,6 +24,33 @@ REPORT_DISCLAIMER = (
 REPORT_FOOTER = "*本报告由 AI 养老健康助手自动生成，仅供参考。请结合专业医生的诊断和建议。*"
 
 
+def _refresh_report_data(payload: Dict[str, Any]) -> Dict[str, Any]:
+    existing = payload.get("report_data") if isinstance(payload, dict) else {}
+    if not isinstance(existing, dict):
+        existing = {}
+
+    raw_results = payload.get("raw_results") if isinstance(payload, dict) else {}
+    if not isinstance(raw_results, dict):
+        return existing
+
+    from mappers import to_frontend_report_data
+
+    generated_at = payload.get("generated_at") if isinstance(payload, dict) else None
+    return to_frontend_report_data(raw_results, str(generated_at).strip() or None)
+
+
+def hydrate_report_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """基于原始结果重建 report_data，兼容历史旧文件。"""
+    if not isinstance(payload, dict):
+        return {}
+
+    hydrated_payload = dict(payload)
+    refreshed_report_data = _refresh_report_data(hydrated_payload)
+    if refreshed_report_data:
+        hydrated_payload["report_data"] = refreshed_report_data
+    return hydrated_payload
+
+
 def profile_to_dict(profile: "UserProfile") -> Dict[str, Any]:
     """将 UserProfile 转为可持久化字典。"""
     payload = asdict(profile)
@@ -66,6 +93,7 @@ def save_report_bundle(
         "raw_results": results,
         "report_data": report_data,
     }
+    payload = hydrate_report_payload(payload)
 
     json_file = date_dir / f"{file_stem}.json"
     with open(json_file, "w", encoding="utf-8") as file_obj:
@@ -307,6 +335,7 @@ def _render_report_from_structured_data(
 
 def build_report_list_item(payload: Dict[str, Any], fallback_id: str) -> Dict[str, Any]:
     """构造列表场景使用的报告摘要对象。"""
+    payload = hydrate_report_payload(payload)
     report_data = payload.get("report_data") if isinstance(payload, dict) else {}
     title = REPORT_TITLE
     if isinstance(report_data, dict):
@@ -330,7 +359,7 @@ def list_reports_for_user(workspace_manager, user_id: str) -> List[Dict[str, Any
 
         for report_file in workspace_manager.get_report_files(session_id):
             with open(report_file, "r", encoding="utf-8") as file_obj:
-                payload = json.load(file_obj)
+                payload = hydrate_report_payload(json.load(file_obj))
 
             item = build_report_list_item(payload, report_file.stem)
             if not item["created_at"]:
@@ -349,7 +378,7 @@ def load_report_payload(
     """根据 report_id 从传统目录和工作区查找报告。"""
     for report_file in reports_dir.rglob("*.json"):
         with open(report_file, "r", encoding="utf-8") as file_obj:
-            payload = json.load(file_obj)
+            payload = hydrate_report_payload(json.load(file_obj))
         if payload.get("report_id") == report_id:
             return payload
 
@@ -359,7 +388,7 @@ def load_report_payload(
     for session_id in workspace_manager.list_sessions():
         for report_file in workspace_manager.get_report_files(session_id):
             with open(report_file, "r", encoding="utf-8") as file_obj:
-                payload = json.load(file_obj)
+                payload = hydrate_report_payload(json.load(file_obj))
             if payload.get("report_id") == report_id:
                 return payload
     return None

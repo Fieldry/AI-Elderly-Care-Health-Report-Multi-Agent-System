@@ -692,7 +692,7 @@ async def generate_report(request: Request, payload: ReportGenerateRequest) -> R
         profile = to_backend_profile(payload.profile)
         results = await _run_report_workflow(conversation_manager, profile)
         report_data = to_frontend_report_data(results)
-        save_report_bundle(
+        saved_payload = save_report_bundle(
             reports_dir=reports_dir,
             workspace_manager=workspace_manager,
             profile=profile_to_dict(profile),
@@ -707,7 +707,7 @@ async def generate_report(request: Request, payload: ReportGenerateRequest) -> R
             session_owner_id,
             profile=profile_to_dict(profile),
         )
-        return ReportData(**report_data)
+        return ReportData(**saved_payload["report_data"])
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"生成报告失败: {exc}") from exc
 
@@ -798,7 +798,7 @@ async def stream_report(request: Request, payload: ReportGenerateRequest):
             results = await workflow_task
 
             report_data = to_frontend_report_data(results)
-            save_report_bundle(
+            saved_payload = save_report_bundle(
                 reports_dir=reports_dir,
                 workspace_manager=workspace_manager,
                 profile=profile_dict,
@@ -813,6 +813,7 @@ async def stream_report(request: Request, payload: ReportGenerateRequest):
                 session_owner_id,
                 profile=profile_dict,
             )
+            report_data = saved_payload["report_data"]
 
             report_text = str(results.get("report") or "")
             if report_text:
@@ -888,7 +889,7 @@ async def generate_report_for_elderly(
         return ReportGenerateByElderlyResponse(
             reportId=payload["report_id"],
             sessionId=session_id,
-            report=ReportData(**report_data),
+            report=ReportData(**payload["report_data"]),
         )
     except HTTPException:
         raise
