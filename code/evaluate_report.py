@@ -16,7 +16,7 @@
     python evaluate_report.py --input report.json --re-retrieve
 
     # 只运行部分指标
-    python evaluate_report.py --input report.json --metrics faithfulness,coverage
+    python evaluate_report.py --input report.json --metrics input_grounding,profile_coverage
 """
 
 from __future__ import annotations
@@ -34,9 +34,23 @@ from typing import Any, Dict, List
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from evaluation.evaluator import ReportEvaluator
-from evaluation.utils import build_retrieved_context_text
 
 logger = logging.getLogger(__name__)
+
+
+def normalize_metric_names(raw_metrics: set[str]) -> set[str]:
+    alias_map = {
+        "faithfulness": {"input_grounding", "guideline_grounding"},
+        "coverage": {"profile_coverage"},
+        "context_relevance": {"doc_routing_relevance", "node_evidence_relevance", "evidence_coverage"},
+        "doc_routing": {"doc_routing_relevance"},
+        "node_relevance": {"node_evidence_relevance"},
+    }
+    normalized: set[str] = set()
+    for metric in raw_metrics:
+        name = metric.strip()
+        normalized.update(alias_map.get(name, {name}))
+    return normalized
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -105,12 +119,18 @@ def evaluate_single(
     )
 
     # 根据指定的 metrics 过滤
-    if "faithfulness" not in metrics:
-        result.faithfulness = None
-    if "coverage" not in metrics:
+    if "input_grounding" not in metrics:
+        result.input_grounding = None
+    if "guideline_grounding" not in metrics:
+        result.guideline_grounding = None
+    if "profile_coverage" not in metrics:
         result.profile_coverage = None
-    if "context_relevance" not in metrics:
-        result.context_relevance = None
+    if "doc_routing_relevance" not in metrics:
+        result.doc_routing_relevance = None
+    if "node_evidence_relevance" not in metrics:
+        result.node_evidence_relevance = None
+    if "evidence_coverage" not in metrics:
+        result.evidence_coverage = None
 
     # 打印摘要
     summary = result.summary()
@@ -119,10 +139,15 @@ def evaluate_single(
         bar = "█" * int(score * 20) + "░" * (20 - int(score * 20))
         print(f"  {name:20s}: {score:.4f} [{bar}]")
 
-    if result.faithfulness:
-        print(f"\n  Faithfulness 详情:")
-        print(f"    总陈述数: {result.faithfulness.total_statements}")
-        print(f"    被支持数: {result.faithfulness.supported_statements}")
+    if result.input_grounding:
+        print(f"\n  Input Grounding 详情:")
+        print(f"    总陈述数: {result.input_grounding.total_statements}")
+        print(f"    被支持数: {result.input_grounding.supported_statements}")
+
+    if result.guideline_grounding:
+        print(f"\n  Guideline Grounding 详情:")
+        print(f"    总陈述数: {result.guideline_grounding.total_statements}")
+        print(f"    被支持数: {result.guideline_grounding.supported_statements}")
 
     if result.profile_coverage:
         print(f"\n  Profile Coverage 详情:")
@@ -136,10 +161,20 @@ def evaluate_single(
         if uncovered:
             print(f"    未覆盖: {', '.join(uncovered)}")
 
-    if result.context_relevance:
-        print(f"\n  Context Relevance 详情:")
-        print(f"    总句子数: {result.context_relevance.total_sentences}")
-        print(f"    有用句子数: {result.context_relevance.useful_sentences}")
+    if result.doc_routing_relevance:
+        print(f"\n  Doc Routing Relevance 详情:")
+        print(f"    总文档数: {result.doc_routing_relevance.total_docs}")
+        print(f"    相关文档数: {result.doc_routing_relevance.relevant_docs}")
+
+    if result.node_evidence_relevance:
+        print(f"\n  Node Evidence Relevance 详情:")
+        print(f"    总节点数: {result.node_evidence_relevance.total_nodes}")
+        print(f"    产出证据节点数: {result.node_evidence_relevance.covered_nodes}")
+
+    if result.evidence_coverage:
+        print(f"\n  Evidence Coverage 详情:")
+        print(f"    总需求数: {result.evidence_coverage.total_needs}")
+        print(f"    被覆盖需求数: {result.evidence_coverage.covered_needs}")
 
     return {
         "file": str(json_path),
@@ -167,8 +202,8 @@ def main():
     )
     parser.add_argument(
         "--metrics", "-m",
-        default="faithfulness,coverage,context_relevance",
-        help="要运行的指标，逗号分隔（默认: faithfulness,coverage,context_relevance）",
+        default="input_grounding,guideline_grounding,profile_coverage,doc_routing_relevance,node_evidence_relevance,evidence_coverage",
+        help="要运行的指标，逗号分隔",
     )
     parser.add_argument(
         "--verbose", "-v",
@@ -179,7 +214,7 @@ def main():
     args = parser.parse_args()
     setup_logging(args.verbose)
 
-    metrics = {m.strip() for m in args.metrics.split(",")}
+    metrics = normalize_metric_names({m.strip() for m in args.metrics.split(",")})
     report_files = find_report_files(args.input)
 
     if not report_files:
@@ -207,7 +242,14 @@ def main():
         print(f"\n{'='*60}")
         print(f"汇总（共 {len(all_results)} 份报告）")
         print(f"{'='*60}")
-        for metric_name in ["faithfulness", "profile_coverage", "context_relevance"]:
+        for metric_name in [
+            "input_grounding",
+            "guideline_grounding",
+            "profile_coverage",
+            "doc_routing_relevance",
+            "node_evidence_relevance",
+            "evidence_coverage",
+        ]:
             scores = [
                 r["summary"][metric_name]
                 for r in all_results

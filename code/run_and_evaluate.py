@@ -15,7 +15,7 @@
     python run_and_evaluate.py --row 10 --index ../data/rag_indexes/guidelines_all_index.json
 
     # 只运行部分评测指标
-    python run_and_evaluate.py --row 10 --metrics coverage
+    python run_and_evaluate.py --row 10 --metrics profile_coverage
 
     # 跳过评测，只生成报告
     python run_and_evaluate.py --row 10 --skip-eval
@@ -115,12 +115,18 @@ def evaluate_report(
     evaluator = ReportEvaluator()
     result = evaluator.evaluate_from_file(json_path)
 
-    if "faithfulness" not in metrics:
-        result.faithfulness = None
-    if "coverage" not in metrics:
+    if "input_grounding" not in metrics:
+        result.input_grounding = None
+    if "guideline_grounding" not in metrics:
+        result.guideline_grounding = None
+    if "profile_coverage" not in metrics:
         result.profile_coverage = None
-    if "context_relevance" not in metrics:
-        result.context_relevance = None
+    if "doc_routing_relevance" not in metrics:
+        result.doc_routing_relevance = None
+    if "node_evidence_relevance" not in metrics:
+        result.node_evidence_relevance = None
+    if "evidence_coverage" not in metrics:
+        result.evidence_coverage = None
 
     return result
 
@@ -136,13 +142,19 @@ def print_eval_results(result, json_path: str) -> None:
         bar = "█" * int(score * 20) + "░" * (20 - int(score * 20))
         print(f"  {name:20s}: {score:.4f} [{bar}]")
 
-    if result.faithfulness:
-        unsupported = [
-            s for s in result.faithfulness.statements if not s["supported"]
-        ]
-        print(f"\n  Faithfulness: {result.faithfulness.supported_statements}/{result.faithfulness.total_statements} 条陈述有上下文支持")
+    if result.input_grounding:
+        unsupported = [s for s in result.input_grounding.statements if not s["supported"]]
+        print(f"\n  Input Grounding: {result.input_grounding.supported_statements}/{result.input_grounding.total_statements} 条陈述被输入证据支持")
         if unsupported:
             print(f"  未支持的陈述（前5条）:")
+            for s in unsupported[:5]:
+                print(f"    ✗ {s['statement'][:70]}")
+
+    if result.guideline_grounding:
+        unsupported = [s for s in result.guideline_grounding.statements if not s["supported"]]
+        print(f"\n  Guideline Grounding: {result.guideline_grounding.supported_statements}/{result.guideline_grounding.total_statements} 条陈述被知识证据支持")
+        if unsupported:
+            print(f"  未支持的指南型陈述（前5条）:")
             for s in unsupported[:5]:
                 print(f"    ✗ {s['statement'][:70]}")
 
@@ -152,8 +164,14 @@ def print_eval_results(result, json_path: str) -> None:
         if uncovered:
             print(f"  未覆盖: {', '.join(e['element'] for e in uncovered)}")
 
-    if result.context_relevance:
-        print(f"\n  Context Relevance: {result.context_relevance.useful_sentences}/{result.context_relevance.total_sentences} 个句子有用")
+    if result.doc_routing_relevance:
+        print(f"\n  Doc Routing Relevance: {result.doc_routing_relevance.relevant_docs}/{result.doc_routing_relevance.total_docs} 份文档相关")
+
+    if result.node_evidence_relevance:
+        print(f"\n  Node Evidence Relevance: {result.node_evidence_relevance.covered_nodes}/{result.node_evidence_relevance.total_nodes} 个节点产出证据")
+
+    if result.evidence_coverage:
+        print(f"\n  Evidence Coverage: {result.evidence_coverage.covered_needs}/{result.evidence_coverage.total_needs} 个核心需求被证据覆盖")
 
     # 保存
     eval_path = Path(json_path).parent / f"eval_{Path(json_path).stem}.json"
@@ -227,6 +245,21 @@ def run_pipeline(
     return {"generation": gen, "evaluation": result.to_dict()}
 
 
+def normalize_metric_names(raw_metrics: set[str]) -> set[str]:
+    alias_map = {
+        "faithfulness": {"input_grounding", "guideline_grounding"},
+        "coverage": {"profile_coverage"},
+        "context_relevance": {"doc_routing_relevance", "node_evidence_relevance", "evidence_coverage"},
+        "doc_routing": {"doc_routing_relevance"},
+        "node_relevance": {"node_evidence_relevance"},
+    }
+    normalized: set[str] = set()
+    for metric in raw_metrics:
+        name = metric.strip()
+        normalized.update(alias_map.get(name, {name}))
+    return normalized
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="一键生成报告并评测",
@@ -269,8 +302,8 @@ def main():
     )
     parser.add_argument(
         "--metrics", "-m", type=str,
-        default="faithfulness,coverage,context_relevance",
-        help="评测指标，逗号分隔（默认: faithfulness,coverage,context_relevance）",
+        default="input_grounding,guideline_grounding,profile_coverage,doc_routing_relevance,node_evidence_relevance,evidence_coverage",
+        help="评测指标，逗号分隔",
     )
     parser.add_argument(
         "--skip-eval", action="store_true",
@@ -282,7 +315,7 @@ def main():
     excel_path = Path(args.excel)
     rag_index = Path(args.index)
     output_dir = Path(args.output)
-    metrics = {m.strip() for m in args.metrics.split(",")}
+    metrics = normalize_metric_names({m.strip() for m in args.metrics.split(",")})
 
     if not excel_path.exists():
         print(f"❌ 数据文件不存在: {excel_path}")

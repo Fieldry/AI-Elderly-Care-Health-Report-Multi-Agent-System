@@ -99,10 +99,13 @@ def parse_json_response(text: str) -> Any:
 _DISEASE_FIELDS = {
     "hypertension": "高血压",
     "diabetes": "糖尿病",
-    "heart_disease": "心脏病",
+    "coronary_heart_disease": "冠心病",
+    "heart_failure": "心力衰竭",
+    "arrhythmia": "心律失常",
     "stroke": "中风/脑卒中",
     "arthritis": "关节炎",
     "cancer": "肿瘤/癌症",
+    "hearing_impairment": "听力障碍",
 }
 
 # BADL 字段映射
@@ -230,6 +233,24 @@ def extract_profile_elements(profile: Dict[str, Any]) -> List[str]:
     return elements
 
 
+def build_input_evidence_text(results: Dict[str, Any], profile: Dict[str, Any]) -> str:
+    """构建用于输入事实核验的证据上下文。"""
+    sections = [
+        ("用户画像", profile),
+        ("状态判定", results.get("status", {})),
+        ("风险评估", results.get("risk", {})),
+        ("因素分析", results.get("factors", {})),
+        ("行动计划", results.get("actions", {})),
+        ("优先级排序", results.get("priority", {})),
+    ]
+    parts: List[str] = []
+    for title, payload in sections:
+        if not payload:
+            continue
+        parts.append(f"【{title}】\n{json.dumps(payload, ensure_ascii=False, indent=2)}")
+    return "\n\n".join(parts)
+
+
 def build_retrieved_context_text(
     knowledge: Dict[str, Any],
     use_full_text: bool = False,
@@ -243,7 +264,36 @@ def build_retrieved_context_text(
                        False 使用 excerpt（适合 Context Relevance 精准度评估，
                        也与 LLM 实际看到的上下文一致）。
     """
-    # 优先使用 combined_context（已由 KnowledgeAgent 格式化好的上下文）
+    evidence_cards = knowledge.get("evidence_cards", []) or []
+    selected_nodes = knowledge.get("selected_nodes", []) or []
+
+    if evidence_cards and not use_full_text:
+        parts = []
+        for idx, card in enumerate(evidence_cards, start=1):
+            parts.append(
+                "\n".join(
+                    [
+                        f"[证据{idx}] {card.get('doc_name', '未知文档')} / {card.get('path', '未知章节')}",
+                        f"需求: {card.get('need', '未标注')}",
+                        f"推荐: {card.get('recommendation', '')}",
+                        f"依据: {card.get('evidence_quote', '')}",
+                        f"适用性: {card.get('applicability', '')}",
+                    ]
+                )
+            )
+        return "\n\n".join(parts)
+
+    if selected_nodes:
+        texts: List[str] = []
+        for node in selected_nodes:
+            content = node.get("text", "") if use_full_text else (node.get("summary") or node.get("excerpt") or "")
+            if not content:
+                continue
+            header = f"[来源: {node.get('doc_name', '未知文档')} / {node.get('path', '未知章节')}]"
+            texts.append(f"{header}\n{content}")
+        if texts:
+            return "\n\n---\n\n".join(texts)
+
     combined = knowledge.get("combined_context", "")
     if combined and not use_full_text:
         return combined
@@ -269,3 +319,36 @@ def build_retrieved_context_text(
                 texts.append(f"{header}\n{content}")
 
     return "\n\n---\n\n".join(texts)
+
+
+def build_retrieval_focus_needs(results: Dict[str, Any], knowledge: Dict[str, Any]) -> List[str]:
+    retrieval_brief = knowledge.get("retrieval_brief", {}) or {}
+    if retrieval_brief.get("focus_needs"):
+        return [str(item).strip() for item in retrieval_brief.get("focus_needs", []) if str(item).strip()]
+
+    focus_needs: List[str] = []
+    for risk in (results.get("risk", {}) or {}).get("short_term_risks", []) or []:
+        risk_name = str(risk.get("risk") or "").strip()
+        if risk_name:
+            focus_needs.append(risk_name)
+    for risk in (results.get("risk", {}) or {}).get("medium_term_risks", []) or []:
+        risk_name = str(risk.get("risk") or "").strip()
+        if risk_name:
+            focus_needs.append(risk_name)
+    for item in (results.get("factors", {}) or {}).get("main_problems", []) or []:
+        if isinstance(item, str):
+            if item.strip():
+                focus_needs.append(item.strip())
+        elif isinstance(item, dict):
+            for key in ("problem", "impact"):
+                value = str(item.get(key) or "").strip()
+                if value:
+                    focus_needs.append(value)
+    deduped: List[str] = []
+    seen = set()
+    for item in focus_needs:
+        if item in seen:
+            continue
+        seen.add(item)
+        deduped.append(item)
+    return deduped[:8]
