@@ -493,9 +493,12 @@ class PageIndexRAGAgent:
                 chunk["doc_id"] = doc_id
                 doc_lookup[doc_id] = matched_doc
                 doc_chunks.setdefault(doc_id, [])
-            chunk["node_id"] = chunk.get("node_id") or _stable_id(
+            source_node_id = chunk.get("node_id")
+            chunk["source_node_id"] = source_node_id
+            chunk["node_id"] = _stable_id(
                 "node",
                 doc_id,
+                source_node_id,
                 chunk_index,
                 chunk.get("path"),
                 chunk.get("title"),
@@ -546,6 +549,7 @@ class PageIndexRAGAgent:
                         "end_index": chunk.get("end_index"),
                         "source_path": chunk.get("source_path"),
                         "source_type": chunk.get("source_type"),
+                        "source_node_id": chunk.get("source_node_id"),
                     }
                 )
 
@@ -583,9 +587,12 @@ class PageIndexRAGAgent:
 
     def get_nodes_by_ids(self, node_ids: Sequence[str]) -> List[Dict[str, Any]]:
         index_data = self._require_index()
-        node_set = set(node_ids)
-        matched = [chunk for chunk in index_data.get("chunks", []) if chunk.get("node_id") in node_set]
-        matched.sort(key=lambda item: (node_ids.index(item.get("node_id")), item.get("path") or ""))
+        lookup = {chunk.get("node_id"): chunk for chunk in index_data.get("chunks", [])}
+        matched = []
+        for node_id in node_ids:
+            chunk = lookup.get(node_id)
+            if chunk is not None:
+                matched.append(chunk)
         return matched
 
     def _score_chunk(

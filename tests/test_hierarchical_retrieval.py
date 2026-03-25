@@ -141,6 +141,45 @@ class HierarchicalRetrievalTestCase(unittest.TestCase):
         self.assertTrue(nodes[0]["summary"])
         self.assertTrue(nodes[0]["node_id"])
 
+    def test_page_index_agent_namespaces_duplicate_source_node_ids(self):
+        payload = {
+            "documents": [
+                {"doc_name": "甲指南.pdf", "source_path": "/tmp/a.pdf", "source_type": "pdf", "structure": []},
+                {"doc_name": "乙指南.pdf", "source_path": "/tmp/b.pdf", "source_type": "pdf", "structure": []},
+            ],
+            "chunks": [
+                {
+                    "doc_name": "甲指南.pdf",
+                    "source_path": "/tmp/a.pdf",
+                    "source_type": "pdf",
+                    "node_id": "1.1",
+                    "title": "居家安全",
+                    "path": "居家安全",
+                    "text": "甲文档内容",
+                },
+                {
+                    "doc_name": "乙指南.pdf",
+                    "source_path": "/tmp/b.pdf",
+                    "source_type": "pdf",
+                    "node_id": "1.1",
+                    "title": "居家安全",
+                    "path": "居家安全",
+                    "text": "乙文档内容",
+                },
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            index_path = Path(tmp_dir) / "index.json"
+            index_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            agent = PageIndexRAGAgent(index_path=str(index_path))
+            nodes = agent.get_node_catalog()
+            matched = agent.get_nodes_by_ids([nodes[0]["node_id"], nodes[1]["node_id"]])
+
+        self.assertEqual(len(nodes), 2)
+        self.assertNotEqual(nodes[0]["node_id"], nodes[1]["node_id"])
+        self.assertEqual(len(matched), 2)
+        self.assertNotEqual(matched[0]["text"], matched[1]["text"])
+
     def test_knowledge_agent_returns_hierarchical_result(self):
         agent = KnowledgeAgent(FakeRAG())
         responses = iter(
@@ -196,6 +235,43 @@ class HierarchicalRetrievalTestCase(unittest.TestCase):
         self.assertEqual(len(result["selected_nodes"]), 2)
         self.assertEqual(len(result["evidence_cards"]), 2)
         self.assertIn("结构化知识证据", result["combined_context"])
+
+    def test_evidence_extraction_uses_batches(self):
+        agent = KnowledgeAgent(FakeRAG())
+        selected_nodes = [
+            {
+                "node_id": f"node_{idx}",
+                "doc_name": "测试指南.pdf",
+                "path": f"章节{idx}",
+                "text": "建议安装夜灯。" * 300,
+                "need": "夜间跌倒预防",
+                "reason": "包含做法",
+            }
+            for idx in range(5)
+        ]
+        call_count = {"value": 0}
+
+        def fake_call(prompt, max_tokens=4096):
+            call_count["value"] += 1
+            current_index = call_count["value"]
+            return {
+                "evidence_cards": [
+                    {
+                        "node_id": selected_nodes[current_index - 1]["node_id"],
+                        "need": "夜间跌倒预防",
+                        "recommendation": f"建议{current_index}",
+                        "evidence_quote": "建议安装夜灯。",
+                        "applicability": "适合独居老人",
+                    }
+                ]
+            }
+
+        agent._call_llm_json = fake_call  # type: ignore[method-assign]
+        payload = agent._extract_evidence_cards({"text": "独居老人夜间跌倒预防"}, selected_nodes, max_cards=8)
+
+        self.assertEqual(call_count["value"], 3)
+        self.assertEqual(len(payload["evidence_cards"]), 3)
+        self.assertEqual(len(payload["batches"]), 3)
 
     def test_knowledge_agent_falls_back_when_llm_route_fails(self):
         agent = KnowledgeAgent(FakeRAG())

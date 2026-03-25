@@ -19,6 +19,8 @@ except Exception:
 
 logger = logging.getLogger(__name__)
 
+EVIDENCE_BATCH_SIZE = 2
+
 
 class KnowledgeAgent:
     """知识检索与推理 Agent - 封装分层 RAG 功能"""
@@ -455,22 +457,34 @@ class KnowledgeAgent:
         selected_nodes: List[Dict[str, Any]],
         max_cards: int,
     ) -> Dict[str, Any]:
-        node_blocks = []
-        for node in selected_nodes:
-            node_blocks.append(
-                "\n".join(
-                    [
-                        f"[node_id] {node.get('node_id')}",
-                        f"[doc_name] {node.get('doc_name')}",
-                        f"[path] {node.get('path')}",
-                        f"[selected_need] {node.get('need') or '未填写'}",
-                        f"[selected_reason] {node.get('reason') or '未填写'}",
-                        f"[text]\n{self._truncate_node_text(node.get('text', ''))}",
-                    ]
-                )
-            )
+        batches = self._chunk_selected_nodes(selected_nodes, batch_size=EVIDENCE_BATCH_SIZE)
+        logger.info(
+            "Evidence extraction batches=%s selected_nodes=%s batch_size=%s",
+            len(batches),
+            len(selected_nodes),
+            EVIDENCE_BATCH_SIZE,
+        )
+        node_lookup = {item["node_id"]: item for item in selected_nodes}
+        all_cards: List[Dict[str, Any]] = []
+        raw_batches: List[Dict[str, Any]] = []
 
-        prompt = f"""你是老年照护知识提炼助手。请根据病例摘要和选中的知识节点，提炼可直接支持报告生成的结构化证据卡。
+        for batch_index, batch_nodes in enumerate(batches, start=1):
+            node_blocks = []
+            for node in batch_nodes:
+                node_blocks.append(
+                    "\n".join(
+                        [
+                            f"[node_id] {node.get('node_id')}",
+                            f"[doc_name] {node.get('doc_name')}",
+                            f"[path] {node.get('path')}",
+                            f"[selected_need] {node.get('need') or '未填写'}",
+                            f"[selected_reason] {node.get('reason') or '未填写'}",
+                            f"[text]\n{self._truncate_node_text(node.get('text', ''))}",
+                        ]
+                    )
+                )
+
+            prompt = f"""你是老年照护知识提炼助手。请根据病例摘要和选中的知识节点，提炼可直接支持报告生成的结构化证据卡。
 
 要求：
 - 返回 4 到 {max_cards} 条 evidence_cards
@@ -499,30 +513,45 @@ class KnowledgeAgent:
     }}
   ]
 }}"""
-
-        payload = self._call_llm_json(prompt, max_tokens=4096)
-        node_lookup = {item["node_id"]: item for item in selected_nodes}
-        cards = []
-        for item in payload.get("evidence_cards", []) or payload.get("items", []):
-            if not isinstance(item, dict):
-                continue
-            node_id = str(item.get("node_id") or "").strip()
-            node = node_lookup.get(node_id)
-            if node is None:
-                continue
-            cards.append(
+            logger.info(
+                "Evidence extraction batch=%s/%s prompt_chars=%s node_count=%s",
+                batch_index,
+                len(batches),
+                len(prompt),
+                len(batch_nodes),
+            )
+            payload = self._call_llm_json(prompt, max_tokens=4096)
+            raw_batches.append(
                 {
-                    "need": str(item.get("need") or node.get("need") or "").strip(),
-                    "recommendation": str(item.get("recommendation") or "").strip(),
-                    "evidence_quote": str(item.get("evidence_quote") or "").strip(),
-                    "doc_name": node.get("doc_name"),
-                    "node_id": node_id,
-                    "path": node.get("path"),
-                    "applicability": str(item.get("applicability") or "").strip(),
+                    "batch_index": batch_index,
+                    "node_ids": [node.get("node_id") for node in batch_nodes],
+                    "prompt_chars": len(prompt),
+                    "response": payload.get("_raw_response", ""),
                 }
             )
-        payload["evidence_cards"] = self._dedupe_cards(cards)[:max_cards]
-        return payload
+            for item in payload.get("evidence_cards", []) or payload.get("items", []):
+                if not isinstance(item, dict):
+                    continue
+                node_id = str(item.get("node_id") or "").strip()
+                node = node_lookup.get(node_id)
+                if node is None:
+                    continue
+                all_cards.append(
+                    {
+                        "need": str(item.get("need") or node.get("need") or "").strip(),
+                        "recommendation": str(item.get("recommendation") or "").strip(),
+                        "evidence_quote": str(item.get("evidence_quote") or "").strip(),
+                        "doc_name": node.get("doc_name"),
+                        "node_id": node_id,
+                        "path": node.get("path"),
+                        "applicability": str(item.get("applicability") or "").strip(),
+                    }
+                )
+
+        return {
+            "evidence_cards": self._dedupe_cards(all_cards)[:max_cards],
+            "batches": raw_batches,
+        }
 
     def _combine_evidence_cards(
         self,
@@ -563,6 +592,16 @@ class KnowledgeAgent:
         if len(text) <= limit:
             return text
         return f"{text[: limit - 3].rstrip()}..."
+
+    @staticmethod
+    def _chunk_selected_nodes(selected_nodes: List[Dict[str, Any]], batch_size: int) -> List[List[Dict[str, Any]]]:
+        if batch_size <= 0:
+            return [selected_nodes]
+        return [
+            selected_nodes[idx: idx + batch_size]
+            for idx in range(0, len(selected_nodes), batch_size)
+            if selected_nodes[idx: idx + batch_size]
+        ]
 
     def _retrieve_comprehensive_keyword_fallback(
         self,
