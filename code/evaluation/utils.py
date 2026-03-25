@@ -22,6 +22,7 @@ DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
 LLM_TIMEOUT = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "180"))
 LLM_MAX_RETRIES = int(os.getenv("DEEPSEEK_MAX_RETRIES", "2"))
+LLM_TEMPERATURE_OVERRIDE = os.getenv("LLM_TEMPERATURE_OVERRIDE", "").strip()
 
 _client: Optional[OpenAI] = None
 
@@ -45,14 +46,20 @@ def call_llm(
     """调用 DeepSeek LLM，返回文本回复。"""
     client = _get_client()
     total_attempts = LLM_MAX_RETRIES + 1
+    if LLM_TEMPERATURE_OVERRIDE:
+        try:
+            temperature = float(LLM_TEMPERATURE_OVERRIDE)
+        except ValueError:
+            pass
 
     for attempt in range(1, total_attempts + 1):
         try:
             logger.info(
-                "[eval] LLM call attempt=%s/%s prompt_chars=%s",
+                "[eval] LLM call attempt=%s/%s prompt_chars=%s temperature=%.2f",
                 attempt,
                 total_attempts,
                 len(prompt),
+                temperature,
             )
             response = client.chat.completions.create(
                 model=DEEPSEEK_MODEL,

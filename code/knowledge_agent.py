@@ -30,6 +30,7 @@ DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
 DEEPSEEK_TIMEOUT_SECONDS = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "180"))
 DEEPSEEK_MAX_RETRIES = int(os.getenv("DEEPSEEK_MAX_RETRIES", "2"))
 DEEPSEEK_RETRY_DELAY_SECONDS = float(os.getenv("DEEPSEEK_RETRY_DELAY_SECONDS", "2"))
+LLM_TEMPERATURE_OVERRIDE = os.getenv("LLM_TEMPERATURE_OVERRIDE", "").strip()
 
 
 class KnowledgeAgent:
@@ -158,16 +159,22 @@ class KnowledgeAgent:
     ) -> str:
         client = self._get_client()
         total_attempts = DEEPSEEK_MAX_RETRIES + 1
+        if LLM_TEMPERATURE_OVERRIDE:
+            try:
+                temperature = float(LLM_TEMPERATURE_OVERRIDE)
+            except ValueError:
+                pass
 
         for attempt in range(1, total_attempts + 1):
             started_at = time.monotonic()
             try:
                 logger.info(
-                    "[knowledge] LLM call attempt=%s/%s prompt_chars=%s max_tokens=%s",
+                    "[knowledge] LLM call attempt=%s/%s prompt_chars=%s max_tokens=%s temperature=%.2f",
                     attempt,
                     total_attempts,
                     len(prompt),
                     max_tokens,
+                    temperature,
                 )
                 response = client.chat.completions.create(
                     model=DEEPSEEK_MODEL,

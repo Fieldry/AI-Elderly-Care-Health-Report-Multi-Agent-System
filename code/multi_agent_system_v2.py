@@ -67,9 +67,20 @@ def _env_float(name: str, default: float) -> float:
         return default
 
 
+def _env_optional_float(name: str) -> Optional[float]:
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 LLM_TIMEOUT_SECONDS = max(_env_float("DEEPSEEK_TIMEOUT_SECONDS", 180.0), 1.0)
 LLM_MAX_RETRIES = max(_env_int("DEEPSEEK_MAX_RETRIES", 2), 0)
 LLM_RETRY_DELAY_SECONDS = max(_env_float("DEEPSEEK_RETRY_DELAY_SECONDS", 2.0), 0.0)
+LLM_TEMPERATURE_OVERRIDE = _env_optional_float("LLM_TEMPERATURE_OVERRIDE")
 
 
 RAG_ENABLED = _env_flag("RAG_ENABLED", False)
@@ -307,17 +318,19 @@ class BaseAgent:
     def call_llm(self, user_prompt: str, temperature: float = 0.3, max_tokens: int = 2048) -> str:
         """调用 LLM"""
         total_attempts = LLM_MAX_RETRIES + 1
+        resolved_temperature = temperature if LLM_TEMPERATURE_OVERRIDE is None else LLM_TEMPERATURE_OVERRIDE
         for attempt in range(1, total_attempts + 1):
             started_at = time.monotonic()
             try:
                 logger.info(
-                    "[%s] LLM request started attempt=%s/%s model=%s prompt_chars=%s timeout=%.1fs",
+                    "[%s] LLM request started attempt=%s/%s model=%s prompt_chars=%s timeout=%.1fs temperature=%.2f",
                     self.name,
                     attempt,
                     total_attempts,
                     DEEPSEEK_MODEL,
                     len(user_prompt),
                     LLM_TIMEOUT_SECONDS,
+                    resolved_temperature,
                 )
                 response = client.chat.completions.create(
                     model=DEEPSEEK_MODEL,
@@ -325,7 +338,7 @@ class BaseAgent:
                         {"role": "system", "content": self.system_prompt},
                         {"role": "user", "content": user_prompt}
                     ],
-                    temperature=temperature,
+                    temperature=resolved_temperature,
                     max_tokens=max_tokens,
                     timeout=LLM_TIMEOUT_SECONDS,
                 )
