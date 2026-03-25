@@ -391,7 +391,8 @@ def main() -> int:
     excel_path = Path(args.excel).resolve()
     rag_index = Path(args.index).resolve()
     output_root = Path(args.output_root).resolve()
-    python_bin = Path(sys.executable).resolve()
+    venv_python = BACKEND_ROOT / ".venv" / "bin" / "python"
+    python_bin = venv_python if venv_python.exists() else Path(sys.executable)
 
     if not excel_path.exists():
         raise FileNotFoundError(f"excel not found: {excel_path}")
