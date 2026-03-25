@@ -24,6 +24,12 @@ LLM_TIMEOUT = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "180"))
 LLM_MAX_RETRIES = int(os.getenv("DEEPSEEK_MAX_RETRIES", "2"))
 LLM_TEMPERATURE_OVERRIDE = os.getenv("LLM_TEMPERATURE_OVERRIDE", "").strip()
 
+
+def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
+    if str(model or "").startswith("gpt-5"):
+        return {"max_completion_tokens": max_tokens}
+    return {"max_tokens": max_tokens}
+
 _client: Optional[OpenAI] = None
 
 
@@ -68,8 +74,8 @@ def call_llm(
                     {"role": "user", "content": prompt},
                 ],
                 temperature=temperature,
-                max_tokens=max_tokens,
                 timeout=LLM_TIMEOUT,
+                **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
             )
             return response.choices[0].message.content.strip()
         except Exception as e:

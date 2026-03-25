@@ -89,6 +89,12 @@ RAG_INDEX_PATH = Path(os.getenv("RAG_INDEX_PATH", str(DEFAULT_RAG_INDEX_PATH))).
 RAG_TOP_K = max(int(os.getenv("RAG_TOP_K", "3")), 1)
 
 
+def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
+    if str(model or "").startswith("gpt-5"):
+        return {"max_completion_tokens": max_tokens}
+    return {"max_tokens": max_tokens}
+
+
 @dataclass
 class UserProfile:
     """用户画像数据结构"""
@@ -339,8 +345,8 @@ class BaseAgent:
                         {"role": "user", "content": user_prompt}
                     ],
                     temperature=resolved_temperature,
-                    max_tokens=max_tokens,
                     timeout=LLM_TIMEOUT_SECONDS,
+                    **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
                 )
                 duration = time.monotonic() - started_at
                 logger.info(

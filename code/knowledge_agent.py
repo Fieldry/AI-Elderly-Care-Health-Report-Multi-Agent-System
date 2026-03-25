@@ -33,6 +33,12 @@ DEEPSEEK_RETRY_DELAY_SECONDS = float(os.getenv("DEEPSEEK_RETRY_DELAY_SECONDS", "
 LLM_TEMPERATURE_OVERRIDE = os.getenv("LLM_TEMPERATURE_OVERRIDE", "").strip()
 
 
+def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
+    if str(model or "").startswith("gpt-5"):
+        return {"max_completion_tokens": max_tokens}
+    return {"max_tokens": max_tokens}
+
+
 class KnowledgeAgent:
     """知识检索与推理 Agent - 封装分层 RAG 功能"""
 
@@ -183,8 +189,8 @@ class KnowledgeAgent:
                         {"role": "user", "content": prompt},
                     ],
                     temperature=temperature,
-                    max_tokens=max_tokens,
                     timeout=DEEPSEEK_TIMEOUT_SECONDS,
+                    **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
                 )
                 logger.info(
                     "[knowledge] LLM call finished attempt=%s/%s duration=%.2fs",
