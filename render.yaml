@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: ai-elderly-care-backend
+    env: python
+    region: singapore       # 推荐亚洲节点，降低与中国服务的延迟
+    plan: standard          # 免费套餐内存不足以安装 torch，建议用 standard 及以上
+    rootDir: .              # render.yaml 与后端代码同目录时保持为 "."
+                            # 如果将此文件移至仓库根目录，改为 rootDir: backend
+
+    buildCommand: pip install uv && uv sync --no-dev
+    startCommand: uv run uvicorn api.server:app --host 0.0.0.0 --port $PORT
+
+    healthCheckPath: /api/health
+
+    # 持久化磁盘（standard 及以上套餐可用）
+    # SQLite 数据库存放于此，避免每次部署后数据丢失
+    disk:
+      name: data-volume
+      mountPath: /var/data
+      sizeGB: 1
+
+    envVars:
+      # Python 版本（Render 用此变量选择 Python 解释器版本）
+      - key: PYTHON_VERSION
+        value: 3.12.0
+
+      # ── 必填：DeepSeek API ──────────────────────────────────────────────
+      - key: DEEPSEEK_API_KEY
+        sync: false           # 在 Render Dashboard 手动填写，勿提交到代码库
+
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com
+
+      # ── 数据库路径（指向持久化磁盘挂载点）─────────────────────────────
+      - key: DB_PATH
+        value: /var/data/users.db
+
+      # ── 可选：Google Cloud Speech-to-Text ──────────────────────────────
+      # - key: GOOGLE_CLOUD_PROJECT
+      #   sync: false
+      # - key: GOOGLE_APPLICATION_CREDENTIALS
+      #   value: /etc/secrets/google-credentials.json
+
+      # ── 可选：Pinecone（RAG 功能）──────────────────────────────────────
+      # - key: PINECONE_API_KEY
+      #   sync: false
+      # - key: PINECONE_ENVIRONMENT
+      #   sync: false
+      # - key: PINECONE_INDEX_NAME
+      #   value: elderly-care-index
+
+      # ── RAG 开关 ────────────────────────────────────────────────────────
+      - key: RAG_ENABLED
+        value: "false"
+
+      # ── 日志级别 ─────────────────────────────────────────────────────────
+      - key: LOG_LEVEL
+        value: INFO
