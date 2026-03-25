@@ -7,9 +7,13 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import time
 from typing import Any, Dict, List, Optional
 
-from evaluation.utils import call_llm, parse_json_response
+from openai import OpenAI
+
+from evaluation.utils import parse_json_response
 
 try:
     from rag.agent import PageIndexRAGAgent
@@ -20,6 +24,12 @@ except Exception:
 logger = logging.getLogger(__name__)
 
 EVIDENCE_BATCH_SIZE = 2
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+DEEPSEEK_TIMEOUT_SECONDS = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "180"))
+DEEPSEEK_MAX_RETRIES = int(os.getenv("DEEPSEEK_MAX_RETRIES", "2"))
+DEEPSEEK_RETRY_DELAY_SECONDS = float(os.getenv("DEEPSEEK_RETRY_DELAY_SECONDS", "2"))
 
 
 class KnowledgeAgent:
@@ -28,6 +38,7 @@ class KnowledgeAgent:
     def __init__(self, rag_agent: PageIndexRAGAgent):
         self.rag = rag_agent
         self.cache: Dict[str, Dict[str, Any]] = {}
+        self._client: Optional[OpenAI] = None
 
     def retrieve(self, query: str, top_k: int = 3, use_cache: bool = True) -> Dict[str, Any]:
         """
@@ -122,7 +133,7 @@ class KnowledgeAgent:
         return result
 
     def _call_llm_json(self, prompt: str, max_tokens: int = 4096) -> Dict[str, Any]:
-        response = call_llm(prompt, max_tokens=max_tokens)
+        response = self._call_llm(prompt, max_tokens=max_tokens)
         parsed = parse_json_response(response)
         if isinstance(parsed, list):
             return {"items": parsed, "_raw_response": response}
@@ -130,6 +141,64 @@ class KnowledgeAgent:
             parsed["_raw_response"] = response
             return parsed
         raise ValueError("LLM 未返回 JSON 对象或数组")
+
+    def _get_client(self) -> OpenAI:
+        if self._client is None:
+            for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"):
+                os.environ.pop(key, None)
+            self._client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
+        return self._client
+
+    def _call_llm(
+        self,
+        prompt: str,
+        system_prompt: str = "你是一个严谨的知识路由助手，请按照指令精确完成任务。",
+        temperature: float = 0.1,
+        max_tokens: int = 4096,
+    ) -> str:
+        client = self._get_client()
+        total_attempts = DEEPSEEK_MAX_RETRIES + 1
+
+        for attempt in range(1, total_attempts + 1):
+            started_at = time.monotonic()
+            try:
+                logger.info(
+                    "[knowledge] LLM call attempt=%s/%s prompt_chars=%s max_tokens=%s",
+                    attempt,
+                    total_attempts,
+                    len(prompt),
+                    max_tokens,
+                )
+                response = client.chat.completions.create(
+                    model=DEEPSEEK_MODEL,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": prompt},
+                    ],
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    timeout=DEEPSEEK_TIMEOUT_SECONDS,
+                )
+                logger.info(
+                    "[knowledge] LLM call finished attempt=%s/%s duration=%.2fs",
+                    attempt,
+                    total_attempts,
+                    time.monotonic() - started_at,
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as error:
+                logger.warning(
+                    "[knowledge] LLM call failed attempt=%s/%s duration=%.2fs error=%s",
+                    attempt,
+                    total_attempts,
+                    time.monotonic() - started_at,
+                    error,
+                )
+                if attempt >= total_attempts:
+                    raise
+                sleep_seconds = max(DEEPSEEK_RETRY_DELAY_SECONDS, 0.0) * attempt
+                if sleep_seconds > 0:
+                    time.sleep(sleep_seconds)
 
     def _build_retrieval_brief(
         self,
