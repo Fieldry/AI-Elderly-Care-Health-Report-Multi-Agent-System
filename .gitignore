@@ -22,26 +22,14 @@ __pycache__/
 corpora/
 logs/
 workspace/
+
 # 大数据文件（Excel原始数据）
 data/*.xlsx
 data/*.csv
 data/*.xls
 
 # 模型运行输出（结果可本地保存，不上传）
-data/output_v2_*/
-data/output_chat/
-data/reports/
-data/guidelines
-data/.access_token_secret
 data/
 !data/users.db
-
-# uv 安装的临时 wheel 包（如 =0.1.0 这类）
-=*/
-
-# 项目目录内的其他 git 仓库（UltraRAG 等依赖）
-github.com/
-
-# 单次运行的输出结果
-data/output_v2_single/
-data/output_v2_batch/
+!data/rag_indexes
+!data/reports
