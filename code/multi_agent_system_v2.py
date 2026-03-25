@@ -866,9 +866,9 @@ class ActionPlanAgentV3(BaseAgent):
 6. 照护资源对接
 """
 
-        # 构建 RAG 查询：针对最紧迫的行动需求
         rag_query = None
-        if self.knowledge_agent:
+        if not knowledge_context and self.knowledge_agent:
+            # 仅在上游没有提供结构化知识证据时，才退回旧的关键词检索增强。
             # 提取高风险项
             high_risks = [r for r in risk_result.get('short_term_risks', [])
                          if r.get('severity') == '高']
@@ -898,7 +898,6 @@ class ActionPlanAgentV3(BaseAgent):
 {knowledge_context}
 """
 
-        # 使用 RAG 增强的 LLM 调用
         result = self.call_llm_with_rag(
             context,
             rag_query=rag_query,
@@ -1448,16 +1447,28 @@ class OrchestratorAgentV2:
             knowledge_context = results['knowledge'].get('combined_context', '')
             if verbose:
                 total_hits = results['knowledge'].get('total_hits', 0)
+                retrieval_mode = results['knowledge'].get('retrieval_mode', 'unknown')
+                print(f"   → 检索模式: {retrieval_mode}")
                 print(f"   → 总命中文档片段数: {total_hits}")
-                risk_hits = len(results['knowledge'].get('risk_prevention', {}).get('hits', []))
-                disease_hits = len(results['knowledge'].get('disease_management', {}).get('hits', []))
-                training_hits = len(results['knowledge'].get('functional_training', {}).get('hits', []))
-                if risk_hits > 0:
-                    print(f"   → 风险预防知识: {risk_hits}条")
-                if disease_hits > 0:
-                    print(f"   → 疾病管理知识: {disease_hits}条")
-                if training_hits > 0:
-                    print(f"   → 功能训练知识: {training_hits}条")
+                selected_docs = results['knowledge'].get('selected_docs', [])
+                selected_nodes = results['knowledge'].get('selected_nodes', [])
+                evidence_cards = results['knowledge'].get('evidence_cards', [])
+                if selected_docs:
+                    print(f"   → 文档路由命中: {len(selected_docs)}份")
+                if selected_nodes:
+                    print(f"   → 节点路由命中: {len(selected_nodes)}个")
+                if evidence_cards:
+                    print(f"   → 结构化证据卡: {len(evidence_cards)}条")
+                if not selected_docs and not selected_nodes:
+                    risk_hits = len(results['knowledge'].get('risk_prevention', {}).get('hits', []))
+                    disease_hits = len(results['knowledge'].get('disease_management', {}).get('hits', []))
+                    training_hits = len(results['knowledge'].get('functional_training', {}).get('hits', []))
+                    if risk_hits > 0:
+                        print(f"   → 风险预防知识: {risk_hits}条")
+                    if disease_hits > 0:
+                        print(f"   → 疾病管理知识: {disease_hits}条")
+                    if training_hits > 0:
+                        print(f"   → 功能训练知识: {training_hits}条")
         else:
             results['knowledge'] = {
                 "enabled": False,
@@ -1465,7 +1476,11 @@ class OrchestratorAgentV2:
                 "disease_management": {"hits": [], "context": ""},
                 "functional_training": {"hits": [], "context": ""},
                 "combined_context": "",
-                "total_hits": 0
+                "total_hits": 0,
+                "selected_docs": [],
+                "selected_nodes": [],
+                "evidence_cards": [],
+                "retrieval_mode": "disabled",
             }
 
         # Stage 4: 行动计划生成（新增）
