@@ -29,7 +29,7 @@ data/*.csv
 data/*.xls
 
 # 模型运行输出（结果可本地保存，不上传）
-data/
-!data/users.db
-!data/rag_indexes
-!data/reports
+data/guidelines
+data/output_*/
+data/test_samples/
+data/.access_token_secret
