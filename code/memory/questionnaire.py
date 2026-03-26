@@ -359,7 +359,7 @@ QUESTION_GROUPS: List[Dict[str, Any]] = [
                 "id": "g2_waist_hip",
                 "kind": "chat",
                 "fields": ["waist_circumference", "hip_circumference"],
-                "prompt": "如果您最近量过腰围和臀围，可以告诉我大概多少厘米；如果没有量过，直接说"没量过"就可以跳过。",
+                "prompt": "如果您最近量过腰围和臀围，可以告诉我大概多少厘米；如果没有量过，直接说\"没量过\"就可以跳过。",
             },
         ],
     },
