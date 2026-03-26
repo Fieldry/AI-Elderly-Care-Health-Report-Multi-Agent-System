@@ -61,7 +61,7 @@ class EvaluationPipelineTestCase(unittest.TestCase):
         self.assertIn("状态判定", text)
         self.assertIn("行动计划", text)
 
-    @patch("evaluation.metrics.call_llm")
+    @patch("evaluation.utils.call_llm")
     def test_report_evaluator_outputs_new_metrics(self, mock_call_llm):
         mock_call_llm.side_effect = [
             json.dumps(
@@ -119,7 +119,7 @@ class EvaluationPipelineTestCase(unittest.TestCase):
         self.assertEqual(summary["evidence_coverage"], 1.0)
         self.assertIn("selected_docs_count", evaluation.metadata)
 
-    @patch("evaluation.metrics.call_llm")
+    @patch("evaluation.utils.call_llm")
     def test_evidence_coverage_tolerates_non_numeric_index(self, mock_call_llm):
         mock_call_llm.return_value = json.dumps(
             [

@@ -140,14 +140,30 @@ class KnowledgeAgent:
         return result
 
     def _call_llm_json(self, prompt: str, max_tokens: int = 4096) -> Dict[str, Any]:
-        response = self._call_llm(prompt, max_tokens=max_tokens)
-        parsed = parse_json_response(response)
-        if isinstance(parsed, list):
-            return {"items": parsed, "_raw_response": response}
-        if isinstance(parsed, dict):
-            parsed["_raw_response"] = response
-            return parsed
-        raise ValueError("LLM 未返回 JSON 对象或数组")
+        current_prompt = prompt
+        last_error: Optional[Exception] = None
+        last_response = ""
+
+        for attempt in range(1, 3):
+            last_response = self._call_llm(current_prompt, max_tokens=max_tokens)
+            try:
+                parsed = parse_json_response(last_response)
+                if isinstance(parsed, list):
+                    return {"items": parsed, "_raw_response": last_response}
+                if isinstance(parsed, dict):
+                    parsed["_raw_response"] = last_response
+                    return parsed
+                raise ValueError("LLM 未返回 JSON 对象或数组")
+            except Exception as error:
+                last_error = error
+                logger.warning("[knowledge] JSON parse failed attempt=%s/2 error=%s", attempt, error)
+                current_prompt = (
+                    f"{prompt}\n\n"
+                    "上一次回复无法解析为 JSON。请这一次只输出一个合法 JSON 对象或数组，"
+                    "不要使用 markdown 代码块，不要添加解释。"
+                )
+
+        raise ValueError(f"LLM JSON parse failed after retries: {last_error}; raw={last_response[:500]}")
 
     def _get_client(self) -> OpenAI:
         if self._client is None:

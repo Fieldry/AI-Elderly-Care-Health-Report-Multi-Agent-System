@@ -16,7 +16,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Sequence, Tuple
 
-from evaluation.utils import call_llm, parse_json_response
+from evaluation.utils import call_llm, call_llm_json
 
 logger = logging.getLogger(__name__)
 
@@ -99,11 +99,10 @@ class ReportGroundingMetric:
 - 只输出 JSON 数组
 - 每个元素包含 statement/source_type/reason
 
-行动计划内容：
+        行动计划内容：
 {report_text}"""
-        response = call_llm(prompt, max_tokens=4096)
         try:
-            parsed = parse_json_response(response)
+            parsed = call_llm_json(prompt, max_tokens=4096)
             if isinstance(parsed, list):
                 items = parsed
             else:
@@ -182,9 +181,8 @@ class ReportGroundingMetric:
 - index: 陈述编号（从1开始）
 - supported: true/false
 - reason: 20字以内说明"""
-        response = call_llm(prompt, max_tokens=4096)
         try:
-            parsed = parse_json_response(response)
+            parsed = call_llm_json(prompt, max_tokens=4096)
             if isinstance(parsed, dict):
                 parsed = parsed.get("items", [])
         except Exception:
@@ -241,9 +239,8 @@ class ProfileCoverageMetric:
 - index: 要素编号
 - covered: true/false
 - evidence: 报告中的相关内容片段，或“未提及”"""
-        response = call_llm(prompt, max_tokens=4096)
         try:
-            parsed = parse_json_response(response)
+            parsed = call_llm_json(prompt, max_tokens=4096)
             if isinstance(parsed, dict):
                 parsed = parsed.get("items", [])
         except Exception:
@@ -311,9 +308,8 @@ class DocRoutingRelevanceMetric:
 - index: 文档编号
 - relevant: true/false
 - reason: 20字以内理由"""
-        response = call_llm(prompt, max_tokens=3072)
         try:
-            parsed = parse_json_response(response)
+            parsed = call_llm_json(prompt, max_tokens=3072)
             if isinstance(parsed, dict):
                 parsed = parsed.get("items", [])
         except Exception:
@@ -408,9 +404,8 @@ class EvidenceCoverageMetric:
 - index: 需求编号
 - covered: true/false
 - evidence: 对应证据卡里的 recommendation 或 need 摘要；若未覆盖则写“未覆盖”"""
-        response = call_llm(prompt, max_tokens=3072)
         try:
-            parsed = parse_json_response(response)
+            parsed = call_llm_json(prompt, max_tokens=3072)
             if isinstance(parsed, dict):
                 parsed = parsed.get("items", [])
         except Exception:

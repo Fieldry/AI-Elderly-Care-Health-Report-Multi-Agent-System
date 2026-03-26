@@ -12,6 +12,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from openai import OpenAI
+from json_response_utils import parse_json_response_loose
 
 logger = logging.getLogger(__name__)
 
@@ -98,12 +99,39 @@ def split_chinese_sentences(text: str) -> List[str]:
 
 def parse_json_response(text: str) -> Any:
     """尝试从 LLM 回复中提取 JSON，兼容 markdown code block。"""
-    # 尝试提取 ```json ... ``` 块
-    match = re.search(r"```(?:json)?\s*\n?(.*?)\n?```", text, re.S)
-    if match:
-        return json.loads(match.group(1))
-    # 直接尝试解析
-    return json.loads(text)
+    return parse_json_response_loose(text)
+
+
+def call_llm_json(
+    prompt: str,
+    system_prompt: str = "你是一个严谨的评测助手，请按照指令精确完成任务。",
+    temperature: float = 0.1,
+    max_tokens: int = 4096,
+    parse_attempts: int = 2,
+) -> Any:
+    """调用 LLM 并尽量返回可解析的 JSON。"""
+    last_error: Optional[Exception] = None
+    current_prompt = prompt
+
+    for attempt in range(1, max(parse_attempts, 1) + 1):
+        response = call_llm(
+            current_prompt,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        try:
+            return parse_json_response(response)
+        except Exception as error:
+            last_error = error
+            logger.warning("[eval] JSON parse failed attempt=%s/%s error=%s", attempt, parse_attempts, error)
+            current_prompt = (
+                f"{prompt}\n\n"
+                "上一次回复无法解析为 JSON。请这一次只输出一个合法 JSON 对象或数组，"
+                "不要使用 markdown 代码块，不要附加任何解释。"
+            )
+
+    raise ValueError(f"LLM JSON parse failed after {parse_attempts} attempts: {last_error}")
 
 
 # ── Profile 要素提取 ────────────────────────────────────────────────

@@ -20,6 +20,7 @@ from typing import Callable, Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
+from json_response_utils import parse_json_response_loose
 
 try:
     from rag import PageIndexRAGAgent
@@ -375,6 +376,42 @@ class BaseAgent:
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
 
+    def call_llm_json(
+        self,
+        user_prompt: str,
+        temperature: float = 0.3,
+        max_tokens: int = 2048,
+        parse_attempts: int = 2,
+    ) -> Dict:
+        """调用 LLM 并尽量返回可解析 JSON。"""
+        last_error: Optional[Exception] = None
+        current_prompt = user_prompt
+        last_response = ""
+
+        for attempt in range(1, max(parse_attempts, 1) + 1):
+            last_response = self.call_llm(current_prompt, temperature=temperature, max_tokens=max_tokens)
+            try:
+                parsed = parse_json_response_loose(last_response)
+                if isinstance(parsed, list):
+                    return {"items": parsed}
+                if isinstance(parsed, dict):
+                    return parsed
+                raise ValueError("parsed payload is not dict or list")
+            except Exception as error:
+                last_error = error
+                logger.warning("[%s] JSON parse failed attempt=%s/%s error=%s", self.name, attempt, parse_attempts, error)
+                current_prompt = (
+                    f"{user_prompt}\n\n"
+                    "上一次回复无法解析为 JSON。请这一次只输出一个合法 JSON 对象，"
+                    "不要使用 markdown 代码块，不要添加任何额外说明。"
+                )
+
+        return {
+            "error": "JSON解析失败",
+            "raw": last_response,
+            "parse_error": str(last_error) if last_error else "unknown",
+        }
+
     def call_llm_with_rag(
         self,
         user_prompt: str,
@@ -415,17 +452,50 @@ class BaseAgent:
         # 调用 LLM
         return self.call_llm(user_prompt, temperature)
 
+    def call_llm_with_rag_json(
+        self,
+        user_prompt: str,
+        rag_query: Optional[str] = None,
+        rag_top_k: int = 2,
+        temperature: float = 0.3,
+        max_tokens: int = 2048,
+        parse_attempts: int = 2,
+    ) -> Dict:
+        """带 RAG 增强的 JSON 调用。"""
+        if rag_query and self.knowledge_agent:
+            try:
+                rag_result = self.knowledge_agent.retrieve(rag_query, top_k=rag_top_k)
+                knowledge_context = rag_result.get('context', '')
+
+                if knowledge_context:
+                    user_prompt = f"""{user_prompt}
+
+【专业知识参考】
+{knowledge_context}
+
+请结合以上专业标准和指南进行分析，确保建议的科学性和权威性。"""
+            except Exception as e:
+                print(f"⚠️ {self.name} RAG 检索失败: {e}")
+
+        return self.call_llm_json(
+            user_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            parse_attempts=parse_attempts,
+        )
+
 
     def parse_json(self, text: str) -> Dict:
         """解析 JSON 输出"""
         try:
-            if '```' in text:
-                text = text.split('```')[1]
-                if text.startswith('json'):
-                    text = text[4:]
-            return json.loads(text.strip())
-        except:
+            parsed = parse_json_response_loose(text)
+            if isinstance(parsed, list):
+                return {"items": parsed}
+            if isinstance(parsed, dict):
+                return parsed
+        except Exception:
             return {"error": "JSON解析失败", "raw": text}
+        return {"error": "JSON解析失败", "raw": text}
 
 
 # ============ Stage 1: 状态判定 Agent V3 ============
@@ -498,8 +568,7 @@ IADL（工具性日常生活活动）8项：串门、购物、做饭、洗衣、
 - 蹲起: {profile.iadl_crouching}
 - 公共交通: {profile.iadl_transport}
 """
-        result = self.call_llm(f"判定以下老人的失能状态：\n{badl_info}")
-        return self.parse_json(result)
+        return self.call_llm_json(f"判定以下老人的失能状态：\n{badl_info}")
 
 
 
@@ -631,12 +700,12 @@ class RiskAgentV3(BaseAgent):
                 rag_query = f"{age}岁 {' '.join(risk_keywords[:3])} 风险预防 健康标准"
 
         # 使用 RAG 增强的 LLM 调用
-        result = self.call_llm_with_rag(
+        return self.call_llm_with_rag_json(
             f"评估以下老人的短期和中期风险：\n{risk_factors}",
             rag_query=rag_query,
-            rag_top_k=2
+            rag_top_k=2,
+            max_tokens=4096,
         )
-        return self.parse_json(result)
 
 
 
@@ -779,8 +848,7 @@ IADL受限: {status_result.get('iadl_details', [])}
 - 短期风险: {[f"{r.get('risk')}({r.get('severity')})" for r in risk_result.get('short_term_risks', [])]}
 - 中期风险: {[f"{r.get('risk')}({r.get('severity')})" for r in risk_result.get('medium_term_risks', [])]}
 """
-        result = self.call_llm(f"生成健康画像：\n{all_info}")
-        return self.parse_json(result)
+        return self.call_llm_json(f"生成健康画像：\n{all_info}", max_tokens=4096)
 
 
 
@@ -917,12 +985,12 @@ class ActionPlanAgentV3(BaseAgent):
 {knowledge_context}
 """
 
-        result = self.call_llm_with_rag(
+        return self.call_llm_with_rag_json(
             context,
             rag_query=rag_query,
-            rag_top_k=2
+            rag_top_k=2,
+            max_tokens=4096,
         )
-        return self.parse_json(result)
 
 
 
@@ -996,8 +1064,7 @@ class PriorityAgentV3(BaseAgent):
 将行动计划按优先级分为A/B/C三级，给出排序理由。
 每个 action 的 difficulty/cost/impact/timeframe 字段可用来判断 feasibility 与 cost_effectiveness 与 time_criticality。
 """
-        result = self.call_llm(user_prompt=context, max_tokens=4096)
-        return self.parse_json(result)
+        return self.call_llm_json(user_prompt=context, max_tokens=4096)
 
 
 
@@ -1115,8 +1182,10 @@ class ReviewAgentV3(BaseAgent):
 【优先级排序结果】
 {json.dumps(priority_result, ensure_ascii=False, indent=2)}
 """
-        result = self.call_llm(f"审核以下健康评估与照护行动计划：\n{report_content}")
-        review_json = self.parse_json(result)
+        review_json = self.call_llm_json(
+            f"审核以下健康评估与照护行动计划：\n{report_content}",
+            max_tokens=4096,
+        )
         input_quality = completeness_score(profile)
         review_json["input_quality"] = input_quality
 
