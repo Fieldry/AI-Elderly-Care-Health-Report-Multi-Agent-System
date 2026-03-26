@@ -306,8 +306,9 @@ def analyze_outputs(output_dir: Path, run_results: Sequence[RowRunResult]) -> Di
 
 
 def render_markdown(summary: Dict[str, Any]) -> str:
+    total_requested = len(summary.get("requested_rows", []))
     lines = [
-        "# 20 份报告并发评测汇总",
+        f"# {total_requested} 份报告并发评测汇总",
         "",
         f"- 生成时间: `{summary['generated_at']}`",
         f"- 输出目录: `{summary['output_dir']}`",

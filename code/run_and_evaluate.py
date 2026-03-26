@@ -37,6 +37,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from dotenv import load_dotenv
+
 # 确保 code 目录在 sys.path 中
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -54,6 +56,7 @@ DATA_DIR = SCRIPT_DIR.parent / "data"
 DEFAULT_EXCEL = DATA_DIR / "clhls_2018_bilingual_headers-checked.xlsx"
 DEFAULT_INDEX = DATA_DIR / "rag_indexes" / "guidelines_all_index.json"
 DEFAULT_OUTPUT = DATA_DIR / "output_eval"
+DEFAULT_DOTENV = SCRIPT_DIR.parent / ".env"
 
 # 预置样本
 PRESET_ROWS = {
@@ -61,6 +64,35 @@ PRESET_ROWS = {
     3: "100岁男性（部分失能）",
     10: "81岁男性（无失能）",
 }
+
+
+def configure_runtime(
+    rag_index: Path,
+    rag_top_k: int,
+    dotenv_path: Path,
+    llm_config: str,
+    temperature: float,
+    model_override: str | None,
+) -> None:
+    load_dotenv(dotenv_path, override=True)
+
+    if llm_config == "openai":
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        base_url = os.getenv("OPENAI_BASE_URL", "").strip()
+        model = (model_override or os.getenv("OPENAI_MODEL", "")).strip()
+        if api_key:
+            os.environ["DEEPSEEK_API_KEY"] = api_key
+        if base_url:
+            os.environ["DEEPSEEK_BASE_URL"] = base_url
+        if model:
+            os.environ["DEEPSEEK_MODEL"] = model
+    elif llm_config == "deepseek" and model_override:
+        os.environ["DEEPSEEK_MODEL"] = model_override
+
+    os.environ["RAG_ENABLED"] = "true"
+    os.environ["RAG_INDEX_PATH"] = str(rag_index)
+    os.environ["RAG_TOP_K"] = str(rag_top_k)
+    os.environ["LLM_TEMPERATURE_OVERRIDE"] = str(temperature)
 
 
 def generate_report(
@@ -309,6 +341,22 @@ def main():
         "--skip-eval", action="store_true",
         help="跳过评测，只生成报告",
     )
+    parser.add_argument(
+        "--dotenv", type=str, default=str(DEFAULT_DOTENV),
+        help=f".env 路径（默认: {DEFAULT_DOTENV}）",
+    )
+    parser.add_argument(
+        "--llm-config", choices=("deepseek", "openai"), default="deepseek",
+        help="使用哪组 .env 模型配置（默认 deepseek）",
+    )
+    parser.add_argument(
+        "--model", type=str, default=None,
+        help="可选模型名覆盖；若 llm-config=openai，则覆盖 OPENAI_MODEL",
+    )
+    parser.add_argument(
+        "--temperature", type=float, default=1.0,
+        help="统一覆盖整条链路 temperature（默认 1.0）",
+    )
 
     args = parser.parse_args()
 
@@ -316,6 +364,7 @@ def main():
     rag_index = Path(args.index)
     output_dir = Path(args.output)
     metrics = normalize_metric_names({m.strip() for m in args.metrics.split(",")})
+    dotenv_path = Path(args.dotenv)
 
     if not excel_path.exists():
         print(f"❌ 数据文件不存在: {excel_path}")
@@ -323,6 +372,15 @@ def main():
     if not rag_index.exists():
         print(f"❌ RAG 索引不存在: {rag_index}")
         sys.exit(1)
+
+    configure_runtime(
+        rag_index=rag_index,
+        rag_top_k=args.top_k,
+        dotenv_path=dotenv_path,
+        llm_config=args.llm_config,
+        temperature=args.temperature,
+        model_override=args.model,
+    )
 
     # 确定要处理的行
     if args.rows:
@@ -338,6 +396,9 @@ def main():
     print(f"  待处理: {len(row_indices)} 份报告 (行 {','.join(map(str, row_indices))})")
     print(f"  RAG 索引: {rag_index.name}")
     print(f"  输出目录: {output_dir}")
+    print(f"  模型配置: {args.llm_config}")
+    print(f"  基座模型: {os.getenv('DEEPSEEK_MODEL', '')}")
+    print(f"  temperature: {os.getenv('LLM_TEMPERATURE_OVERRIDE', '')}")
 
     all_summaries: List[Dict[str, Any]] = []
     for row_index in row_indices:
