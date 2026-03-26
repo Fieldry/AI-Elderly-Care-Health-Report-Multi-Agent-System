@@ -122,11 +122,8 @@ class ProfileExtractAgent:
         conversation_history: Optional[List[Dict[str, Any]]] = None,
         group_question: Optional[str] = None,
     ) -> str:
-        if group_question:
-            return group_question
-
         labels = [FIELD_META.get(field, {}).get("zh", field) for field in missing_fields[:6]]
         if not labels:
             return "您继续说就可以。"
-        return f"这部分还差这些信息：{'、'.join(labels)}。您方便继续补充一下吗？"
+        return f"刚才还差这些信息：{'、'.join(labels)}。您方便补充一下吗？"
 
