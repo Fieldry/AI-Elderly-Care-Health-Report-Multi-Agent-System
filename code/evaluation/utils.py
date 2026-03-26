@@ -84,7 +84,7 @@ def call_llm(
                 temperature=temperature,
                 timeout=LLM_TIMEOUT,
                 **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
-                **({"response_format": response_format} if response_format else {}),
+                **(response_format or {}),
             )
             return response.choices[0].message.content.strip()
         except Exception as e:

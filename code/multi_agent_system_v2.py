@@ -360,7 +360,7 @@ class BaseAgent:
                     temperature=resolved_temperature,
                     timeout=LLM_TIMEOUT_SECONDS,
                     **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
-                    **({"response_format": response_format} if response_format else {}),
+                    **(response_format or {}),
                 )
                 duration = time.monotonic() - started_at
                 logger.info(
