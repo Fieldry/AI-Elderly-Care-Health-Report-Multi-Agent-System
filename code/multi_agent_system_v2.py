@@ -204,6 +204,7 @@ class UserProfile:
     cognition_season: str = None
     cognition_place: str = None
     cognition_calc: List[str] = None
+    cognition_draw: str = None
 
     # 心理状态
     depression: str = None
@@ -218,7 +219,9 @@ class UserProfile:
 
     # 社会支持
     living_arrangement: str = None
+    cohabitants: str = None
     financial_status: str = None
+    income: str = None
     medical_insurance: str = None
     caregiver: str = None
 
