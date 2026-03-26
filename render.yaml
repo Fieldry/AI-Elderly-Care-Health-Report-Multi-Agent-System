@@ -16,7 +16,7 @@ services:
     # SQLite 数据库存放于此，避免每次部署后数据丢失
     disk:
       name: data-volume
-      mountPath: /var/data
+      mountPath: ./data
       sizeGB: 1
 
     envVars:
@@ -33,7 +33,7 @@ services:
 
       # ── 数据库路径（指向持久化磁盘挂载点）─────────────────────────────
       - key: DB_PATH
-        value: /var/data/users.db
+        value: ./data/users.db
 
       # ── 可选：Google Cloud Speech-to-Text ──────────────────────────────
       # - key: GOOGLE_CLOUD_PROJECT
