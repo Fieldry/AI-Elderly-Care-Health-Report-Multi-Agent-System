@@ -96,8 +96,8 @@ class ReportGroundingMetric:
 
 要求：
 - 每条陈述必须是完整句子
-- 只输出 JSON 数组
-- 每个元素包含 statement/source_type/reason
+- 只输出 JSON 对象，格式为 {{"items":[...]}}
+- items 中每个元素包含 statement/source_type/reason
 
         行动计划内容：
 {report_text}"""
@@ -177,7 +177,7 @@ class ReportGroundingMetric:
 待核验陈述：
 {numbered}
 
-只输出 JSON 数组。每个元素包含：
+只输出 JSON 对象，格式为 {{"items":[...]}}。items 中每个元素包含：
 - index: 陈述编号（从1开始）
 - supported: true/false
 - reason: 20字以内说明"""
@@ -235,7 +235,7 @@ class ProfileCoverageMetric:
 关键要素：
 {numbered}
 
-请只输出 JSON 数组，每个元素包含：
+请只输出 JSON 对象，格式为 {{"items":[...]}}。items 中每个元素包含：
 - index: 要素编号
 - covered: true/false
 - evidence: 报告中的相关内容片段，或“未提及”"""
@@ -304,7 +304,7 @@ class DocRoutingRelevanceMetric:
 被选文档：
 {docs_text}
 
-请只输出 JSON 数组。每个元素包含：
+请只输出 JSON 对象，格式为 {{"items":[...]}}。items 中每个元素包含：
 - index: 文档编号
 - relevant: true/false
 - reason: 20字以内理由"""
@@ -400,7 +400,7 @@ class EvidenceCoverageMetric:
 结构化证据卡：
 {json.dumps(evidence_cards, ensure_ascii=False, indent=2)}
 
-请只输出 JSON 数组。每个元素包含：
+请只输出 JSON 对象，格式为 {{"items":[...]}}。items 中每个元素包含：
 - index: 需求编号
 - covered: true/false
 - evidence: 对应证据卡里的 recommendation 或 need 摘要；若未覆盖则写“未覆盖”"""

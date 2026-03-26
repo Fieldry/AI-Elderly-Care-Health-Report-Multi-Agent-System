@@ -96,6 +96,12 @@ def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
     return {"max_tokens": max_tokens}
 
 
+def _json_response_kwargs(model: str) -> Dict[str, Any]:
+    if str(model or "").startswith("gpt-5"):
+        return {"response_format": {"type": "json_object"}}
+    return {}
+
+
 @dataclass
 class UserProfile:
     """用户画像数据结构"""
@@ -322,7 +328,13 @@ class BaseAgent:
             or any(marker in error_text for marker in retry_markers)
         )
 
-    def call_llm(self, user_prompt: str, temperature: float = 0.3, max_tokens: int = 2048) -> str:
+    def call_llm(
+        self,
+        user_prompt: str,
+        temperature: float = 0.3,
+        max_tokens: int = 2048,
+        response_format: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """调用 LLM"""
         total_attempts = LLM_MAX_RETRIES + 1
         resolved_temperature = temperature if LLM_TEMPERATURE_OVERRIDE is None else LLM_TEMPERATURE_OVERRIDE
@@ -348,6 +360,7 @@ class BaseAgent:
                     temperature=resolved_temperature,
                     timeout=LLM_TIMEOUT_SECONDS,
                     **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
+                    **({"response_format": response_format} if response_format else {}),
                 )
                 duration = time.monotonic() - started_at
                 logger.info(
@@ -389,7 +402,19 @@ class BaseAgent:
         last_response = ""
 
         for attempt in range(1, max(parse_attempts, 1) + 1):
-            last_response = self.call_llm(current_prompt, temperature=temperature, max_tokens=max_tokens)
+            try_response_format = _json_response_kwargs(DEEPSEEK_MODEL)
+            try:
+                last_response = self.call_llm(
+                    current_prompt,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    response_format=try_response_format or None,
+                )
+            except Exception as error:
+                if try_response_format and "response_format" in str(error).lower():
+                    last_response = self.call_llm(current_prompt, temperature=temperature, max_tokens=max_tokens)
+                else:
+                    raise
             try:
                 parsed = parse_json_response_loose(last_response)
                 if isinstance(parsed, list):

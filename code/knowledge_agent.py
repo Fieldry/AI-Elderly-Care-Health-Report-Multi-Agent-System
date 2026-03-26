@@ -39,6 +39,12 @@ def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
     return {"max_tokens": max_tokens}
 
 
+def _json_response_kwargs(model: str) -> Dict[str, Any]:
+    if str(model or "").startswith("gpt-5"):
+        return {"response_format": {"type": "json_object"}}
+    return {}
+
+
 class KnowledgeAgent:
     """知识检索与推理 Agent - 封装分层 RAG 功能"""
 
@@ -145,7 +151,18 @@ class KnowledgeAgent:
         last_response = ""
 
         for attempt in range(1, 3):
-            last_response = self._call_llm(current_prompt, max_tokens=max_tokens)
+            try_response_format = _json_response_kwargs(DEEPSEEK_MODEL)
+            try:
+                last_response = self._call_llm(
+                    current_prompt,
+                    max_tokens=max_tokens,
+                    response_format=try_response_format or None,
+                )
+            except Exception as error:
+                if try_response_format and "response_format" in str(error).lower():
+                    last_response = self._call_llm(current_prompt, max_tokens=max_tokens)
+                else:
+                    raise
             try:
                 parsed = parse_json_response(last_response)
                 if isinstance(parsed, list):
@@ -178,6 +195,7 @@ class KnowledgeAgent:
         system_prompt: str = "你是一个严谨的知识路由助手，请按照指令精确完成任务。",
         temperature: float = 0.1,
         max_tokens: int = 4096,
+        response_format: Optional[Dict[str, Any]] = None,
     ) -> str:
         client = self._get_client()
         total_attempts = DEEPSEEK_MAX_RETRIES + 1
@@ -207,6 +225,7 @@ class KnowledgeAgent:
                     temperature=temperature,
                     timeout=DEEPSEEK_TIMEOUT_SECONDS,
                     **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
+                    **({"response_format": response_format} if response_format else {}),
                 )
                 logger.info(
                     "[knowledge] LLM call finished attempt=%s/%s duration=%.2fs",

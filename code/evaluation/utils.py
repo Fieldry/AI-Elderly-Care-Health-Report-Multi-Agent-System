@@ -31,6 +31,12 @@ def _completion_length_kwargs(model: str, max_tokens: int) -> Dict[str, int]:
         return {"max_completion_tokens": max_tokens}
     return {"max_tokens": max_tokens}
 
+
+def _json_response_kwargs(model: str) -> Dict[str, Any]:
+    if str(model or "").startswith("gpt-5"):
+        return {"response_format": {"type": "json_object"}}
+    return {}
+
 _client: Optional[OpenAI] = None
 
 
@@ -49,6 +55,7 @@ def call_llm(
     system_prompt: str = "你是一个严谨的评测助手，请按照指令精确完成任务。",
     temperature: float = 0.1,
     max_tokens: int = 4096,
+    response_format: Optional[Dict[str, Any]] = None,
 ) -> str:
     """调用 DeepSeek LLM，返回文本回复。"""
     client = _get_client()
@@ -77,6 +84,7 @@ def call_llm(
                 temperature=temperature,
                 timeout=LLM_TIMEOUT,
                 **_completion_length_kwargs(DEEPSEEK_MODEL, max_tokens),
+                **({"response_format": response_format} if response_format else {}),
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
@@ -114,12 +122,25 @@ def call_llm_json(
     current_prompt = prompt
 
     for attempt in range(1, max(parse_attempts, 1) + 1):
-        response = call_llm(
-            current_prompt,
-            system_prompt=system_prompt,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
+        try_response_format = _json_response_kwargs(DEEPSEEK_MODEL)
+        try:
+            response = call_llm(
+                current_prompt,
+                system_prompt=system_prompt,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format=try_response_format or None,
+            )
+        except Exception as error:
+            if try_response_format and "response_format" in str(error).lower():
+                response = call_llm(
+                    current_prompt,
+                    system_prompt=system_prompt,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+            else:
+                raise
         try:
             return parse_json_response(response)
         except Exception as error:

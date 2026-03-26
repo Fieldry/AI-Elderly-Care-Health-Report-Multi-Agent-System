@@ -41,7 +41,9 @@ class JsonResponseUtilsTestCase(unittest.TestCase):
     def test_base_agent_call_llm_json_retries(self):
         agent = BaseAgent("TestAgent", "system")
         responses = iter(["不是 JSON", '{"result": "ok"}'])
-        agent.call_llm = lambda user_prompt, temperature=0.3, max_tokens=2048: next(responses)  # type: ignore[method-assign]
+        agent.call_llm = (  # type: ignore[method-assign]
+            lambda user_prompt, temperature=0.3, max_tokens=2048, response_format=None: next(responses)
+        )
 
         parsed = agent.call_llm_json("请输出 JSON", parse_attempts=2)
         self.assertEqual(parsed["result"], "ok")
