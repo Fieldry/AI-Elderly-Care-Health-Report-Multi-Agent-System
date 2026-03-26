@@ -117,8 +117,8 @@ class UserProfile:
     height: float = None
     vision: str = None
     hearing: str = None
-    waist_circumference: float = None
-    hip_circumference: float = None
+    waist_circumference: float = None  # 新增字段
+    hip_circumference: float = None  # 新增字段
 
     # 健康限制
     health_limitation: str = None
@@ -246,28 +246,40 @@ def completeness_score(profile: UserProfile) -> dict:
         "disease": {
             "weight": 0.25,
             "fields": [
-                profile.age,
-                profile.coronary_heart_disease, profile.heart_failure, profile.arrhythmia, profile.stroke,
-                profile.hypertension, profile.diabetes, profile.arthritis, profile.osteoporosis,
-                profile.chronic_lung_disease, profile.dementia, profile.fall_history, profile.malnutrition]
+                profile.hypertension, profile.coronary_heart_disease, profile.heart_failure,
+                profile.arrhythmia, profile.stroke, profile.diabetes, profile.hyperlipidemia,
+                profile.thyroid_disease, profile.chronic_lung_disease, profile.tuberculosis,
+                profile.cataract, profile.glaucoma, profile.hearing_impairment,
+                profile.peptic_ulcer, profile.cholecystitis_gallstones, profile.chronic_kidney_disease,
+                profile.hepatitis, profile.chronic_liver_disease, profile.parkinsons_disease,
+                profile.dementia, profile.epilepsy, profile.arthritis, profile.rheumatism_rheumatoid,
+                profile.osteoporosis, profile.pressure_ulcer, profile.cancer, profile.frailty,
+                profile.fall_history, profile.disability, profile.malnutrition,
+                profile.prostate_disease, profile.breast_disease, profile.uterine_fibroids
+            ]
         },
         "psycho_social": {
             "weight": 0.20,
             "fields": [
                 profile.depression, profile.anxiety, profile.loneliness,
-                profile.living_arrangement, profile.caregiver
+                profile.living_arrangement, profile.caregiver,
+                profile.financial_status, profile.medical_insurance
             ]
         },
         "lifestyle_vitals": {
             "weight": 0.15,
             "fields": [
                 profile.smoking, profile.drinking, profile.exercise, profile.sleep_quality,
-                profile.height, profile.weight, profile.vision, profile.hearing
+                profile.height, profile.weight, profile.vision, profile.hearing,
+                profile.waist_circumference, profile.hip_circumference
             ]
         },
         "background": {
             "weight": 0.05,
-            "fields": [profile.education_years, profile.medical_insurance, profile.financial_status]
+            "fields": [
+                profile.age, profile.sex, profile.residence,
+                profile.education_years, profile.marital_status
+            ]
         }
     }
 
@@ -290,8 +302,8 @@ def completeness_score(profile: UserProfile) -> dict:
         level = "低"
 
     notes = {
-        "满": "信息完整度为100%，结论与建议可信度最高。",
-        "高": "信息较完整，结论与建议可信度较高。",
+        "高": "信息完整度为100%，结论与建议可信度最高。",
+        "较高": "信息较完整，结论与建议可信度较高。",
         "中": "信息部分缺失，部分结论偏预防性建议，建议补充信息。",
         "低": "关键信息缺失较多，本报告仅供参考，建议补充信息后再生成。"
     }[level]
@@ -332,7 +344,7 @@ class BaseAgent:
         self,
         user_prompt: str,
         temperature: float = 0.3,
-        max_tokens: int = 2048,
+        max_tokens: int = 8192,
         response_format: Optional[Dict[str, Any]] = None,
     ) -> str:
         """调用 LLM"""
@@ -728,8 +740,7 @@ class RiskAgentV3(BaseAgent):
         return self.call_llm_with_rag_json(
             f"评估以下老人的短期和中期风险：\n{risk_factors}",
             rag_query=rag_query,
-            rag_top_k=2,
-            max_tokens=4096,
+            rag_top_k=2
         )
 
 
@@ -978,6 +989,7 @@ class ActionPlanAgentV3(BaseAgent):
 6. 照护资源对接
 """
 
+        # 构建 RAG 查询：针对最紧迫的行动需求
         rag_query = None
         if not knowledge_context and self.knowledge_agent:
             # 仅在上游没有提供结构化知识证据时，才退回旧的关键词检索增强。
@@ -1013,8 +1025,7 @@ class ActionPlanAgentV3(BaseAgent):
         return self.call_llm_with_rag_json(
             context,
             rag_query=rag_query,
-            rag_top_k=2,
-            max_tokens=4096,
+            rag_top_k=2
         )
 
 
@@ -1098,7 +1109,7 @@ class ReviewAgentV3(BaseAgent):
     """反思校验 Agent V3 - 检查输出质量和一致性"""
 
     def __init__(self):
-        system_prompt = """你是健康评估与照护行动计划质量审核专家，负责检查报告的准确性、一致性和安全性。
+        system_prompt = """你是健康报告质量审核专家，负责检查报告的准确性、一致性和安全性。
 
 【硬规则核查（必须逐项检查）】
 1. Stage1/Stage3一致性
@@ -1208,8 +1219,7 @@ class ReviewAgentV3(BaseAgent):
 {json.dumps(priority_result, ensure_ascii=False, indent=2)}
 """
         review_json = self.call_llm_json(
-            f"审核以下健康评估与照护行动计划：\n{report_content}",
-            max_tokens=4096,
+            f"审核以下健康评估与照护行动计划：\n{report_content}"
         )
         input_quality = completeness_score(profile)
         review_json["input_quality"] = input_quality
@@ -1223,7 +1233,7 @@ class ReportAgentV2(BaseAgent):
     """报告生成 Agent V2 - 使用新版报告模板"""
 
     def __init__(self):
-        system_prompt = """你是健康评估与照护行动计划撰写专家，负责将评估结果整合为"健康评估与照护行动计划"。
+        system_prompt = """你是健康报告撰写专家，负责将评估结果整合为"健康评估与照护行动计划"。
 
 【报告结构】
 0. 报告说明
@@ -1244,6 +1254,7 @@ class ReportAgentV2(BaseAgent):
 “能量与蛋白质摄入可能不足（需结合体重变化判断）”。
 - 输出报告时，“优势”用口语表达，禁止直接展示括号里的证据，比如
 “您平时不怎么抽烟，这点很加分”。
+- 在报告的最后，根据【报告参考价值】评估结果给出本此报告的参考价值。
 
 
 【输出格式】
@@ -1330,6 +1341,9 @@ C级（第三优先）: {json.dumps(priority_c_full, ensure_ascii=False, indent=
 是否紧急: {urgent}
 紧急原因: {urgent_reason}
 
+【报告参考价值】
+{review_result.get('input_quality','')}
+
 按以下结构生成报告：
 
 # 健康评估与照护行动计划
@@ -1378,6 +1392,10 @@ C级（第三优先）: {json.dumps(priority_c_full, ensure_ascii=False, indent=
 
 ## 5. 温馨寄语
 [一段温暖、鼓励的话，强调"按计划慢慢来，能做多少就做多少"]
+
+## 6.报告参考价值
+本次生成报告参考价值**较高**：信息较完整，结论与建议可信度较高。",
+
 """
         if knowledge_context:
             context += f"""
@@ -1753,6 +1771,7 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
         cognition_season=safe_get('c14'),
         cognition_place=safe_get('c15'),
         cognition_calc=[safe_get('c31a', ''), safe_get('c31b', ''), safe_get('c31c', '')],
+        cognition_draw=safe_get('c32'),
 
         # 心理状态
         depression=safe_get('b33'),
@@ -1773,7 +1792,9 @@ def load_user_profile_from_excel(excel_path: str, row_index: int = 0) -> UserPro
 
         # 社会支持
         living_arrangement=safe_get('a51'),
+        cohabitants=safe_get('a52'),
         financial_status=safe_get('f34'),
+        income=safe_get('f35'),
         medical_insurance=f"城镇医保:{safe_get('f64e')}, 新农合:{safe_get('f64g')}",
         caregiver=safe_get('f5'),
 
@@ -1862,6 +1883,7 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
                 cognition_season=safe_get('c14'),
                 cognition_place=safe_get('c15'),
                 cognition_calc=[safe_get('c31a', ''), safe_get('c31b', ''), safe_get('c31c', '')],
+                cognition_draw=safe_get('c32'),
                 depression=safe_get('b33'),
                 anxiety=safe_get('b36'),
                 loneliness=safe_get('b38'),
@@ -1874,7 +1896,9 @@ def load_multiple_profiles(excel_path: str, n_samples: int = 50, random_state: i
                 vision=safe_get('g1'),
                 hearing=safe_get('g106'),
                 living_arrangement=safe_get('a51'),
+                cohabitants=safe_get('a52'),
                 financial_status=safe_get('f34'),
+                income=safe_get('f35'),
                 medical_insurance=f"城镇医保:{safe_get('f64e')}, 新农合:{safe_get('f64g')}",
                 caregiver=safe_get('f5'),
                 user_type="elderly"
