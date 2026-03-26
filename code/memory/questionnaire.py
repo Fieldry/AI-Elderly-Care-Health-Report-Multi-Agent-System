@@ -290,16 +290,38 @@ QUESTION_GROUPS: List[Dict[str, Any]] = [
         "fields": ["age", "sex", "residence", "education_years", "marital_status"],
         "steps": [
             {
-                "id": "g1_basic",
+                "id": "g1_age",
                 "kind": "chat",
-                "fields": ["age", "sex", "residence", "education_years", "marital_status"],
-                "prompt": (
-                    "下面先了解一下您的基本情况，都是一些简单的问题，您按实际情况回答就可以。\n\n"
-                    "您今年多大年纪了？您是男士还是女士？您现在住的地方属于城市，还是农村？\n"
-                    "您以前大概上过几年学？如果不方便按年数说，也可以告诉我是小学、初中、高中，还是更高一些。\n"
-                    "您现在的婚姻情况是怎样的？比如在婚、丧偶，或者其他情况。"
-                ),
-            }
+                "fields": ["age"],
+                "prompt": "下面先了解一下您的基本情况，都是一些简单的问题，您按实际情况回答就可以。\n\n您今年多大年纪了？",
+            },
+            {
+                "id": "g1_sex",
+                "kind": "single_choice",
+                "field": "sex",
+                "prompt": "您是男士还是女士？",
+                "options": SEX_OPTIONS,
+            },
+            {
+                "id": "g1_residence",
+                "kind": "single_choice",
+                "field": "residence",
+                "prompt": "您现在住的地方属于城市，还是农村？",
+                "options": RESIDENCE_OPTIONS,
+            },
+            {
+                "id": "g1_education",
+                "kind": "chat",
+                "fields": ["education_years"],
+                "prompt": "您以前大概上过几年学？如果不方便按年数说，也可以告诉我是小学、初中、高中，还是更高一些。",
+            },
+            {
+                "id": "g1_marital",
+                "kind": "single_choice",
+                "field": "marital_status",
+                "prompt": "您现在的婚姻情况是怎样的？",
+                "options": MARITAL_OPTIONS,
+            },
         ],
     },
     {
@@ -308,18 +330,37 @@ QUESTION_GROUPS: List[Dict[str, Any]] = [
         "fields": ["weight", "height", "vision", "hearing", "waist_circumference", "hip_circumference"],
         "steps": [
             {
-                "id": "g2_body",
+                "id": "g2_weight",
                 "kind": "chat",
-                "fields": ["weight", "height", "vision", "hearing", "waist_circumference", "hip_circumference"],
-                "prompt": (
-                    "下面再简单了解一下您的身体基本情况。\n\n"
-                    "有些如果记不太清，按大概情况说就可以。\n"
-                    "您现在体重大概是多少公斤？身高大概是多少厘米？\n"
-                    "您现在看东西怎么样？比如看人、看字、看手机，大体还清楚吗？（好/一般/差）\n"
-                    "您现在听别人说话怎么样？一般聊天时能听清吗？（好/一般/差）\n"
-                    "如果您最近量过的话，也可以补充一下腰围和臀围；如果没有量过，可以先跳过。"
-                ),
-            }
+                "fields": ["weight"],
+                "prompt": "下面再简单了解一下您的身体基本情况。\n\n您现在体重大概是多少公斤？",
+            },
+            {
+                "id": "g2_height",
+                "kind": "chat",
+                "fields": ["height"],
+                "prompt": "您的身高大概是多少厘米？",
+            },
+            {
+                "id": "g2_vision",
+                "kind": "single_choice",
+                "field": "vision",
+                "prompt": "您现在看东西怎么样？比如看人、看字、看手机，大体还清楚吗？",
+                "options": VISION_HEARING_OPTIONS,
+            },
+            {
+                "id": "g2_hearing",
+                "kind": "single_choice",
+                "field": "hearing",
+                "prompt": "您现在听别人说话怎么样？一般聊天时能听清吗？",
+                "options": VISION_HEARING_OPTIONS,
+            },
+            {
+                "id": "g2_waist_hip",
+                "kind": "chat",
+                "fields": ["waist_circumference", "hip_circumference"],
+                "prompt": "如果您最近量过腰围和臀围，可以告诉我大概多少厘米；如果没有量过，直接说"没量过"就可以跳过。",
+            },
         ],
     },
     {
