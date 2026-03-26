@@ -625,8 +625,15 @@ class ConversationManager:
         interaction = self._find_next_interaction(user_id, ctx)
         if interaction is None:
             return self._ready_to_confirm(user_id, session_id)
+
+        prompt = self._build_prompt_with_title(interaction)
+
+        if interaction["kind"] != "chat" and interaction["groupId"] != "MANUAL_EDIT":
+            hint = "这几道题为方便您回答，会直接弹出一个小卡片，您可以根据实际情况进行选择。"
+            prompt = f"{hint}\n\n{prompt}"
+
         return (
-            self._build_prompt_with_title(interaction),
+            prompt,
             SessionState.COLLECTING,
             {"interaction": interaction},
         )
