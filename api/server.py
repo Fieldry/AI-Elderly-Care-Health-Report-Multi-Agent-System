@@ -25,7 +25,7 @@ except ImportError:
 
 from fastapi import APIRouter, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 from starlette.websockets import WebSocketState
 
 
@@ -73,6 +73,7 @@ from security import (
     require_elderly_session_access,
     require_state,
 )
+from pdf_export import generate_report_pdf
 from workspace_manager import WorkspaceManager
 
 
@@ -910,8 +911,18 @@ async def get_report(request: Request, report_id: str) -> ReportData:
 @report_router.get("/{report_id}/export/pdf")
 async def export_report_pdf(request: Request, report_id: str):
     """导出报告为 PDF。"""
-    _load_accessible_report_payload(request, report_id)
-    raise HTTPException(status_code=501, detail="PDF 导出功能待实现")
+    payload = _load_accessible_report_payload(request, report_id)
+    try:
+        pdf_bytes = generate_report_pdf(payload)
+    except Exception as exc:
+        logger.exception("PDF 生成失败: %s", exc)
+        raise HTTPException(status_code=500, detail="PDF 生成失败，请稍后重试。")
+    filename = f"report_{report_id}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @api_router.get("/sessions")

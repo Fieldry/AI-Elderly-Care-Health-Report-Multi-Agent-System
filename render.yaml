@@ -51,7 +51,16 @@ services:
 
       # ── RAG 开关 ────────────────────────────────────────────────────────
       - key: RAG_ENABLED
-        value: "false"
+        value: "true"
+
+      - key: RAG_INDEX_PATH
+        value: .workspace/data/rag_indexes/default_index.json
+
+      - key: RAG_TOP_K
+        value: 3
+
+      - key: RAG_MODEL
+        value: deepseek-chat
 
       # ── 日志级别 ─────────────────────────────────────────────────────────
       - key: LOG_LEVEL
