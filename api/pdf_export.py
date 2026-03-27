@@ -235,4 +235,4 @@ def generate_report_pdf(payload: Dict[str, Any]) -> bytes:
     font_path = _find_cjk_font()
     pdf = _ReportPDF(font_path)
     pdf.render_markdown(markdown_text)
-    return pdf.output()
+    return bytes(pdf.output())
