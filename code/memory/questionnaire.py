@@ -71,7 +71,7 @@ SEX_OPTIONS = [
 ]
 
 MARITAL_OPTIONS = [
-    {"label": "在婚", "value": "在婚"},
+    {"label": "已婚", "value": "已婚"},
     {"label": "丧偶", "value": "丧偶"},
     {"label": "离婚", "value": "离婚"},
     {"label": "未婚", "value": "未婚"},
@@ -124,7 +124,7 @@ FIELD_META: Dict[str, Dict[str, Any]] = {
     "sex": {"zh": "性别", "hint": "男 / 女"},
     "residence": {"zh": "居住地类型", "hint": "城市 / 农村"},
     "education_years": {"zh": "受教育年限", "hint": "数字，如 6"},
-    "marital_status": {"zh": "婚姻状况", "hint": "在婚 / 丧偶 / 离婚 / 未婚 / 其他"},
+    "marital_status": {"zh": "婚姻状况", "hint": "已婚 / 丧偶 / 离婚 / 未婚 / 其他"},
     "weight": {"zh": "体重（公斤）", "hint": "数字，如 55"},
     "height": {"zh": "身高（厘米）", "hint": "数字，如 160"},
     "vision": {"zh": "视力情况", "hint": "好 / 一般 / 差"},

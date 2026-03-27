@@ -1,0 +1,2871 @@
+{
+  "report_id": "20260327_105035_916592",
+  "session_id": "bcb3dce3-28a4-4bca-ba13-f24069aa819e",
+  "user_id": "9eec61f5-7855-473d-bd2f-dc5a5d4f7eda",
+  "generated_at": "2026-03-27T10:50:35.916592",
+  "profile": {
+    "age": 80,
+    "sex": "男",
+    "residence": "城市",
+    "education_years": 6,
+    "marital_status": "已婚",
+    "weight": 75.0,
+    "height": 170.0,
+    "vision": "好",
+    "hearing": "好",
+    "waist_circumference": null,
+    "hip_circumference": null,
+    "health_limitation": "完全没有影响",
+    "badl_bathing": "不需要帮助",
+    "badl_dressing": "不需要帮助",
+    "badl_toileting": "不需要帮助",
+    "badl_transferring": "不需要帮助",
+    "badl_continence": "不需要帮助",
+    "badl_eating": "不需要帮助",
+    "iadl_visiting": "能自己做",
+    "iadl_shopping": "能自己做",
+    "iadl_cooking": "能自己做",
+    "iadl_laundry": "能自己做",
+    "iadl_walking": "能自己做",
+    "iadl_carrying": "能自己做",
+    "iadl_crouching": "能自己做",
+    "iadl_transport": "能自己做",
+    "chronic_disease_any": "没有",
+    "hypertension": "否",
+    "coronary_heart_disease": "否",
+    "heart_failure": "否",
+    "arrhythmia": "否",
+    "stroke": "否",
+    "diabetes": "否",
+    "hyperlipidemia": "否",
+    "thyroid_disease": "否",
+    "chronic_lung_disease": "否",
+    "tuberculosis": "否",
+    "cataract": "否",
+    "glaucoma": "否",
+    "hearing_impairment": "否",
+    "peptic_ulcer": "否",
+    "cholecystitis_gallstones": "否",
+    "chronic_kidney_disease": "否",
+    "hepatitis": "否",
+    "chronic_liver_disease": "否",
+    "parkinsons_disease": "否",
+    "dementia": "否",
+    "epilepsy": "否",
+    "arthritis": "否",
+    "rheumatism_rheumatoid": "否",
+    "osteoporosis": "否",
+    "pressure_ulcer": "否",
+    "cancer": "否",
+    "cancer_type": null,
+    "frailty": "否",
+    "fall_history": "否",
+    "disability": "否",
+    "malnutrition": "否",
+    "other_chronic_note": null,
+    "prostate_disease": "否",
+    "breast_disease": "否",
+    "uterine_fibroids": "否",
+    "cognition_time": "错误",
+    "cognition_month": "正确",
+    "cognition_season": "正确",
+    "cognition_place": "正确",
+    "cognition_calc": [
+      "正确",
+      "正确",
+      "正确"
+    ],
+    "cognition_draw": null,
+    "depression": "从不",
+    "anxiety": "从不",
+    "loneliness": "从不",
+    "smoking": "从不",
+    "drinking": "从不",
+    "exercise": "有时",
+    "sleep_quality": "很好",
+    "living_arrangement": "和老伴",
+    "cohabitants": null,
+    "financial_status": "好",
+    "income": null,
+    "medical_insurance": "城乡居民医保",
+    "caregiver": "保姆"
+  },
+  "raw_results": {
+    "status": {
+      "status": 0,
+      "status_name": "功能完好",
+      "status_description": "生活自理",
+      "health_limitation_impact": "健康问题对日常活动完全没有影响",
+      "badl_depend_count": 0,
+      "iadl_unable_count": 0,
+      "badl_details": [],
+      "iadl_details": [],
+      "explanation": "老人所有基本生活活动和工具性活动都能独立完成，健康状况良好，完全能够自理。"
+    },
+    "risk": {
+      "short_term_risks": [
+        {
+          "timeframe": "1-4周",
+          "risk": "夜间定向障碍导致跌倒或走失",
+          "trigger": "夜间起床如厕、饮水时，因时间定向错误而慌乱或迷失方向",
+          "evidence": [
+            "认知功能：时间定向错误"
+          ],
+          "severity": "中",
+          "preventable": true,
+          "prevention_key": "加强夜间照明与安全引导，设置清晰路径标识"
+        }
+      ],
+      "medium_term_risks": [
+        {
+          "timeframe": "1-6月",
+          "risk": "认知功能下降加速，影响日常生活独立性",
+          "chain": "时间定向错误（孤立认知缺陷）→ 可能发展为更广泛的定向或执行功能障碍 → 影响IADL（如管理药物、财务）→ 独立性下降",
+          "severity": "中",
+          "preventable": true,
+          "prevention_key": "定期认知训练与评估，建立规律生活日程，老伴/保姆协助监督关键事务"
+        },
+        {
+          "timeframe": "1-6月",
+          "risk": "因锻炼不足导致肌肉力量与平衡能力下降",
+          "chain": "锻炼频率“有时”→ 身体活动量可能不足 → 肌肉力量与平衡能力渐进性下降 → 跌倒风险累积性增加",
+          "severity": "低",
+          "preventable": true,
+          "prevention_key": "制定并执行规律的中等强度锻炼计划（如散步、太极），增强肌力与平衡"
+        }
+      ],
+      "overall_risk_level": "中",
+      "risk_summary": "老人总体健康状况良好，无慢性病与失能。主要风险源于孤立的认知缺陷（时间定向错误）及可能不足的锻炼，可能导致夜间安全事件及中长期功能下降。有老伴与保姆支持，风险可控。"
+    },
+    "factors": {
+      "functional_status": {
+        "level": "功能完好",
+        "description": "老人所有基本生活活动和工具性活动都能独立完成，健康状况良好，完全能够自理。"
+      },
+      "strengths": [
+        "BADL与IADL完全自理（BADL受限: []， IADL受限: []）",
+        "无慢性病（慢性病总问: 没有）",
+        "心理状态良好（抑郁感: 从不，焦虑感: 从不，孤独感: 从不）",
+        "无不良嗜好（吸烟: 从不，饮酒: 从不）",
+        "社会支持良好（居住: 和老伴，经济: 好）"
+      ],
+      "main_problems": [
+        {
+          "problem": "认知功能轻度受损",
+          "impact": "时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+          "priority": 1
+        },
+        {
+          "problem": "体力活动不足",
+          "impact": "锻炼频率为‘有时’，是导致肌肉力量与平衡能力下降的低风险因素。",
+          "priority": 2
+        },
+        {
+          "problem": "体重超重",
+          "impact": "BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。",
+          "priority": 3
+        }
+      ],
+      "unchangeable_factors": [
+        "年龄",
+        "性别",
+        "教育程度"
+      ],
+      "changeable_factors": [
+        "认知训练",
+        "体力活动",
+        "营养状态"
+      ]
+    },
+    "knowledge": {
+      "enabled": true,
+      "retrieval_mode": "hierarchical_llm",
+      "retrieval_brief": {
+        "profile": {
+          "age": 80,
+          "sex": "男",
+          "residence": "城市",
+          "living_arrangement": "和老伴",
+          "caregiver": "保姆",
+          "medical_insurance": "城乡居民医保"
+        },
+        "status": {
+          "status_name": "功能完好",
+          "status_description": "生活自理",
+          "badl_details": [],
+          "iadl_details": []
+        },
+        "risks": {
+          "overall_risk_level": "中",
+          "short_term": [
+            "夜间定向障碍导致跌倒或走失"
+          ],
+          "medium_term": [
+            "认知功能下降加速，影响日常生活独立性",
+            "因锻炼不足导致肌肉力量与平衡能力下降"
+          ]
+        },
+        "factors": {
+          "main_problems": [
+            "认知功能轻度受损",
+            "时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+            "体力活动不足",
+            "锻炼频率为‘有时’，是导致肌肉力量与平衡能力下降的低风险因素。",
+            "体重超重",
+            "BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。"
+          ],
+          "changeable_factors": [
+            "认知训练",
+            "体力活动",
+            "营养状态"
+          ]
+        },
+        "diseases": [],
+        "focus_needs": [
+          "夜间定向障碍导致跌倒或走失",
+          "认知功能下降加速，影响日常生活独立性",
+          "因锻炼不足导致肌肉力量与平衡能力下降",
+          "认知功能轻度受损",
+          "时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+          "体力活动不足"
+        ],
+        "text": "老人画像：80岁，男，居住地=城市，居住方式=和老伴。\n功能状态：功能完好；生活自理。\n短期风险：夜间定向障碍导致跌倒或走失。\n中期风险：认知功能下降加速，影响日常生活独立性；因锻炼不足导致肌肉力量与平衡能力下降。\n主要问题：认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。；体力活动不足；锻炼频率为‘有时’，是导致肌肉力量与平衡能力下降的低风险因素。；体重超重；BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。。\n慢性病：暂无明确慢病。\n本轮最需要检索的照护需求：夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性；因锻炼不足导致肌肉力量与平衡能力下降；认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。；体力活动不足。"
+      },
+      "selected_docs": [
+        {
+          "doc_id": "doc_7e04601a37a4",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "doc_summary": "重点章节包括：健康教育；其他干预；参考文献；定义与流行病学；心理干预；概述。适合从这些章节中继续定位与病例相关的建议和标准。",
+          "reason": "该文档为《老年认知功能障碍慢病管理指南》，其内容直接针对病例中“认知功能轻度受损”、“时间定向错误”及“认知功能下降加速”等核心问题。文档大纲包含健康教育、心理干预等章节，可为夜间定向障碍的照护干预、延缓认知下降提供具体的管理策略和指导原则。",
+          "relevance_to_case": "直接对应“夜间定向障碍导致跌倒或走失”和“认知功能下降加速，影响日常生活独立性”这两个高优先级风险及主要问题。",
+          "outline_nodes": [
+            {
+              "node_id": "node_f7e5cbf49979",
+              "title": "健康教育",
+              "path": "健康教育",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+              "level": 1
+            },
+            {
+              "node_id": "node_f9d31c7672d7",
+              "title": "其他干预",
+              "path": "其他干预",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 1
+            },
+            {
+              "node_id": "node_2eaf1d095ec5",
+              "title": "参考文献",
+              "path": "参考文献",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 [65]XiaoS,ChanP,WangT,etal.A36-weekmulticenter, randomized,double-blind,place...",
+              "level": 1
+            },
+            {
+              "node_id": "node_56906f263a7f",
+              "title": "定义与流行病学",
+              "path": "定义与流行病学",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+              "level": 1
+            },
+            {
+              "node_id": "node_27619f3754ad",
+              "title": "心理干预",
+              "path": "心理干预",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 1
+            },
+            {
+              "node_id": "node_82927736137e",
+              "title": "概述",
+              "path": "概述",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+              "level": 1
+            },
+            {
+              "node_id": "node_8a638af2d7ea",
+              "title": "生活方式干预",
+              "path": "生活方式干预",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+              "level": 1
+            },
+            {
+              "node_id": "node_349e90472e4d",
+              "title": "疾病管理与自我管理",
+              "path": "疾病管理与自我管理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 1
+            },
+            {
+              "node_id": "node_0dc6095ca151",
+              "title": "编写说明",
+              "path": "编写说明",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+              "level": 1
+            },
+            {
+              "node_id": "node_fab578bf7ed1",
+              "title": "药物干预",
+              "path": "药物干预",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 1
+            },
+            {
+              "node_id": "node_202508477eea",
+              "title": "评估",
+              "path": "评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+              "level": 1
+            },
+            {
+              "node_id": "node_f614030ae284",
+              "title": "中医针灸",
+              "path": "其他干预 > 中医针灸",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_cf50063f06c6",
+              "title": "物理治疗",
+              "path": "其他干预 > 物理治疗",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_42ddf0fec333",
+              "title": "体重管理",
+              "path": "生活方式干预 > 体重管理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 2
+            },
+            {
+              "node_id": "node_6720197ffb2d",
+              "title": "吸烟与饮酒",
+              "path": "生活方式干预 > 吸烟与饮酒",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 2
+            },
+            {
+              "node_id": "node_41d37eae9c2d",
+              "title": "睡眠管理",
+              "path": "生活方式干预 > 睡眠管理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 2
+            },
+            {
+              "node_id": "node_d6035b80b325",
+              "title": "运动治疗",
+              "path": "生活方式干预 > 运动治疗",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+              "level": 2
+            },
+            {
+              "node_id": "node_4ea2cbf015a7",
+              "title": "饮食调理",
+              "path": "生活方式干预 > 饮食调理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+              "level": 2
+            },
+            {
+              "node_id": "node_8a181c601fab",
+              "title": "多学科合作管理",
+              "path": "疾病管理与自我管理 > 多学科合作管理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 要时入住精神卫生中心进行专科治疗。 10.4 对照护者的支持 认知功能 障 碍 患 者 的 照 护 者 容 易 患 上 抑 郁 和 焦 虑,应鼓励照护者与...",
+              "level": 2
+            },
+            {
+              "node_id": "node_000aa8c4520d",
+              "title": "对照护者的支持",
+              "path": "疾病管理与自我管理 > 对照护者的支持",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 要时入住精神卫生中心进行专科治疗。 10.4 对照护者的支持 认知功能 障 碍 患 者 的 照 护 者 容 易 患 上 抑 郁 和 焦 虑,应鼓励照护者与...",
+              "level": 2
+            },
+            {
+              "node_id": "node_2ba798264473",
+              "title": "居住环境的调整",
+              "path": "疾病管理与自我管理 > 居住环境的调整",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_7781224e7770",
+              "title": "生活照护",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_94dbba1d8c37",
+              "title": "精神行为症状管理",
+              "path": "疾病管理与自我管理 > 精神行为症状管理",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_b7ffb095bac6",
+              "title": "中成药",
+              "path": "药物干预 > 中成药",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 2
+            },
+            {
+              "node_id": "node_6ec9a68387d6",
+              "title": "西药干预",
+              "path": "药物干预 > 西药干预",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 2
+            },
+            {
+              "node_id": "node_ed89779a8e89",
+              "title": "中医证候辨识",
+              "path": "评估 > 中医证候辨识",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+              "level": 2
+            },
+            {
+              "node_id": "node_115dee0e40e8",
+              "title": "健康状态综合评估",
+              "path": "评估 > 健康状态综合评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+              "level": 2
+            },
+            {
+              "node_id": "node_50e2b146907b",
+              "title": "危险因素评估",
+              "path": "评估 > 危险因素评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+              "level": 2
+            },
+            {
+              "node_id": "node_dca3250705c6",
+              "title": "并发症评估",
+              "path": "评估 > 并发症评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+              "level": 2
+            },
+            {
+              "node_id": "node_98f187a50187",
+              "title": "精神行为症状评估",
+              "path": "评估 > 精神行为症状评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+              "level": 2
+            },
+            {
+              "node_id": "node_2e69cf864bae",
+              "title": "认知功能评估",
+              "path": "评估 > 认知功能评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+              "level": 2
+            },
+            {
+              "node_id": "node_e6f6dcece8e0",
+              "title": "认知障碍疾病分层与进展评估",
+              "path": "评估 > 认知障碍疾病分层与进展评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+              "level": 2
+            },
+            {
+              "node_id": "node_11b2743c3a9e",
+              "title": "推拿按摩",
+              "path": "其他干预 > 物理治疗 > 推拿按摩",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 3
+            },
+            {
+              "node_id": "node_3e09c65dc119",
+              "title": "经颅磁刺激",
+              "path": "其他干预 > 物理治疗 > 经颅磁刺激",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 3
+            },
+            {
+              "node_id": "node_4a53ee39b3dd",
+              "title": "传统功法",
+              "path": "生活方式干预 > 运动治疗 > 传统功法",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+              "level": 3
+            },
+            {
+              "node_id": "node_decf665ca02e",
+              "title": "体育锻炼",
+              "path": "生活方式干预 > 运动治疗 > 体育锻炼",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+              "level": 3
+            },
+            {
+              "node_id": "node_8853d9e0d43d",
+              "title": "康复运动",
+              "path": "生活方式干预 > 运动治疗 > 康复运动",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+              "level": 3
+            },
+            {
+              "node_id": "node_9b5ed8b818ae",
+              "title": "外出活动与社交活动",
+              "path": "疾病管理与自我管理 > 生活照护 > 外出活动与社交活动",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 3
+            },
+            {
+              "node_id": "node_dea2d9c20193",
+              "title": "日常生活照护",
+              "path": "疾病管理与自我管理 > 生活照护 > 日常生活照护",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 3
+            },
+            {
+              "node_id": "node_1acb4b6c3f96",
+              "title": "BPSD 的识别与评估",
+              "path": "疾病管理与自我管理 > 精神行为症状管理 > BPSD 的识别与评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+              "level": 3
+            }
+          ]
+        },
+        {
+          "doc_id": "doc_3298433c2a5e",
+          "doc_name": "老年人失能预防运动干预临床实践指南（2023版）.pdf",
+          "doc_summary": "重点章节包括：临床问题及推荐意见；声明；局限性与展望；指南制订方法学；目标人群和使用者；目的。适合从这些章节中继续定位与病例相关的建议和标准。",
+          "reason": "该文档为《老年人失能预防运动干预临床实践指南（2023版）》，其核心目标是通过运动干预预防失能，这与病例中“因锻炼不足导致肌肉力量与平衡能力下降”及“体力活动不足”的需求高度契合。指南中的“临床问题及推荐意见”可直接用于制定改善平衡、增强肌力的个性化运动方案。",
+          "relevance_to_case": "直接对应“因锻炼不足导致肌肉力量与平衡能力下降”这一中期风险及“体力活动不足”这一主要问题，旨在提升功能、预防跌倒。",
+          "outline_nodes": [
+            {
+              "node_id": "node_50907092bd2d",
+              "title": "临床问题及推荐意见",
+              "path": "临床问题及推荐意见",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+              "level": 1
+            },
+            {
+              "node_id": "node_98f3dec34391",
+              "title": "声明",
+              "path": "声明",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+              "level": 1
+            },
+            {
+              "node_id": "node_c9e4f5632a9a",
+              "title": "局限性与展望",
+              "path": "局限性与展望",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+              "level": 1
+            },
+            {
+              "node_id": "node_77410552e9f1",
+              "title": "指南制订方法学",
+              "path": "指南制订方法学",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 1
+            },
+            {
+              "node_id": "node_161698673fba",
+              "title": "目标人群和使用者",
+              "path": "目标人群和使用者",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+              "level": 1
+            },
+            {
+              "node_id": "node_bcbe146dd7c6",
+              "title": "目的",
+              "path": "目的",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+              "level": 1
+            },
+            {
+              "node_id": "node_35972beee1e5",
+              "title": "相关术语",
+              "path": "相关术语",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+              "level": 1
+            },
+            {
+              "node_id": "node_39ff2a040e5a",
+              "title": "老年人失能预防运动干预临床实践指南（2023 版）",
+              "path": "老年人失能预防运动干预临床实践指南（2023 版）",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2695 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 ·指南·共识· 老年人失能预防运动干预临床实践指南（2023 版） 中华医学会老年医学分会护理学组，中国老年保健医学研究会老年医学护理分会， 中国老年护...",
+              "level": 1
+            },
+            {
+              "node_id": "node_3f8628a4a3ca",
+              "title": "临床问题 10：老年人进行抗阻运动时，运动原则是什么？",
+              "path": "临床问题及推荐意见 > 临床问题 10：老年人进行抗阻运动时，运动原则是什么？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+              "level": 2
+            },
+            {
+              "node_id": "node_5de68af24e96",
+              "title": "临床问题 11：老年人进行抗阻运动后，注意事项有什么？",
+              "path": "临床问题及推荐意见 > 临床问题 11：老年人进行抗阻运动后，注意事项有什么？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+              "level": 2
+            },
+            {
+              "node_id": "node_a10a1ee95e36",
+              "title": "临床问题 12：平衡运动是否能够有效改善老年人的躯体功能？",
+              "path": "临床问题及推荐意见 > 临床问题 12：平衡运动是否能够有效改善老年人的躯体功能？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+              "level": 2
+            },
+            {
+              "node_id": "node_0ef2106c2f9a",
+              "title": "临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+              "path": "临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+              "level": 2
+            },
+            {
+              "node_id": "node_bfd59286eff9",
+              "title": "临床问题 14：老年人进行平衡运动时，运动频次和内容应如何安排？",
+              "path": "临床问题及推荐意见 > 临床问题 14：老年人进行平衡运动时，运动频次和内容应如何安排？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+              "level": 2
+            },
+            {
+              "node_id": "node_da47fa9fa9b3",
+              "title": "临床问题 15：老年人是否应该进行柔韧性运动？",
+              "path": "临床问题及推荐意见 > 临床问题 15：老年人是否应该进行柔韧性运动？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+              "level": 2
+            },
+            {
+              "node_id": "node_898bb570a11d",
+              "title": "临床问题 16：运动结合非运动干预是否能够有效改善老年人的躯体功能？",
+              "path": "临床问题及推荐意见 > 临床问题 16：运动结合非运动干预是否能够有效改善老年人的躯体功能？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+              "level": 2
+            },
+            {
+              "node_id": "node_c101e9e4224d",
+              "title": "临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+              "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+              "level": 2
+            },
+            {
+              "node_id": "node_0df8bebb3a26",
+              "title": "临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+              "path": "临床问题及推荐意见 > 临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+              "level": 2
+            },
+            {
+              "node_id": "node_6b6354b046ec",
+              "title": "临床问题 1：老年人是否应该进行运动？",
+              "path": "临床问题及推荐意见 > 临床问题 1：老年人是否应该进行运动？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+              "level": 2
+            },
+            {
+              "node_id": "node_0227b7baac6d",
+              "title": "临床问题 2：老年人运动前需要进行评估吗？",
+              "path": "临床问题及推荐意见 > 临床问题 2：老年人运动前需要进行评估吗？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+              "level": 2
+            },
+            {
+              "node_id": "node_e1d77af4ea9d",
+              "title": "临床问题 3：老年人的运动方案应如何制订？",
+              "path": "临床问题及推荐意见 > 临床问题 3：老年人的运动方案应如何制订？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+              "level": 2
+            },
+            {
+              "node_id": "node_d71215e44e46",
+              "title": "临床问题 4：老年人的运动量应如何安排？",
+              "path": "临床问题及推荐意见 > 临床问题 4：老年人的运动量应如何安排？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+              "level": 2
+            },
+            {
+              "node_id": "node_1092750af312",
+              "title": "临床问题 5：有氧运动是否能够有效改善老年人的躯体功能？",
+              "path": "临床问题及推荐意见 > 临床问题 5：有氧运动是否能够有效改善老年人的躯体功能？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+              "level": 2
+            },
+            {
+              "node_id": "node_8bc986447e51",
+              "title": "临床问题 6：老年人进行有氧运动时，运动强度、频次和时长应如何安排？",
+              "path": "临床问题及推荐意见 > 临床问题 6：老年人进行有氧运动时，运动强度、频次和时长应如何安排？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2702 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 活性，改善骨骼肌的功能，从而达到改善肌力、平 衡、TUGT、 灵活性、 跌倒等躯体功能的目的。 其中， 气功运动重点改善肌力和肌肉耐力，而...",
+              "level": 2
+            },
+            {
+              "node_id": "node_bc775e19f09f",
+              "title": "临床问题 7：抗阻运动是否能够有效改善老年人的躯体功能？",
+              "path": "临床问题及推荐意见 > 临床问题 7：抗阻运动是否能够有效改善老年人的躯体功能？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2703 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 直至达到推荐的运动水平。 5.6.2 证据概要 WHO 2020 年发布的《关于身体活 动和久坐行为的指南》 ［18］ 、美国卫生及公共服务部 2018...",
+              "level": 2
+            },
+            {
+              "node_id": "node_892ec865d94e",
+              "title": "临床问题 8：老年人进行抗阻运动时，不同肌群的训练顺序应如何安排？",
+              "path": "临床问题及推荐意见 > 临床问题 8：老年人进行抗阻运动时，不同肌群的训练顺序应如何安排？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2703 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 直至达到推荐的运动水平。 5.6.2 证据概要 WHO 2020 年发布的《关于身体活 动和久坐行为的指南》 ［18］ 、美国卫生及公共服务部 2018...",
+              "level": 2
+            },
+            {
+              "node_id": "node_1e94b9bf7f96",
+              "title": "临床问题 9：老年人进行抗阻运动时，运动强度和频率应如何安排？",
+              "path": "临床问题及推荐意见 > 临床问题 9：老年人进行抗阻运动时，运动强度和频率应如何安排？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+              "level": 2
+            },
+            {
+              "node_id": "node_5d62bce12db2",
+              "title": "利益冲突声明签署",
+              "path": "指南制订方法学 > 利益冲突声明签署",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_d1644cc4d7e0",
+              "title": "形成推荐意见并确定推荐强度",
+              "path": "指南制订方法学 > 形成推荐意见并确定推荐强度",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+              "level": 2
+            },
+            {
+              "node_id": "node_f55f1c911ef9",
+              "title": "指南工作组成立",
+              "path": "指南制订方法学 > 指南工作组成立",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_dad187079ac1",
+              "title": "指南文稿的形成与外审",
+              "path": "指南制订方法学 > 指南文稿的形成与外审",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+              "level": 2
+            },
+            {
+              "node_id": "node_35eb1e073514",
+              "title": "指南注册",
+              "path": "指南制订方法学 > 指南注册",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_f6bdda9516af",
+              "title": "指南的传播、实施与更新",
+              "path": "指南制订方法学 > 指南的传播、实施与更新",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+              "level": 2
+            },
+            {
+              "node_id": "node_7b26cc5e501f",
+              "title": "文献检索",
+              "path": "指南制订方法学 > 文献检索",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_ebaa17c3c6aa",
+              "title": "文献筛选与质量评价",
+              "path": "指南制订方法学 > 文献筛选与质量评价",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_9d2ab1ae3516",
+              "title": "涵盖的临床问题和结局指标确定",
+              "path": "指南制订方法学 > 涵盖的临床问题和结局指标确定",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+              "level": 2
+            },
+            {
+              "node_id": "node_e40b15cf4664",
+              "title": "证据总结",
+              "path": "指南制订方法学 > 证据总结",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+              "level": 2
+            },
+            {
+              "node_id": "node_3d3bb0e85df9",
+              "title": "证据质量分级",
+              "path": "指南制订方法学 > 证据质量分级",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+              "level": 2
+            },
+            {
+              "node_id": "node_9d30336cd987",
+              "title": "推荐说明",
+              "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 推荐说明",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+              "level": 3
+            },
+            {
+              "node_id": "node_2c2081596183",
+              "title": "证据概要",
+              "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 证据概要",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+              "level": 3
+            },
+            {
+              "node_id": "node_88e6070c7db2",
+              "title": "推荐说明",
+              "path": "临床问题及推荐意见 > 临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 推荐说明",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+              "level": 3
+            }
+          ]
+        },
+        {
+          "doc_id": "doc_daa908b7dac9",
+          "doc_name": "老年人健康长寿最佳运动建议全球共识.pdf",
+          "doc_summary": "重点章节包括：《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方；多种运动组合 可满足不同健康需求；科学运动 要个性化选择；运动三重效益 守护晚年健康。适合从这些章节中继续定位与病例相关的建议和标准。",
+          "reason": "该文档为《老年人健康长寿最佳运动建议全球共识》，内容聚焦于为老年人提供科学、个性化的运动建议。其大纲中“多种运动组合 可满足不同健康需求”、“科学运动 要个性化选择”等章节，可为病例中体力活动不足、需要提升平衡与肌力的老人提供权威、具体的运动类型和组合指导。",
+          "relevance_to_case": "直接支持解决“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”的问题，是制定安全有效锻炼计划的重要参考。",
+          "outline_nodes": [
+            {
+              "node_id": "node_0c731a4266de",
+              "title": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方",
+              "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方",
+              "summary": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康 寿命，应从开药到开运动处方 随着人口老龄化加剧，越来越多的老年人开始关注如何延缓衰老、远离疾病、保持高质量的 晚年生活。近日，由全球 34 位老年病学、运动医学等领域顶尖专家联合制定的《老年人健 康长寿最佳运动建议全球共识》正式发布，这份整合了近 20 年循证医学证据的权威指南， 为老年人运动保...",
+              "level": 1
+            },
+            {
+              "node_id": "node_0937fa3cddb9",
+              "title": "多种运动组合 可满足不同健康需求",
+              "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求",
+              "summary": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老 年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自 身健康状况灵活调整优先级。 有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优， 对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、...",
+              "level": 2
+            },
+            {
+              "node_id": "node_383547c7f9ff",
+              "title": "科学运动 要个性化选择",
+              "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 科学运动 要个性化选择",
+              "summary": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老 年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自 身健康状况灵活调整优先级。 有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优， 对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、...",
+              "level": 2
+            },
+            {
+              "node_id": "node_700996fcbf12",
+              "title": "运动三重效益 守护晚年健康",
+              "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 运动三重效益 守护晚年健康",
+              "summary": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康 寿命，应从开药到开运动处方 随着人口老龄化加剧，越来越多的老年人开始关注如何延缓衰老、远离疾病、保持高质量的 晚年生活。近日，由全球 34 位老年病学、运动医学等领域顶尖专家联合制定的《老年人健 康长寿最佳运动建议全球共识》正式发布，这份整合了近 20 年循证医学证据的权威指南， 为老年人运动保...",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "doc_id": "doc_52e2452471eb",
+          "doc_name": "体重管理指导原则（2024 年版）.pdf",
+          "doc_summary": "重点章节包括：体重的分类标准；体重管理相关评估；健康体重的管理与维持；特殊人群的体重管理；规范化体重管理流程；超重肥胖的干预和治疗。适合从这些章节中继续定位与病例相关的建议和标准。",
+          "reason": "该文档为《体重管理指导原则（2024 年版）》，病例中明确提到老人“体重超重；BMI为26.0（超重）”，这是影响关节负担和远期健康的潜在风险。该文档的“体重的分类标准”、“健康体重的管理与维持”、“超重肥胖的干预和治疗”等章节，可为制定结合饮食与运动的综合体重管理方案提供规范指导。",
+          "relevance_to_case": "对应“体重超重”这一主要问题，通过管理体重可间接减轻关节负担、改善代谢健康，并为安全运动创造条件。",
+          "outline_nodes": [
+            {
+              "node_id": "node_e1e0a076b0e9",
+              "title": "体重的分类标准",
+              "path": "体重的分类标准",
+              "summary": "— 2 — 一、体重的分类标准 体质指数（body mass index，BMI）是衡量人体胖瘦程 度的标准，BMI=体重(kg)/身高(m)2。根据中国 18 岁及以上 成人 BMI 评判标准（见附表 1），我国健康成年人的 BMI 正 常范围为 18.5kg/m2≤BMI<24.0kg/m2，BMI<18.5kg/m2 为体重 过低，24.0kg/...",
+              "level": 1
+            },
+            {
+              "node_id": "node_f26011c2792d",
+              "title": "体重管理相关评估",
+              "path": "体重管理相关评估",
+              "summary": "— 2 — 一、体重的分类标准 体质指数（body mass index，BMI）是衡量人体胖瘦程 度的标准，BMI=体重(kg)/身高(m)2。根据中国 18 岁及以上 成人 BMI 评判标准（见附表 1），我国健康成年人的 BMI 正 常范围为 18.5kg/m2≤BMI<24.0kg/m2，BMI<18.5kg/m2 为体重 过低，24.0kg/...",
+              "level": 1
+            },
+            {
+              "node_id": "node_efb0f079f514",
+              "title": "健康体重的管理与维持",
+              "path": "健康体重的管理与维持",
+              "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+              "level": 1
+            },
+            {
+              "node_id": "node_b5b0ba4e8bf0",
+              "title": "特殊人群的体重管理",
+              "path": "特殊人群的体重管理",
+              "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+              "level": 1
+            },
+            {
+              "node_id": "node_2e963baf5e8f",
+              "title": "规范化体重管理流程",
+              "path": "规范化体重管理流程",
+              "summary": "— 15 — 六、规范化体重管理流程 成年人体重管理规范化流程图 — 16 — 附表 1 中国成人（18 岁及以上）体重判定标准 类别 体质指数（BMI），kg/m2 体重过低 <18.5 体重正常 18.5～23.9 超重 24.0～27.9 肥胖 ≥28.0 引自：《成人体重判定》（WS/T 428—2013）— 17 — 附表 2 根据腰围对成人...",
+              "level": 1
+            },
+            {
+              "node_id": "node_605a74bddb4b",
+              "title": "超重肥胖的干预和治疗",
+              "path": "超重肥胖的干预和治疗",
+              "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+              "level": 1
+            },
+            {
+              "node_id": "node_14bfaf8f60de",
+              "title": "个人史、既往史等相关病史评估。",
+              "path": "体重管理相关评估 > 个人史、既往史等相关病史评估。",
+              "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+              "level": 2
+            },
+            {
+              "node_id": "node_46d907701344",
+              "title": "体格检查、人体成分、能量消耗评估。",
+              "path": "体重管理相关评估 > 体格检查、人体成分、能量消耗评估。",
+              "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+              "level": 2
+            },
+            {
+              "node_id": "node_bc32daa09417",
+              "title": "医学检查评估。",
+              "path": "体重管理相关评估 > 医学检查评估。",
+              "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+              "level": 2
+            },
+            {
+              "node_id": "node_fbdc30093819",
+              "title": "特定人群评估。",
+              "path": "体重管理相关评估 > 特定人群评估。",
+              "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+              "level": 2
+            },
+            {
+              "node_id": "node_f94b3f461104",
+              "title": "生活方式风险评估。",
+              "path": "体重管理相关评估 > 生活方式风险评估。",
+              "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+              "level": 2
+            },
+            {
+              "node_id": "node_f74cf1c7bbea",
+              "title": "运动能力评估。",
+              "path": "体重管理相关评估 > 运动能力评估。",
+              "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+              "level": 2
+            },
+            {
+              "node_id": "node_6f4dda69e224",
+              "title": "合理膳食。",
+              "path": "健康体重的管理与维持 > 合理膳食。",
+              "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+              "level": 2
+            },
+            {
+              "node_id": "node_e4a3b2620793",
+              "title": "自我监测。",
+              "path": "健康体重的管理与维持 > 自我监测。",
+              "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+              "level": 2
+            },
+            {
+              "node_id": "node_64e193a90f24",
+              "title": "适量运动。",
+              "path": "健康体重的管理与维持 > 适量运动。",
+              "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+              "level": 2
+            },
+            {
+              "node_id": "node_d821762f522b",
+              "title": "体重过低人群。",
+              "path": "特殊人群的体重管理 > 体重过低人群。",
+              "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+              "level": 2
+            },
+            {
+              "node_id": "node_548d9a379856",
+              "title": "孕前、孕期及产后女性体重管理。",
+              "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 2
+            },
+            {
+              "node_id": "node_739eba327f7b",
+              "title": "学龄儿童（6~17 岁）。",
+              "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。",
+              "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+              "level": 2
+            },
+            {
+              "node_id": "node_4412cb9cf8a8",
+              "title": "学龄前儿童（5 岁及以内）。",
+              "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。",
+              "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+              "level": 2
+            },
+            {
+              "node_id": "node_0bdd2088ee00",
+              "title": "老年人群（65 岁及以上）。",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+              "level": 2
+            },
+            {
+              "node_id": "node_aa09841de5c0",
+              "title": "职业人群。",
+              "path": "特殊人群的体重管理 > 职业人群。",
+              "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+              "level": 2
+            },
+            {
+              "node_id": "node_cc3195bbf254",
+              "title": "全流程体重管理。",
+              "path": "超重肥胖的干预和治疗 > 全流程体重管理。",
+              "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+              "level": 2
+            },
+            {
+              "node_id": "node_fc9988afbf03",
+              "title": "医学治疗。",
+              "path": "超重肥胖的干预和治疗 > 医学治疗。",
+              "summary": "— 8 — （3）运动干预注意事项。遵循合理的运动流程和科学 的锻炼方案，在运动前做好热身准备，运动中避免关节、肌 肉、韧带损伤和过度训练，运动后进行充分拉伸恢复并及时 补液。 3.精神心理支持。超重肥胖者的精神心理支持主要针对 依从性不强、减重信心不足等问题，其目标是支持个体改变 并维持健康的生活方式，具体技术包括动机访谈、自我监控、 刺激控制、情绪...",
+              "level": 2
+            },
+            {
+              "node_id": "node_c277a0d03f04",
+              "title": "生活方式干预。",
+              "path": "超重肥胖的干预和治疗 > 生活方式干预。",
+              "summary": "— 5 — 初 始 时 设 立 每 周 减 轻 体 重 约 0.5~1kg 的 目 标 ， 每 月 减 轻 2~4kg，6 个月内减轻当前体重的 5%~15%并维持；对于中、 重度肥胖者（BMI≥32.5kg/m2），建议设立周、月目标，定期 评估，按减轻现体重的 5%、10%、15%划分阶段性减重目标， 周期为 3 至 6 个月。 （一）生活方式干预...",
+              "level": 2
+            },
+            {
+              "node_id": "node_083fbd8d674c",
+              "title": "产后体重管理。",
+              "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 产后体重管理。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+              "level": 3
+            },
+            {
+              "node_id": "node_5c19c14d9f47",
+              "title": "孕前体重管理。",
+              "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 孕前体重管理。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 3
+            },
+            {
+              "node_id": "node_818fb186d47e",
+              "title": "孕期体重管理。",
+              "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 孕期体重管理。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 3
+            },
+            {
+              "node_id": "node_dfc136da8cd6",
+              "title": "减少久坐，每日使用电子产品时间限制在 2 小时内。",
+              "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 减少久坐，每日使用电子产品时间限制在 2 小时内。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 3
+            },
+            {
+              "node_id": "node_41441268e818",
+              "title": "睡眠管理及心理支持。",
+              "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 睡眠管理及心理支持。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 3
+            },
+            {
+              "node_id": "node_b58e149ceca5",
+              "title": "膳食管理。",
+              "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 膳食管理。",
+              "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+              "level": 3
+            },
+            {
+              "node_id": "node_65069d7287fa",
+              "title": "身体活动。",
+              "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 身体活动。",
+              "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+              "level": 3
+            },
+            {
+              "node_id": "node_1857eccf7b5a",
+              "title": "睡眠管理。",
+              "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 睡眠管理。",
+              "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+              "level": 3
+            },
+            {
+              "node_id": "node_b4ee2ba4809f",
+              "title": "膳食管理。",
+              "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 膳食管理。",
+              "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+              "level": 3
+            },
+            {
+              "node_id": "node_e8cf952d8304",
+              "title": "身体活动。",
+              "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 身体活动。",
+              "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+              "level": 3
+            },
+            {
+              "node_id": "node_56db83a33d23",
+              "title": "健康饮食。",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 健康饮食。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+              "level": 3
+            },
+            {
+              "node_id": "node_f85c14ff5470",
+              "title": "心理健康。",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 心理健康。",
+              "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+              "level": 3
+            },
+            {
+              "node_id": "node_9692a2213925",
+              "title": "睡眠改善。",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 睡眠改善。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+              "level": 3
+            },
+            {
+              "node_id": "node_12e129d424e4",
+              "title": "身体活动。",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 身体活动。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+              "level": 3
+            },
+            {
+              "node_id": "node_5fb64ed1ab21",
+              "title": "健康饮食。",
+              "path": "特殊人群的体重管理 > 职业人群。 > 健康饮食。",
+              "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+              "level": 3
+            },
+            {
+              "node_id": "node_04e56ed646c9",
+              "title": "适度运动。",
+              "path": "特殊人群的体重管理 > 职业人群。 > 适度运动。",
+              "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+              "level": 3
+            }
+          ]
+        }
+      ],
+      "selected_nodes": [
+        {
+          "node_id": "node_2e69cf864bae",
+          "doc_id": "doc_7e04601a37a4",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "path": "评估 > 认知功能评估",
+          "title": "认知功能评估",
+          "summary": "",
+          "text": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界\n卫生组织预测,到2050年痴呆患者将增至1.39亿人。\n2001—2003年 我 国 MCI患 病 率 为 7.5%,到 2015—\n2018年已上升至15.4%\n[3];2020年发表的1项大型研\n究显示,中国60岁及以上的 MCI患者约有3877万例\n(占15.5%),痴 呆 患 者 约 1507 万 例 (占 6.0%),其 中\n包括 AD983万例(占3.9%)、VaD392万例(占1.6%)\n以及其他类型的 痴 呆 132 万 例(占 0.5%)[4]。 研 究 表\n明,每年有10%~15%的 MCI患 者 发 展 为 痴 呆 [5],因\n此 MCI患者和痴呆患者的管理同样重要。\n4 评估\n4.1 健康状态综合评估\n4.1.1 一 般 情 况 评 估  包 括 性 别、年 龄、身 高、体 重、\n吸烟、饮 酒、受 教 育 程 度、家 族 史 等 情 况,以 及 近 期 血\n压、血糖、血脂、肝肾功 能、甲 状 腺 功 能、心 电 图 及 用 药\n史等情况。\n4.1.2 日 常 生 活 活 动 能 力  分 为 基 本 日 常 生 活 能 力\n(basicactivitiesofdailyliving,BADL)和 工 具 性 日 常\n生 活 能 力 (instrumentalactivities of daily living,\nIADL)。BADL 评 估 可 采 用 Barthel 指 数 量 表\n(Barthelindex,BI)[6],IADL 评 估 可 采 用 Lawton\nIADL 指数量表。\n4.1.3 心 理 状 态 评 估  可 采 用 焦 虑 自 评 量 表 (self-\nratinganxietyscale,SAS)、抑 郁 自 评 量 表 (self-rating\ndepressionscale,SDS)[7]、患 者 健 康 问 卷-9 项 量 表\n(patienthealthquestionnaire-9,PHQ-9)[8]。\n4.1.4 睡 眠 状 况 评 估  可 采 用 匹 兹 堡 睡 眠 质 量 指 数\n(Pittsburghsleepqualityindex,PSQI)进 行 主 观 睡 眠\n评定 [9]。患 者 可 采 用 睡 眠 状 况 自 评 量 表 (self-rating\nscaleofsleep,SRSS)[10]进行自我评估。\n4.2 并发症评估\n老年认 知 功 能 障 碍 从 早 期 记 忆 力、工 作 能 力 下\n降、情绪 不 稳 定,到 MCI阶 段,逐 渐 发 展 到 痴 呆 阶 段。\n痴呆晚期患者常会 伴 发 各 种 并 发 症,加 重 认 知 功 能 障\n碍,甚至危及患者的生命。\n4.2.1 血栓栓塞性疾病  晚 期 痴 呆 患 者 活 动 减 少,长\n期卧床,易形成 下 肢 深 静 脉 血 栓 [11],血 栓 脱 落 可 导 致\n肺栓 塞 危 及 生 命,如 患 者 出 现 下 肢 肿 胀 疼 痛、软 组 织\n张力 增 高 或 是 突 发 呼 吸 困 难、胸 痛、意 识 障 碍 等 应 及\n时到医院行进一步检查和治疗。\n4.2.2 肺部感染 晚期 痴 呆 患 者 因 吞 咽 困 难、长 期 卧\n床等原因,容易导致肺 部 感 染,出 现 发 热、咳 嗽、咳 痰、\n呼吸 困 难、不 明 原 因 的 意 识 状 态 改 变,应 及 时 到 医 院\n行进一步检查和治疗。\n4.2.3 尿路感染 痴呆 阶 段 的 患 者 因 护 理 难 度 大,常\n存在清洁度不足、饮 水 量 减 少、免 疫 力 低 下 的 情 况,导\n致泌尿 系 感 染 的 概 率 增 加 [12]。 如 患 者 出 现 尿 频、尿\n痛、尿不尽等症状,应及时就医,进行专业治疗。\n4.2.4 癫痫 晚期痴呆 患 者 可 并 发 癫 痫,进 一 步 加 重\n认知障碍。\n4.2.5 营养不良和脱水  认 知 障 碍 患 者 因 吞 咽 困 难、\n食欲下降等原因,进 食 减 少,可 导 致 营 养 不 良 和 脱 水。\n为识别中重度痴呆 患 者 的 饮 食 问 题 和 行 为 症 状,推 荐\n使 用 营 养 风 险 筛 查 工 具 (nutritionalriskscreening\n2002,NRS-2002)识别患者是否存在营养风险;使用洼\n田饮水试验进行误 吸 筛 查 和 吞 咽 障 碍 诊 断;使 用 爱 丁\n堡痴呆 喂 养 评 估 问 卷 (Edinburghfeedingevaluation\nindementiaquestionnaire,EdFED-Q)帮 助 制 定 饮 食\n干 预 计 划 [13];使 用 饮 食 行 为 量 表 (eating behavior\nscale,EBS)评估患 者 独 立 进 食 能 力,判 断 进 餐 时 是 否\n需辅助 [14]。\n4.2.6 压 疮  老 年 认 知 功 能 障 碍 长 期 卧 床 患 者 是 发\n生压疮的高危人群。选 用 华 西 医 科 大 学 评 估 表 (west\nChinauniversityofmedicalsciencesscale,WCUMS)\n能较好预测压疮易患人群 [15],以便于采取防护性的护\n理措施(B2)。\n4.2.7 跌倒 认知障碍 患 者 常 伴 定 向 力 下 降、步 态 异\n常和 注 意 力 不 集 中 等 问 题,从 而 增 加 跌 倒 风 险,推 荐\n使用 Morse跌倒评估量表。\n4.3 认知功能评估\n4.3.1 痴 呆 自 评 8 项 问 卷 (as-certain dementia8\nquestionnaire,AD8)[16-17]\n AD8用于快速筛查早期痴\n呆,评估患者记忆、定向、判断等领域,≥2分提示可能\n存在认知障碍。\n4.3.2 迷 你 认 知 评 估 量 表 (minicognitivetesting,\nmini-Cog)[16,18]\n Mini-Cog属于结合了时钟绘 制 和 单\n词回忆任务的简短 评 估 工 具,适 合 门 诊 快 速 筛 查。 单\n词回忆共3分,时钟 绘 制 2 分,满 分 5 分,<3 分 提 示\n认知功能障碍。\n4.3.3 简明精神状态检查量表(mini-mentalstateex-\namination,MMSE)[16,19]\n MMSE 是目前临床中使 用\n最广泛的认知功能 评 估 工 具,可 用 于 评 估 老 年 人 的 整\n体认知功能,但对 MCI筛查敏感性较低。总分30分,\n包含30个问 题,覆 盖 定 向 力、注 意 力、记 忆、计 算、语\n言和视觉 构 造 等 多 个 认 知 领 域。 评 分 标 准 与 受 教 育\n程度有关,文 盲 组 ≤17 分、小 学 组 ≤20 分、中 学 或 以\n上组≤24分,则为痴呆。\n·342·",
+          "excerpt": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界\n卫生组织预测,到2050年痴呆患者将增至1.39亿人。\n2001—2003年 我 国 MCI患 病 率 为 7.5%,到 2015—\n2018年已上升至15.4%\n[3];2020年发表的1项大型研\n究显示,中国60岁及以上的 MCI患者约有3877万例\n(占15.5%),痴 呆 患 者 约 1507 万 例 (占 6.0%),其 中\n包括 AD983万例",
+          "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“认知功能评估”章节。病例中老人存在“认知功能轻度受损”和“时间定向错误”，这是夜间定向障碍和认知下降加速的核心问题。阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。",
+          "need": "认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+          "line_num": null,
+          "start_index": 2,
+          "end_index": 2,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/老年认知功能障碍慢病管理指南.pdf",
+          "source_type": "pdf"
+        },
+        {
+          "node_id": "node_7781224e7770",
+          "doc_id": "doc_7e04601a37a4",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "title": "生活照护",
+          "summary": "",
+          "text": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法,\n针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针\n在相应穴 位 处 向 前 或 向 后 透 刺。 穴 位 埋 线 集 结 了 针\n刺、穴位及 线 体 的 综 合 效 应,可 改 善 认 知 功 能。 埋 线\n腧穴可 选 择 中 脘、下 脘、气 海、关 元、双 侧 滑 肉 门、外\n陵、坤廓、天枢、大横 [105]。\n9.2 物理治疗\n9.2.1 经 颅 磁 刺 激  经 颅 磁 刺 激 能 利 用 具 有 一 定 规\n律的重复序 列 脉 冲 对 痴 呆 患 者 大 脑 皮 层 相 应 区 域 进\n行刺 激,可 有 效 改 善 患 者 的 脑 组 织 代 谢,增 强 其 大 脑\n皮质 兴 奋 性,促 进 突 触 重 塑,调 节 神 经 元 间 的 相 互 联\n系,从而改善患者的精神症状和认知功能(B2)。\n9.2.2 推 拿 按 摩  推 拿 按 摩 治 疗 老 年 认 知 功 能 障 碍\n具有疏通 头 部 诸 经、醒 脑 开 窍 的 作 用。 有 研 究 [106]结\n果表明,按摩太阳穴、百 会 穴、四 神 聪、神 庭 穴、风 池 穴\n等穴位可 改 善 老 年 痴 呆 患 者 的 认 知 功 能。 运 用 中 医\n调摄护理,将 足 浴 泡 洗、耳 穴 埋 籽、按 摩 穴 位 相 结 合,\n持续干预3个月可 有 效 改 善 MCI患 者 的 认 知 功 能 和\n日常生活能力。\n10 疾病管理与自我管理\n10.1 居住环境的调整\n为认知功能障碍患 者 设 置 友 好 的 居 住 环 境,设 置\n原则为 [107]:① 保 障 周 围 环 境 安 全,防 止 患 者 走 失、跌\n倒以及遭受其他意 外 伤 害,比 如 安 装 难 以 被 患 者 轻 易\n开启的门锁,配备现 代 电 子 设 备,像 门 窗 感 应 器、远 程\n警报系统以及电子 定 位 器 等;② 保 持 环 境 的 稳 定 和 熟\n悉感,避 免 频 繁 改 变;③ 辅 助 患 者 进 行 时 间 和 空 间 的\n定向,例如在卧室、客 厅、餐 厅 等 主 要 活 动 区 域 显 眼 处\n摆放大型钟表、日历,制 作 展 示 当 季 和 节 日 的 图 片,以\n便患 者 识 别 时 间;④ 给 予 适 度 的 感 官 刺 激,如 在 房 门\n上张贴患 者 熟 悉 的 照 片 或 图 案,帮 助 其 识 别 自 己 的\n房间。\n10.2 生活照护\n10.2.1 日常生活照护 针 对 不 同 程 度 的 认 知 功 能 障\n碍患者,应制定个体化日常 生 活 照 护。MCI患 者 日 常\n生 活 能 自 理;轻 度 痴 呆 患 者 日 常 生 活 能 力 部 分 受 损,\n推荐 照 护 者 不 给 予 过 度 的 照 顾,主 要 提 供 监 督、协 助\n作用;中 度 痴 呆 患 者 日 常 生 活 能 力 降 低,照 护 者 应 提\n供 更 多 的 协 助,尽 可 能 让 患 者 保 留 简 单 的 自 理 能 力,\n提高其自信心和参 与 的 乐 趣;而 重 度 痴 呆 患 者 丧 失 了\n生活自理能力且难 以 表 达 自 身 诉 求,应 进 行 疼 痛 的 评\n估并进行 相 应 的 治 疗,照 护 者 要 更 多 关 注 患 者 的 饮\n食、营养、如厕、个人卫生和服药。\n10.2.2 外出活 动 与 社 交 活 动  鼓 励 MCI、轻 中 度 痴\n呆患者外出参加社 交 聚 会 或 定 时 组 织 相 关 活 动,照 护\n者 应 陪 同,选 择 患 者 感 到 亲 近 且 信 赖 的 人 参 与 其 中,\n限制参与活动的 规 模 和 时 长。当 患 者 CDR 评 分 大 于\n1时不适合驾驶车辆出行 [108]。\n10.3 精神行为症状管理\n10.3.1 BPSD 管理原则 [107]\n专业照料与家庭照 料 相 结 合,充 分 了 解 患 者 的 性\n格、爱 好、尚 存 的 能 力、经 历,以 患 者 为 中 心,定 期 评\n估,持 续 改 进 治 疗 及 管 理 方 案,首 选 非 药 物 的 照 料 干\n预(A1)。只有当非药物干预无效、严重影响患者的生\n活、存 在 紧 急 情 况 或 安 全 问 题 时 才 使 用 药 物 治 疗 [109]\n(B1)。非药 物 干 预 可 选 择 行 为 认 知 疗 法、正 念 疗 法、\n音乐疗法等干预手段。\n10.3.2 BPSD 的识别与评估\n所有 痴 呆 患 者 都 要 进 行 精 神 行 为 症 状 的 评 估\n(B1)。应分 别 向 患 者 及 照 护 者 问 询 相 关 精 神 行 为 症\n状,详细记录症状出 现 的 诱 发 因 素、表 现 形 式、持 续 时\n间、频 率、强 度 及 其 对 患 者 及 照 护 者 的 影 响,可 使 用\nNPI等量表进行评估 [107]。\n10.3.3 对 BPSD 的干预措施\n①激越行 为:可 分 为 躯 体 攻 击 行 为、躯 体 非 攻 击\n行为、语言攻击行 为、语 言 非 攻 击 行 为 [110]。 当 患 者 出\n现躯体攻击行为时,应 首 先 查 找 引 起 激 越 攻 击 行 为 的\n生理原因以及客观 环 境 因 素,尽 可 能 消 除 刺 激 患 者 的\n因素,确 保 患 者 与 周 围 人 的 安 全,管 控 危 险 尖 锐 易 碎\n物品,不可与患者产 生 对 抗,宜 由 信 任 的 人 进 行 安 抚;\n当发 生 躯 体 非 攻 击 行 为 时,需 防 范 患 者 跌 倒、走 失 或\n遭受 伤 害,强 化 对 患 者 的 监 护 力 度,陪 伴 患 者 做 感 兴\n趣的事,在不危及周 围 人 时,患 者 部 分 行 为(如 重 复 动\n作、藏匿物品等)不 宜 强 行 纠 正 或 限 制 其 活 动;当 发 生\n语言 攻 击 行 为 时,避 免 与 其 争 论,避 免 谈 及 可 能 诱 发\n其 语 言 攻 击 行 为 的 话 题;当 发 生 语 言 非 攻 击 行 为 时,\n应耐心予以解答,主 动 表 达 关 心,不 可 表 现 出 厌 烦、责\n怪的情绪。 在 确 保 患 者 人 身 安 全 以 及 照 护 者 能 力 范\n围允许的前提下,应尽可能地保障患者自由活动。\n②心理症 状:包 括 情 感 淡 漠、抑 郁 等。 接 触 自 然\n环境对认知 功 能 障 碍 患 者 的 心 理 症 状 改 善 有 积 极 作\n用。鼓励患者进行园 艺,接 受 足 够 的 自 然 阳 光。 部 分\n老年认知功 能 障 碍 患 者 在 日 落 或 日 光 减 少 时 会 出 现\n一系列精 神 行 为 异 常,需 注 意 日 落 现 象。 另 外,营 造\n安全、平静的环境,聆 听、学 习 音 乐 和 进 行 语 言 交 流 等\n均有改善作用。严重 BPSD(如自伤或伤人风险)需 多\n学科 会 诊,精 神 科 医 生 主 导 制 定 个 体 化 药 物 方 案,必\n·942·",
+          "excerpt": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法,\n针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针\n在相应穴 位 处 向 前 或 向 后 透 刺。 穴 位 埋 线 集 结 了 针\n刺、穴位及 线 体 的 综 合 效 应,可 改 善 认 知 功 能。 埋 线\n腧穴可 选 择 中 脘、下 脘、气 海、关 元、双 侧 滑 肉 门、外\n陵、坤廓、天枢、大横 [105]。\n9.2 物理治疗\n",
+          "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“生活照护”章节。针对老人“夜间定向障碍导致跌倒或走失”这一最紧急的短期风险，此节点很可能包含针对认知障碍患者的具体居家照护策略、环境改造建议（如夜间照明、安全标识）和风险预防措施，直接关系到如何保障老人夜间安全，防止意外发生。",
+          "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+          "line_num": null,
+          "start_index": 8,
+          "end_index": 8,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/老年认知功能障碍慢病管理指南.pdf",
+          "source_type": "pdf"
+        },
+        {
+          "node_id": "node_d6035b80b325",
+          "doc_id": "doc_7e04601a37a4",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "path": "生活方式干预 > 运动治疗",
+          "title": "运动治疗",
+          "summary": "",
+          "text": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教\n育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、受 教\n育程度、既往治疗状 况、并 发 症、认 知 功 能 及 有 无 照 护\n者等,应 结 合 每 位 患 者 的 特 点 进 行 个 体 化 的 健 康 教\n育。部分认知功能障 碍 患 者 自 我 管 理 能 力 明 显 降 低,\n严重者甚 至 完 全 丧 失 生 活 自 理 能 力。 为 提 高 健 康 管\n理实 施 效 果,应 当 对 患 者、患 者 家 属 及 其 照 护 者 同 时\n进行健康 教 育 管 理。 健 康 教 育 的 内 容 应 包 括 认 知 障\n碍的病 因、危 险 因 素、临 床 表 现、干 预 策 略、个 体 化 治\n疗目标、生活方式干 预、照 料 护 理 技 巧、各 种 治 疗 手 段\n的特点、临床药物选 择 及 使 用 方 法 等。 认 知 障 碍 教 育\n的形式可以采取个 人 教 育、小 组 宣 传、病 友 座 谈 会、社\n区健康教育活动、线 上 知 识 讲 座、微 信 公 众 号 推 送 等。\n不同的教育形式互 为 补 充,以 方 便 患 者 获 得 需 要 的 信\n息资讯。认知障碍患 者 的 健 康 教 育 是 长 期、渐 进 的 过\n程,规范的健康教育 能 帮 助 患 者 及 家 属 了 解 正 确 的 疾\n病相 关 知 识,提 高 患 者 自 我 管 理 能 力 和 依 从 性,对 疾\n病康复、阻断或减缓 疾 病 进 展、防 止 并 发 症、减 轻 经 济\n负担和提高生活质量起到促进作用,并使患者受益。\n6 生活方式干预\n生活方 式 干 预 主 要 关 注 5 个 方 面,包 括 饮 食 调\n理、运动治 疗、睡 眠 管 理、体 重 管 理 和 远 离 不 良 习 惯。\n应该将生活方式干 预 纳 入 日 常 家 庭 实 践,生 活 方 式 医\n学属于循证方法,通 过 用 健 康 的 行 为 取 代 不 健 康 的 行\n为来预防、治疗和促进疾病的转归(A1)[29]。\n6.1 饮食调理\n健康的饮食方式是 老 年 认 知 功 能 的 保 护 因 素,维\n生素 D、叶酸、维 生 素 B6、胆 碱 (包 括 膳 食 胆 碱 和 磷 脂\n酰胆碱)、矿物 质 (钙、锌)可 提 高 老 年 人 认 知 功 能 [30]。\n而高 盐、高 糖、高 饱 和 脂 肪 和 反 式 脂 肪 饮 食 则 是 老 年\n认知功能障碍的危险因素(B1)。\n地中 海 延 缓 神 经 退 变 膳 食 模 式 (Mediterranean-\nDASH intervention for neurodegenerative delay,\nMIND)结 合 了 地 中 海 饮 食 (Mediterranean diet,\nMeDi)和 终 止 高 血 压 膳 食 疗 法(dietaryapproachesto\nstophypertension,DASH),MIND 强 调 多 摄 入 绿 叶\n蔬菜、坚果、浆 果、全 谷 物、鱼 类 和 橄 榄 油,限 制 红 肉、\n黄油、奶酪、甜点和油炸食品的摄入。有证据 [31]表明,\n坚持 MIND 可以 降 低 认 知 障 碍 的 风 险 (B1)。 生 酮 饮\n食(ketogenic-diet,KD)是以高脂肪和低碳水化合物为\n基础 的 饮 食,通 过 改 善 线 粒 体 功 能、优 化 肠 道 微 生 物\n群组成以及 减 少 神 经 炎 症 和 氧 化 应 激 来 改 善 认 知 功\n能,酮体不仅能抑制 Aβ进入神经元内,而且也 可 以 降\n低 Aβ、tau蛋白的产生,促进 Aβ在脑内的清除从而改\n善认知 [32],因此 KD 对 认 知 功 能 具 有 改 善 作 用 (B1)。\nMIND、KD 应根据患 者 健 康 状 况、药 物 使 用 情 况 在 营\n养师和医师指导下实施。\n6.2 运动治疗\n6.2.1 体育锻炼\n运动是老 年 患 者 认 知 功 能 的 保 护 因 素。 适 当 的\n运动干预可提升老 年 人 基 础 代 谢 水 平,延 缓 细 胞 衰 老\n进程,促进细胞修复更新,对改善老年 MCI症状、延缓\n认知功能 障 碍 进 展 有 益。 规 律 的 有 氧 运 动 可 预 防 炎\n症反 应 所 致 的 认 知 功 能 下 降。 定 期 有 氧 运 动 可 使\nMCI患 者 的 整 体 认 知 功 能 得 到 改 善,延 缓 脑 萎 缩 速\n度 [33],即使是痴呆 高 危 基 因 型 的 人 群,规 律 的 身 体 锻\n炼也可减少痴呆的发病(A1)。\n运动强度与认知功能呈倒 U 型关联,即合适的运\n动强度有助于认知 功 能 提 高,而 过 低 或 过 高 的 运 动 强\n度均不利于 认 知 功 能 的 改 善 [34]。 符 合 患 者 康 复 阶 段\n的运动强度能有效 预 防 运 动 危 害 的 发 生 和 疲 劳、厌 倦\n等负性情 绪 的 产 生。 建 议 疾 病 早 期 进 行 适 当 强 度 的\n运动 以 刺 激 神 经 元、促 使 认 知 功 能 迅 速 提 高;中 期 运\n动负荷 的 适 量 增 加 有 助 于 促 使 患 者 度 过 康 复 平 台\n期 [35](B1)。\n6.2.2 康复运动\n认知康复训练可针 对 认 知 功 能 进 行 反 复 训 练,提\n高患者残存神经细 胞 的 兴 奋 性,重 建 大 脑 受 损 部 分 的\n功能,提高 患 者 认 知 水 平 (B1)。 具 体 方 式 有:① 言 语\n训练,指导患者采用 麦 克 风 进 行 朗 读 训 练;② 记 忆 力,\n主要包括复述数字,干 预 者 念 出 一 组 非 连 续 排 列 的 数\n字,随即让患者复述,自 3 位 数 开 始 逐 次 递 增 1 位,如\n147、1529、34682…… 直 至 不 能 复 述 为 止;③ 益 智 活\n动,如 扑 克、下 棋、七 巧 板 等,以 简 单 图 形 的 拼 凑 作 为\n引导,鼓励患者拼凑 其 他 图 形,或 进 行 词 语 关 联 训 练,\n干预者列举一 系 列 词 汇,让 患 者 关 联 词 汇,如 夜 晚-星\n星、电灯-光明、手机-打电话等;④ 短 时 记 忆,听 一 段 故\n事 后 进 行 复 述,或 听 一 段 感 兴 趣 的 歌 曲 后 背 诵 歌 词;\n⑤回忆能力,收集亲 戚、朋 友 照 片 鼓 励 患 者 回 忆,或 让\n患者讲述 近 1 周 内 发 生 的 家 务 事、看 过 的 电 视 节 目\n等,对 难 以 回 想 的 人 名 与 易 错 之 处 建 立 提 醒 标 识;⑥\n定向力,叮 嘱 患 者 家 属 尽 量 不 改 变 家 中 日 常 物 品 陈\n设,以 便 患 者 形 成 稳 固 的 时 间、地 点、人 物 等 概 念,且\n干预 时 要 求 患 者 重 复;⑦ 日 常 生 活 能 力 训 练,鼓 励 患\n者独立完成 穿 衣、进 食、洗 漱、入 厕 等 日 常 生 活 事 件,\n同时可配合“手指操”“手指 行 走”“手 指 滑 板”等;⑧ 执\n行能力训练,通过模 拟 买 东 西 等 方 式 帮 助 患 者 进 行 计\n·542·",
+          "excerpt": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4\n对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教\n育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、受 教\n育程度、既往治疗状 况、并 发 症、认 知 功 能 及 有 无 照 护\n者等,应 结 合 每 位 患 者 的 特 点 进 行 个 体 化 的 健 康 教\n育。部分认知功能障 碍 患 者 自 我 管 理 能 力 明 显 降 低,\n严重者甚 至 完 全 丧 失 生 活 自 理 能 ",
+          "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“运动治疗”章节。该指南将运动作为认知障碍管理的重要非药物干预手段。此节点内容可直接将“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”这两个问题，与“延缓认知下降”的目标结合起来，提供针对认知改善的运动类型、频率和强度建议，实现一箭双雕。",
+          "need": "因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；认知功能下降加速。",
+          "line_num": null,
+          "start_index": 4,
+          "end_index": 4,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/老年认知功能障碍慢病管理指南.pdf",
+          "source_type": "pdf"
+        },
+        {
+          "node_id": "node_0ef2106c2f9a",
+          "doc_id": "doc_3298433c2a5e",
+          "doc_name": "老年人失能预防运动干预临床实践指南（2023版）.pdf",
+          "path": "临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+          "title": "临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+          "summary": "",
+          "text": "fmx_T3RoZXJNaXJyb3Jz\n· 2705 ·\nhttp://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn\n2023年8月   第26卷   第22 期\n尼龙绳的平衡运动可以改善老年人的串联站立时间\n〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时\n间〔MD=2.27，95%CI（0.74，3.79）〕\n［56］\n。\n5.13　临床问题 13： 老年人进行平衡运动时，运动原\n则是什么？\n【推荐意见】　推荐从稳定体位开始逐渐进展到\n不稳定体位、逐步缩小人体支撑面积和提高身体重\n心、从睁眼状态过渡到闭眼状态、从静态平衡进展\n到动态平衡（证据等级 Level 5b，强推荐）。\n5.13.1　推荐说明\n 　平衡一般分为静态平衡和动态平\n衡，其中静态平衡指无外力作用下维持某种固定姿\n势，动态平衡指在外力作用下姿势的调整。通过平衡\n运动， 老年人逐渐增加训练难度， 最终达到动态平衡，\n可有效降低老年人跌倒的发生率，因此，虽此条证据\n缺乏相关的证据支持， 但指南专家组仍给出 “强推荐”\n建议。\n5.13.2　证据概要\n 　中国老年保健医学研究会老龄健\n康服务与标准化分会等 2018 年发布的 《居家老年人\n运动功能评估与干预专家共识》中指出平衡运动原\n则 为：（1\n ）从稳定体位开始逐渐进展到不稳定体位；\n（2）逐步缩小人体支撑面积和提高身体重心；（3）\n从睁眼状态过渡到闭眼状态；（ 4\n ）从静态平衡进展\n到动态平衡，保持稳定的前提下逐步增加头颈、躯\n干和四肢的控制力\n［50］\n。IZQUIERDO 等\n［51］\n2021 年\n发布的专家共识中也指出，鼓励老年人参与可耐受\n的难度渐进性提高、支撑缩小、本体感觉调整、身\n体的重心远离垂直或静止位置的平衡运动。\n5.14　临床问题 14：\n 老年人进行平衡运动时，运动频\n次和内容应如何安排？\n【推荐意见】 　建议老年人进行平衡运动每周\n1~7 次 ，每次 1~2 组，每组 4~10 种不同的练习（证\n据等级 Level 5b，弱推荐）。\n5.14.1　推荐说明 　对于老年人，平衡运动应每周安\n排，但其也是相对风险较高的运动，因此，应在栏\n杆或双杠附近进行练习，确保可以抓住以保证安全，\n且不要在锋利边缘附近进行锻炼，确保过程中地板\n干净，没有杂物。\n5.14.2　证据概要\n 　IZQUIERDO 等\n［51］\n2021 年发布的\n专家共识中提到， 平衡运动每周1~7 次， 每次 1~2 套，\n每套 4~10 种不同的练习 。WHO 2010 年发布的《关\n于身体活动有益健康的全球建议》中指出，建议有\n跌倒风险和活动能力较差的老年人每周进行 3 次及\n以上的平衡运动\n［35］\n。\n5.15　临床问题 15 ：老年人是否应该进行柔韧性  \n运动？\n【推荐意见】　推荐老年人进行柔韧性运动，可\n安排在运动前后， 包含对各个关节的牵拉， 动作缓慢，\n穿插放松环节，过程中始终保持轻微的不适感（证\n据等级 Level 5b，强推荐）。\n5.15.1　推荐说明\n 　柔韧性运动可提高运动和日常生\n活过程中的安全性和灵活性，安排在运动前后，可减\n少运动损伤和减轻运动所带来的疲劳。因此虽此条\n证据缺乏相关的证据支持，但指南专家组仍给出“强\n推荐”建议。\n5.15.2　证据概要\n 　中华医学会老年医学分会老年康\n复学组 2017 年发布的专家共识中提到柔韧性运动包\n括颈、 肩、 肘、 腕、 髋、 膝、 踝关节， 可提高安全性\n［57］\n。\nACSM 和 AHA 2007 年发布的专家共识中提到为了维\n持常规身体活动和日常生活中灵活的必要性，老年\n人应该进行维持或增加灵活性的运动\n［36］\n。中国老年\n保健医学研究会老龄健康服务与标准化分会等 2018\n年发布的专家共识中指出要循序渐进，不要太过用\n力，柔韧性运动过程中始终保持被牵拉的肌肉有轻\n微的不适感即可，不要急于求成；过程中要注意正\n确的呼吸方式，动作要缓慢，可采用伸展 - 放松 - 再\n伸展的方法；日常运动前后都要做柔韧性运动，运\n动前做有助于预防损伤，运动后做有助于放松肌肉、\n消除疲劳\n［50］\n。 \n5.16　临床问题 16： 运动结合非运动干预是否能够有\n效改善老年人的躯体功能？\n【推荐意见】　推荐运动结合非运动干预，如加\n压训练、认知训练、营养支持、日常生活活动、全\n身振动训练、虚拟现实训练、运动想象训练改善老\n年人的躯体功能（证据等级 A\n ，强推荐）。\n5.16.1　 推荐说明　运动可以与一些非运动干预结\n合，以增加单独运动带来的效果，常见的用于结合\n的干预包括：（1\n ）加压训练，又称血流限制训练，\n指通过特殊加压装置（如弹性绷带），对肢体进行\n外部加压，部分阻塞动静脉血流，提高肌肉代谢；\n（2）认知训练是指对一个或多个认知域及认知加工\n过程的训练；（3\n ）全身振动训练指通过物理机械反\n复垂直上下振动，使刺激传递到肌群，从而提高神经\n肌肉系统兴奋性；（ 4\n ）虚拟现实训练是指借助计算\n机等设备产生逼真的虚拟世界，使老年人可在虚拟\n场景中进行身临其境的实时交互训练；（ 5\n ）运动想\n象训练指想象肢体运动但没有实际运动输出。其中，",
+          "excerpt": "fmx_T3RoZXJNaXJyb3Jz\n· 2705 ·\nhttp://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn\n2023年8月   第26卷   第22 期\n尼龙绳的平衡运动可以改善老年人的串联站立时间\n〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时\n间〔MD=2.27，95%CI（0.74，3.79）〕\n［56］\n。\n5.13　临床问题 13： 老年人进行平衡运动时，运动原\n则是什么？\n【推荐意见】　推荐从稳定体位开始逐渐进展到\n不稳定体位、逐步缩小人体支撑面积和提高身体重\n心、从睁眼状态过渡到闭眼状态、从静态平衡进展\n到动态平衡（证据等级 Level 5",
+          "reason": "该节点为《老年人失能预防运动干预临床实践指南》中的“临床问题 13：老年人进行平衡运动时，运动原则是什么？”。病例中老人跌倒风险高，平衡能力是关键。此节点提供基于循证医学的平衡训练原则，是制定个性化、安全有效的平衡训练方案的核心指导，直接针对“肌肉力量与平衡能力下降”和“预防跌倒”的需求。",
+          "need": "因锻炼不足导致肌肉力量与平衡能力下降；夜间定向障碍导致跌倒或走失。",
+          "line_num": null,
+          "start_index": 11,
+          "end_index": 11,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/老年人失能预防运动干预临床实践指南（2023版）.pdf",
+          "source_type": "pdf"
+        },
+        {
+          "node_id": "node_0937fa3cddb9",
+          "doc_id": "doc_daa908b7dac9",
+          "doc_name": "老年人健康长寿最佳运动建议全球共识.pdf",
+          "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求",
+          "title": "多种运动组合 可满足不同健康需求",
+          "summary": "",
+          "text": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老\n年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自\n身健康状况灵活调整优先级。\n有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优，\n对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、\n体重超标或高血压的老年人，游泳、水中漫步等低冲击运动是理想选择，能在保护关节的同\n时达到锻炼目的。而快走、慢跑、骑行、有氧体操等普适性运动，因易开展、场地限制小，\n适合大多数老年人入门。在实施上，建议每周开展 37 天，无运动基础者可从 3 天起步；每\n次时长 20~60 分钟，新手从 5~10 分钟/次逐步递增，每次增加不超过 5 分钟；强度控制在\n中等水平，表现为能说话但无法唱歌，身体耐受者可适当提升。需要注意的是，饭后 1 小\n时内应避免高强度有氧运动，高血压患者应避免憋气类动作。\n抗阻训练是预防肌肉流失的关键运动，肌肉量的维持直接关系到老年人的独立生活能力。有\n运动基础者可选择哑铃、弹力带、固定器械等器械训练；居家练习者则适合深蹲、靠墙静蹲、\n跪姿俯卧撑、平板支撑等徒手训练。建议每周开展 2~3 天，同一肌群训练间隔不少于 48 小\n时；每次 1~3 组，每组 8~12 次，以肌肉稍感疲劳为度，新手从 1 组、低负重起步；组间休\n息 2~3 分钟，避免连续高强度训练同一肌群。\n平衡与柔韧性训练是预防跌倒的重点，而跌倒是老年人意外伤害的主要诱因。平衡训练可选\n择单腿站立、脚跟走/脚尖走、太极、八段锦等，还可搭配认知任务（如行走时数步数、做\n简单算术）提升综合协调能力；柔韧性训练则以静态拉伸（肩颈、腰背、下肢拉伸）、瑜伽、\n普拉提为主，重点拉伸大肌群与关节周围组织。平衡训练建议每天 1~2 组，每组包含 4~10\n种姿势，每种姿势保持 10~30 秒，重复 2~3 次；柔韧性训练每个动作保持 20~30 秒，重复\n2~4 组。拉伸时以肌肉有轻微牵拉感为宜，避免过度拉伸导致拉伤；平衡能力差者可借助桌\n椅辅助，逐步减少支撑。\n03\n科学运动\n要个性化选择\n坚持运动的同时，《老年人健康长寿最佳运动建议全球共识》强调老年人运动需遵循个性化\n原则，才能在获得健康益处的同时，规避运动风险。\n个性化运动处方的制定并非“一刀切”，而是需围绕四大核心要点科学设计，兼顾健康获益\n与长期可行性。\n一是针对功能缺陷“对症下方”。遵循“训练的特异性原则”，先评估个人功能短板，再匹\n配精准运动方案。如老年人上肢力量不足影响转移能力，可优先开展上肢抗阻训练；严重膝\n骨关节炎患者，宜选择坐位或水中阻力训练等低冲击运动。\n二是结合共病与风险科学取舍。将多病共存、跌倒史等风险因素纳入决策，权衡运动的安全",
+          "excerpt": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老\n年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自\n身健康状况灵活调整优先级。\n有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优，\n对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、\n体重超标或高血压的老年人，游泳、水中漫步等低冲击运动是理想选择，能在保护关节的同\n时达到锻炼目的。而快走、慢跑、骑行、有氧体操等普适性运动，因易开展、场地限制小，\n适合大多数老年人入门。在实施上，建议每周开展 37 天，无运动基础者可从 3 天起步；每\n次时长 20~60 分钟，新手",
+          "reason": "该节点为《老年人健康长寿最佳运动建议全球共识》中的“多种运动组合 可满足不同健康需求”章节。它提供了“有氧+抗阻+平衡”的组合运动框架，并针对“关节不好、体重超标”等具体情况给出了运动选择建议（如游泳）。这完美契合病例中超重、需提升平衡与肌力、且需考虑关节保护的老人，能指导制定全面、安全、个性化的运动处方。",
+          "need": "因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；体重超重。",
+          "line_num": null,
+          "start_index": 2,
+          "end_index": 2,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/老年人健康长寿最佳运动建议全球共识.pdf",
+          "source_type": "pdf"
+        },
+        {
+          "node_id": "node_0bdd2088ee00",
+          "doc_id": "doc_52e2452471eb",
+          "doc_name": "体重管理指导原则（2024 年版）.pdf",
+          "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。",
+          "title": "老年人群（65 岁及以上）。",
+          "summary": "",
+          "text": "— 13 —\n（4）加强监测。定期监测体重相关指标。\n3.产后体重管理。\n（1）目标明确，逐步减重。产后 1 年内是体重恢复的\n关键时期，可逐步将体重恢复至孕前体重。\n（2）膳食多样，不要过量。母乳喂养者在相应年龄阶\n段的成年女性能量需要量基础上，每日增加 400 千卡。\n（3）循序渐进，提高运动强度。考虑到产后恢复情况，\n运动强度可从低至中等逐渐增加。\n（四）老年人群（65 岁及以上）。\n结合老年人的健康状况和肥胖相关危险因素，全面评估\n体重管理对改善老年人机体功能的作用，制定相应营养和运\n动方案。\n1.健康饮食。\n（1）能自主进食的老年人，选用容易消化吸收的食物，\n并监测体重变化。\n（2）有吞咽功能障碍的老年人，选用营养均衡、适当\n粘度的流体食物，降低误吸风险。\n2.身体活动。\n（1）在身体允许的情况下，鼓励在熟悉环境中进行规\n律活动，减少静坐时间，并注意保暖防暑。\n（2）慢性病患者应在医生咨询和专业人员指导下进行\n活动。\n3.睡眠改善。",
+          "excerpt": "— 13 —\n（4）加强监测。定期监测体重相关指标。\n3.产后体重管理。\n（1）目标明确，逐步减重。产后 1 年内是体重恢复的\n关键时期，可逐步将体重恢复至孕前体重。\n（2）膳食多样，不要过量。母乳喂养者在相应年龄阶\n段的成年女性能量需要量基础上，每日增加 400 千卡。\n（3）循序渐进，提高运动强度。考虑到产后恢复情况，\n运动强度可从低至中等逐渐增加。\n（四）老年人群（65 岁及以上）。\n结合老年人的健康状况和肥胖相关危险因素，全面评估\n体重管理对改善老年人机体功能的作用，制定相应营养和运\n动方案。\n1.健康饮食。\n（1）能自主进食的老年人，选用容易消化吸收的食物，\n并监测体重变化。\n（2）有吞咽功能障碍的老年人，选用营养均衡、适",
+          "reason": "该节点为《体重管理指导原则》中专为“老年人群（65岁及以上）”制定的体重管理方案。病例老人BMI 26.0，属于超重。此节点内容结合了老年人的健康状况，提供了包括饮食、运动、睡眠、心理在内的综合管理策略，而非单纯的减重。这有助于在控制体重、减轻关节负担的同时，确保方案的安全性和可持续性，为安全运动创造条件。",
+          "need": "体重超重；BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。",
+          "line_num": null,
+          "start_index": 13,
+          "end_index": 13,
+          "source_path": "/Users/akai/Desktop/data/AI-Elderly-Care-Health-Report/backend/data/guidelines/体重管理指导原则（2024 年版）.pdf",
+          "source_type": "pdf"
+        }
+      ],
+      "evidence_cards": [
+        {
+          "need": "认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+          "recommendation": "建议对老人进行全面的认知功能评估，包括采用MoCA量表等标准化工具，以明确认知受损的具体程度，为后续制定干预和监测方案提供基线依据。",
+          "evidence_quote": "阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_2e69cf864bae",
+          "path": "评估 > 认知功能评估",
+          "applicability": "病例中老人明确存在“认知功能轻度受损”和“时间定向错误”，这是核心问题。进行标准化评估是管理此类问题的科学起点，符合指南推荐的首要步骤。"
+        },
+        {
+          "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+          "recommendation": "建议对老人的居住环境进行安全改造，例如安装难以轻易开启的门锁，并配备门窗感应器、远程警报系统或电子定位器等现代电子设备，以防止走失和意外伤害。",
+          "evidence_quote": "保障周围环境安全，防止患者走失、跌倒以及遭受其他意外伤害，比如安装难以被患者轻易开启的门锁，配备现代电子设备，像门窗感应器、远程警报系统以及电子定位器等。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_7781224e7770",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "applicability": "病例中老人存在“夜间定向障碍导致跌倒或走失”的短期风险，这是最紧急的安全问题。指南中的环境安全建议可直接用于预防此类意外。"
+        },
+        {
+          "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+          "recommendation": "建议在卧室、客厅等主要活动区域的显眼处摆放大型钟表、日历，或制作展示当季和节日的图片，以辅助老人进行时间定向，减少因时间混淆导致的风险。",
+          "evidence_quote": "辅助患者进行时间和空间的定向，例如在卧室、客厅、餐厅等主要活动区域显眼处摆放大型钟表、日历，制作展示当季和节日的图片，以便患者识别时间。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_7781224e7770",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "applicability": "病例中老人存在“时间定向错误”，这是夜间定向障碍的核心表现之一。通过环境中的视觉提示辅助时间定向，是针对该问题的直接、非药物干预措施。"
+        },
+        {
+          "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+          "recommendation": "建议保持老人居住环境的稳定和熟悉感，避免频繁改变家具布局或装饰，以降低其因环境陌生而产生的困惑和不安，从而减少跌倒和走失风险。",
+          "evidence_quote": "保持环境的稳定和熟悉感，避免频繁改变。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_7781224e7770",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "applicability": "对于存在认知功能轻度受损和定向障碍的老人，稳定的环境有助于其建立空间记忆和安全感，是预防因环境混淆导致意外的基础措施。"
+        },
+        {
+          "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+          "recommendation": "建议在房门上张贴老人熟悉的照片或图案，帮助其在夜间或白天都能轻松识别自己的房间，减少因找错房间导致的混乱和潜在跌倒风险。",
+          "evidence_quote": "给予适度的感官刺激，如在房门上张贴患者熟悉的照片或图案，帮助其识别自己的房间。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_7781224e7770",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "applicability": "此建议针对认知障碍患者的空间定向困难。老人与老伴同住，在卧室门上做个性化标识，能直接辅助其夜间定向，贴合其“夜间定向障碍”的具体需求。"
+        },
+        {
+          "need": "认知功能下降加速，影响日常生活独立性。",
+          "recommendation": "鉴于老人目前生活自理（功能完好），照护策略应以监督和协助为主，避免过度照顾，以尽可能维持其现有的自理能力和自信心。",
+          "evidence_quote": "MCI患者日常生活能自理；轻度痴呆患者日常生活能力部分受损，推荐照护者不给予过度的照顾，主要提供监督、协助作用。",
+          "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+          "node_id": "node_7781224e7770",
+          "path": "疾病管理与自我管理 > 生活照护",
+          "applicability": "病例描述老人“功能完好；生活自理”，且处于“认知功能轻度受损”阶段，与指南中MCI及轻度痴呆的照护原则完全吻合，强调维持独立性的重要性。"
+        }
+      ],
+      "combined_context": "【结构化知识证据】\n\n[证据1] 需求：认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。\n推荐内容：建议对老人进行全面的认知功能评估，包括采用MoCA量表等标准化工具，以明确认知受损的具体程度，为后续制定干预和监测方案提供基线依据。\n证据原文：阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。\n来源：老年认知功能障碍慢病管理指南.pdf / 评估 > 认知功能评估\n适用原因：病例中老人明确存在“认知功能轻度受损”和“时间定向错误”，这是核心问题。进行标准化评估是管理此类问题的科学起点，符合指南推荐的首要步骤。\n\n[证据2] 需求：夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\n推荐内容：建议对老人的居住环境进行安全改造，例如安装难以轻易开启的门锁，并配备门窗感应器、远程警报系统或电子定位器等现代电子设备，以防止走失和意外伤害。\n证据原文：保障周围环境安全，防止患者走失、跌倒以及遭受其他意外伤害，比如安装难以被患者轻易开启的门锁，配备现代电子设备，像门窗感应器、远程警报系统以及电子定位器等。\n来源：老年认知功能障碍慢病管理指南.pdf / 疾病管理与自我管理 > 生活照护\n适用原因：病例中老人存在“夜间定向障碍导致跌倒或走失”的短期风险，这是最紧急的安全问题。指南中的环境安全建议可直接用于预防此类意外。\n\n[证据3] 需求：夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\n推荐内容：建议在卧室、客厅等主要活动区域的显眼处摆放大型钟表、日历，或制作展示当季和节日的图片，以辅助老人进行时间定向，减少因时间混淆导致的风险。\n证据原文：辅助患者进行时间和空间的定向，例如在卧室、客厅、餐厅等主要活动区域显眼处摆放大型钟表、日历，制作展示当季和节日的图片，以便患者识别时间。\n来源：老年认知功能障碍慢病管理指南.pdf / 疾病管理与自我管理 > 生活照护\n适用原因：病例中老人存在“时间定向错误”，这是夜间定向障碍的核心表现之一。通过环境中的视觉提示辅助时间定向，是针对该问题的直接、非药物干预措施。\n\n[证据4] 需求：夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\n推荐内容：建议保持老人居住环境的稳定和熟悉感，避免频繁改变家具布局或装饰，以降低其因环境陌生而产生的困惑和不安，从而减少跌倒和走失风险。\n证据原文：保持环境的稳定和熟悉感，避免频繁改变。\n来源：老年认知功能障碍慢病管理指南.pdf / 疾病管理与自我管理 > 生活照护\n适用原因：对于存在认知功能轻度受损和定向障碍的老人，稳定的环境有助于其建立空间记忆和安全感，是预防因环境混淆导致意外的基础措施。\n\n[证据5] 需求：夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\n推荐内容：建议在房门上张贴老人熟悉的照片或图案，帮助其在夜间或白天都能轻松识别自己的房间，减少因找错房间导致的混乱和潜在跌倒风险。\n证据原文：给予适度的感官刺激，如在房门上张贴患者熟悉的照片或图案，帮助其识别自己的房间。\n来源：老年认知功能障碍慢病管理指南.pdf / 疾病管理与自我管理 > 生活照护\n适用原因：此建议针对认知障碍患者的空间定向困难。老人与老伴同住，在卧室门上做个性化标识，能直接辅助其夜间定向，贴合其“夜间定向障碍”的具体需求。\n\n[证据6] 需求：认知功能下降加速，影响日常生活独立性。\n推荐内容：鉴于老人目前生活自理（功能完好），照护策略应以监督和协助为主，避免过度照顾，以尽可能维持其现有的自理能力和自信心。\n证据原文：MCI患者日常生活能自理；轻度痴呆患者日常生活能力部分受损，推荐照护者不给予过度的照顾，主要提供监督、协助作用。\n来源：老年认知功能障碍慢病管理指南.pdf / 疾病管理与自我管理 > 生活照护\n适用原因：病例描述老人“功能完好；生活自理”，且处于“认知功能轻度受损”阶段，与指南中MCI及轻度痴呆的照护原则完全吻合，强调维持独立性的重要性。",
+      "total_hits": 6,
+      "retrieval_trace": {
+        "document_selection": {
+          "selected_docs": [
+            {
+              "doc_id": "doc_7e04601a37a4",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "doc_summary": "重点章节包括：健康教育；其他干预；参考文献；定义与流行病学；心理干预；概述。适合从这些章节中继续定位与病例相关的建议和标准。",
+              "reason": "该文档为《老年认知功能障碍慢病管理指南》，其内容直接针对病例中“认知功能轻度受损”、“时间定向错误”及“认知功能下降加速”等核心问题。文档大纲包含健康教育、心理干预等章节，可为夜间定向障碍的照护干预、延缓认知下降提供具体的管理策略和指导原则。",
+              "relevance_to_case": "直接对应“夜间定向障碍导致跌倒或走失”和“认知功能下降加速，影响日常生活独立性”这两个高优先级风险及主要问题。",
+              "outline_nodes": [
+                {
+                  "node_id": "node_f7e5cbf49979",
+                  "title": "健康教育",
+                  "path": "健康教育",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_f9d31c7672d7",
+                  "title": "其他干预",
+                  "path": "其他干预",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_2eaf1d095ec5",
+                  "title": "参考文献",
+                  "path": "参考文献",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 [65]XiaoS,ChanP,WangT,etal.A36-weekmulticenter, randomized,double-blind,place...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_56906f263a7f",
+                  "title": "定义与流行病学",
+                  "path": "定义与流行病学",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_27619f3754ad",
+                  "title": "心理干预",
+                  "path": "心理干预",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_82927736137e",
+                  "title": "概述",
+                  "path": "概述",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_8a638af2d7ea",
+                  "title": "生活方式干预",
+                  "path": "生活方式干预",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_349e90472e4d",
+                  "title": "疾病管理与自我管理",
+                  "path": "疾病管理与自我管理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_0dc6095ca151",
+                  "title": "编写说明",
+                  "path": "编写说明",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 doi:10.3969/j.issn.1674-4616.2025.04.006 · 指 南 共 识 · 老年认知功能障碍慢病管理指南 中国老年学和老年医...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_fab578bf7ed1",
+                  "title": "药物干预",
+                  "path": "药物干预",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_202508477eea",
+                  "title": "评估",
+                  "path": "评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_f614030ae284",
+                  "title": "中医针灸",
+                  "path": "其他干预 > 中医针灸",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_cf50063f06c6",
+                  "title": "物理治疗",
+                  "path": "其他干预 > 物理治疗",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_42ddf0fec333",
+                  "title": "体重管理",
+                  "path": "生活方式干预 > 体重管理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_6720197ffb2d",
+                  "title": "吸烟与饮酒",
+                  "path": "生活方式干预 > 吸烟与饮酒",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_41d37eae9c2d",
+                  "title": "睡眠管理",
+                  "path": "生活方式干预 > 睡眠管理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_d6035b80b325",
+                  "title": "运动治疗",
+                  "path": "生活方式干预 > 运动治疗",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_4ea2cbf015a7",
+                  "title": "饮食调理",
+                  "path": "生活方式干预 > 饮食调理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_8a181c601fab",
+                  "title": "多学科合作管理",
+                  "path": "疾病管理与自我管理 > 多学科合作管理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 要时入住精神卫生中心进行专科治疗。 10.4 对照护者的支持 认知功能 障 碍 患 者 的 照 护 者 容 易 患 上 抑 郁 和 焦 虑,应鼓励照护者与...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_000aa8c4520d",
+                  "title": "对照护者的支持",
+                  "path": "疾病管理与自我管理 > 对照护者的支持",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 要时入住精神卫生中心进行专科治疗。 10.4 对照护者的支持 认知功能 障 碍 患 者 的 照 护 者 容 易 患 上 抑 郁 和 焦 虑,应鼓励照护者与...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_2ba798264473",
+                  "title": "居住环境的调整",
+                  "path": "疾病管理与自我管理 > 居住环境的调整",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_7781224e7770",
+                  "title": "生活照护",
+                  "path": "疾病管理与自我管理 > 生活照护",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_94dbba1d8c37",
+                  "title": "精神行为症状管理",
+                  "path": "疾病管理与自我管理 > 精神行为症状管理",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_b7ffb095bac6",
+                  "title": "中成药",
+                  "path": "药物干预 > 中成药",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_6ec9a68387d6",
+                  "title": "西药干预",
+                  "path": "药物干预 > 西药干预",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_ed89779a8e89",
+                  "title": "中医证候辨识",
+                  "path": "评估 > 中医证候辨识",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_115dee0e40e8",
+                  "title": "健康状态综合评估",
+                  "path": "评估 > 健康状态综合评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_50e2b146907b",
+                  "title": "危险因素评估",
+                  "path": "评估 > 危险因素评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_dca3250705c6",
+                  "title": "并发症评估",
+                  "path": "评估 > 并发症评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_98f187a50187",
+                  "title": "精神行为症状评估",
+                  "path": "评估 > 精神行为症状评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_2e69cf864bae",
+                  "title": "认知功能评估",
+                  "path": "评估 > 认知功能评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—200...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_e6f6dcece8e0",
+                  "title": "认知障碍疾病分层与进展评估",
+                  "path": "评估 > 认知障碍疾病分层与进展评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 4.3.4 蒙 特 利 尔 认 知 评 估 量 表 (Montrealcognitive assessmentscale,MoCA)[16,18] MoC...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_11b2743c3a9e",
+                  "title": "推拿按摩",
+                  "path": "其他干预 > 物理治疗 > 推拿按摩",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_3e09c65dc119",
+                  "title": "经颅磁刺激",
+                  "path": "其他干预 > 物理治疗 > 经颅磁刺激",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_4a53ee39b3dd",
+                  "title": "传统功法",
+                  "path": "生活方式干预 > 运动治疗 > 传统功法",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 算能力训练,增强执 行 能 力、解 决 问 题 能 力;⑨ 认 知 数 字疗 法,进 行 数 字 化 认 知 任 务,以 提 高 患 者 的 多 维 度...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_decf665ca02e",
+                  "title": "体育锻炼",
+                  "path": "生活方式干预 > 运动治疗 > 体育锻炼",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_8853d9e0d43d",
+                  "title": "康复运动",
+                  "path": "生活方式干预 > 运动治疗 > 康复运动",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_9b5ed8b818ae",
+                  "title": "外出活动与社交活动",
+                  "path": "疾病管理与自我管理 > 生活照护 > 外出活动与社交活动",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_dea2d9c20193",
+                  "title": "日常生活照护",
+                  "path": "疾病管理与自我管理 > 生活照护 > 日常生活照护",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_1acb4b6c3f96",
+                  "title": "BPSD 的识别与评估",
+                  "path": "疾病管理与自我管理 > 精神行为症状管理 > BPSD 的识别与评估",
+                  "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针...",
+                  "level": 3
+                }
+              ]
+            },
+            {
+              "doc_id": "doc_3298433c2a5e",
+              "doc_name": "老年人失能预防运动干预临床实践指南（2023版）.pdf",
+              "doc_summary": "重点章节包括：临床问题及推荐意见；声明；局限性与展望；指南制订方法学；目标人群和使用者；目的。适合从这些章节中继续定位与病例相关的建议和标准。",
+              "reason": "该文档为《老年人失能预防运动干预临床实践指南（2023版）》，其核心目标是通过运动干预预防失能，这与病例中“因锻炼不足导致肌肉力量与平衡能力下降”及“体力活动不足”的需求高度契合。指南中的“临床问题及推荐意见”可直接用于制定改善平衡、增强肌力的个性化运动方案。",
+              "relevance_to_case": "直接对应“因锻炼不足导致肌肉力量与平衡能力下降”这一中期风险及“体力活动不足”这一主要问题，旨在提升功能、预防跌倒。",
+              "outline_nodes": [
+                {
+                  "node_id": "node_50907092bd2d",
+                  "title": "临床问题及推荐意见",
+                  "path": "临床问题及推荐意见",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_98f3dec34391",
+                  "title": "声明",
+                  "path": "声明",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_c9e4f5632a9a",
+                  "title": "局限性与展望",
+                  "path": "局限性与展望",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_77410552e9f1",
+                  "title": "指南制订方法学",
+                  "path": "指南制订方法学",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_161698673fba",
+                  "title": "目标人群和使用者",
+                  "path": "目标人群和使用者",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_bcbe146dd7c6",
+                  "title": "目的",
+                  "path": "目的",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_35972beee1e5",
+                  "title": "相关术语",
+                  "path": "相关术语",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2696 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 我国失能老年人口规模大、增长快、负担重。第 七次人口普查结果显示，我国 60 岁及以上人口已达 到 2.6 亿 ，占总人口比重为 18.7...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_39ff2a040e5a",
+                  "title": "老年人失能预防运动干预临床实践指南（2023 版）",
+                  "path": "老年人失能预防运动干预临床实践指南（2023 版）",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2695 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 ·指南·共识· 老年人失能预防运动干预临床实践指南（2023 版） 中华医学会老年医学分会护理学组，中国老年保健医学研究会老年医学护理分会， 中国老年护...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_3f8628a4a3ca",
+                  "title": "临床问题 10：老年人进行抗阻运动时，运动原则是什么？",
+                  "path": "临床问题及推荐意见 > 临床问题 10：老年人进行抗阻运动时，运动原则是什么？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_5de68af24e96",
+                  "title": "临床问题 11：老年人进行抗阻运动后，注意事项有什么？",
+                  "path": "临床问题及推荐意见 > 临床问题 11：老年人进行抗阻运动后，注意事项有什么？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_a10a1ee95e36",
+                  "title": "临床问题 12：平衡运动是否能够有效改善老年人的躯体功能？",
+                  "path": "临床问题及推荐意见 > 临床问题 12：平衡运动是否能够有效改善老年人的躯体功能？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_0ef2106c2f9a",
+                  "title": "临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+                  "path": "临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_bfd59286eff9",
+                  "title": "临床问题 14：老年人进行平衡运动时，运动频次和内容应如何安排？",
+                  "path": "临床问题及推荐意见 > 临床问题 14：老年人进行平衡运动时，运动频次和内容应如何安排？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_da47fa9fa9b3",
+                  "title": "临床问题 15：老年人是否应该进行柔韧性运动？",
+                  "path": "临床问题及推荐意见 > 临床问题 15：老年人是否应该进行柔韧性运动？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_898bb570a11d",
+                  "title": "临床问题 16：运动结合非运动干预是否能够有效改善老年人的躯体功能？",
+                  "path": "临床问题及推荐意见 > 临床问题 16：运动结合非运动干预是否能够有效改善老年人的躯体功能？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_c101e9e4224d",
+                  "title": "临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+                  "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_0df8bebb3a26",
+                  "title": "临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+                  "path": "临床问题及推荐意见 > 临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_6b6354b046ec",
+                  "title": "临床问题 1：老年人是否应该进行运动？",
+                  "path": "临床问题及推荐意见 > 临床问题 1：老年人是否应该进行运动？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_0227b7baac6d",
+                  "title": "临床问题 2：老年人运动前需要进行评估吗？",
+                  "path": "临床问题及推荐意见 > 临床问题 2：老年人运动前需要进行评估吗？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_e1d77af4ea9d",
+                  "title": "临床问题 3：老年人的运动方案应如何制订？",
+                  "path": "临床问题及推荐意见 > 临床问题 3：老年人的运动方案应如何制订？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_d71215e44e46",
+                  "title": "临床问题 4：老年人的运动量应如何安排？",
+                  "path": "临床问题及推荐意见 > 临床问题 4：老年人的运动量应如何安排？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_1092750af312",
+                  "title": "临床问题 5：有氧运动是否能够有效改善老年人的躯体功能？",
+                  "path": "临床问题及推荐意见 > 临床问题 5：有氧运动是否能够有效改善老年人的躯体功能？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2701 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 的《美国人体力活动指南第二版》中指出应该减少 久坐行为，即使参加少量的体力活动，老年人也可 从中获益 ［17］ 。澳大利亚和新西兰老年医学协会 2014...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_8bc986447e51",
+                  "title": "临床问题 6：老年人进行有氧运动时，运动强度、频次和时长应如何安排？",
+                  "path": "临床问题及推荐意见 > 临床问题 6：老年人进行有氧运动时，运动强度、频次和时长应如何安排？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2702 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 活性，改善骨骼肌的功能，从而达到改善肌力、平 衡、TUGT、 灵活性、 跌倒等躯体功能的目的。 其中， 气功运动重点改善肌力和肌肉耐力，而...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_bc775e19f09f",
+                  "title": "临床问题 7：抗阻运动是否能够有效改善老年人的躯体功能？",
+                  "path": "临床问题及推荐意见 > 临床问题 7：抗阻运动是否能够有效改善老年人的躯体功能？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2703 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 直至达到推荐的运动水平。 5.6.2 证据概要 WHO 2020 年发布的《关于身体活 动和久坐行为的指南》 ［18］ 、美国卫生及公共服务部 2018...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_892ec865d94e",
+                  "title": "临床问题 8：老年人进行抗阻运动时，不同肌群的训练顺序应如何安排？",
+                  "path": "临床问题及推荐意见 > 临床问题 8：老年人进行抗阻运动时，不同肌群的训练顺序应如何安排？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2703 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 直至达到推荐的运动水平。 5.6.2 证据概要 WHO 2020 年发布的《关于身体活 动和久坐行为的指南》 ［18］ 、美国卫生及公共服务部 2018...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_1e94b9bf7f96",
+                  "title": "临床问题 9：老年人进行抗阻运动时，运动强度和频率应如何安排？",
+                  "path": "临床问题及推荐意见 > 临床问题 9：老年人进行抗阻运动时，运动强度和频率应如何安排？",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2704 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 5.9 临床问题 9：老年人进行抗阻运动时，运动强度 和频率应如何安排？ 【推荐意见】 建议老年人进行中、高强度抗 阻运动，每周 2~3...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_5d62bce12db2",
+                  "title": "利益冲突声明签署",
+                  "path": "指南制订方法学 > 利益冲突声明签署",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_d1644cc4d7e0",
+                  "title": "形成推荐意见并确定推荐强度",
+                  "path": "指南制订方法学 > 形成推荐意见并确定推荐强度",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_f55f1c911ef9",
+                  "title": "指南工作组成立",
+                  "path": "指南制订方法学 > 指南工作组成立",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_dad187079ac1",
+                  "title": "指南文稿的形成与外审",
+                  "path": "指南制订方法学 > 指南文稿的形成与外审",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_35eb1e073514",
+                  "title": "指南注册",
+                  "path": "指南制订方法学 > 指南注册",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_f6bdda9516af",
+                  "title": "指南的传播、实施与更新",
+                  "path": "指南制订方法学 > 指南的传播、实施与更新",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2699 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 任何一格票数 >50%， 即可确定推荐方向和推荐强度 ； 其余情况视为未达成共识，未达成共识的推荐意见则 进入下一轮投票。对于最终未达成共识的推荐意见，...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_7b26cc5e501f",
+                  "title": "文献检索",
+                  "path": "指南制订方法学 > 文献检索",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_ebaa17c3c6aa",
+                  "title": "文献筛选与质量评价",
+                  "path": "指南制订方法学 > 文献筛选与质量评价",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_9d2ab1ae3516",
+                  "title": "涵盖的临床问题和结局指标确定",
+                  "path": "指南制订方法学 > 涵盖的临床问题和结局指标确定",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2697 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 4 指南制订方法学 本指南以《世界卫生组织指南制定手册》 ［23］ 为 指导，参照国际实践指南报告规范（ RIGHT ） ［24］ 、 指南科学性（Sc...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_e40b15cf4664",
+                  "title": "证据总结",
+                  "path": "指南制订方法学 > 证据总结",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_3d3bb0e85df9",
+                  "title": "证据质量分级",
+                  "path": "指南制订方法学 > 证据质量分级",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2698 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 系统综述。 证据总结组中 2 名成员独立对文献进行质量评 价，如遇分歧，由组内讨论决定。各类文献的质量 评价标准如下。（ 1 ）指南：采用...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_9d30336cd987",
+                  "title": "推荐说明",
+                  "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 推荐说明",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_2c2081596183",
+                  "title": "证据概要",
+                  "path": "临床问题及推荐意见 > 临床问题 17：从老年人角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 证据概要",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2706 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn August 2023, Vol.26 No.22 结合加压训练和营养支持对肌力的改善尤为有效， 而其他类型的非运动干预的结合可用于平衡功能的 改善和跌倒的预防。 5.16.2 证据概要 （...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_88e6070c7db2",
+                  "title": "推荐说明",
+                  "path": "临床问题及推荐意见 > 临床问题 18：从运动实施者角度，运动过程中需要考虑哪些促进因素和障碍因素？ > 推荐说明",
+                  "summary": "fmx_T3RoZXJNaXJyb3Jz · 2707 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 【推荐意见】 老年人进行运动时，推荐考虑的 促进因素：（1 ）使用移动应用程序、网站、可穿戴 设备等技术提高运动方案的趣味性和监测性（证据 等级 A ，...",
+                  "level": 3
+                }
+              ]
+            },
+            {
+              "doc_id": "doc_daa908b7dac9",
+              "doc_name": "老年人健康长寿最佳运动建议全球共识.pdf",
+              "doc_summary": "重点章节包括：《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方；多种运动组合 可满足不同健康需求；科学运动 要个性化选择；运动三重效益 守护晚年健康。适合从这些章节中继续定位与病例相关的建议和标准。",
+              "reason": "该文档为《老年人健康长寿最佳运动建议全球共识》，内容聚焦于为老年人提供科学、个性化的运动建议。其大纲中“多种运动组合 可满足不同健康需求”、“科学运动 要个性化选择”等章节，可为病例中体力活动不足、需要提升平衡与肌力的老人提供权威、具体的运动类型和组合指导。",
+              "relevance_to_case": "直接支持解决“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”的问题，是制定安全有效锻炼计划的重要参考。",
+              "outline_nodes": [
+                {
+                  "node_id": "node_0c731a4266de",
+                  "title": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方",
+                  "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方",
+                  "summary": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康 寿命，应从开药到开运动处方 随着人口老龄化加剧，越来越多的老年人开始关注如何延缓衰老、远离疾病、保持高质量的 晚年生活。近日，由全球 34 位老年病学、运动医学等领域顶尖专家联合制定的《老年人健 康长寿最佳运动建议全球共识》正式发布，这份整合了近 20 年循证医学证据的权威指南， 为老年人运动保...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_0937fa3cddb9",
+                  "title": "多种运动组合 可满足不同健康需求",
+                  "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求",
+                  "summary": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老 年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自 身健康状况灵活调整优先级。 有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优， 对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_383547c7f9ff",
+                  "title": "科学运动 要个性化选择",
+                  "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 科学运动 要个性化选择",
+                  "summary": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老 年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自 身健康状况灵活调整优先级。 有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优， 对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_700996fcbf12",
+                  "title": "运动三重效益 守护晚年健康",
+                  "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 运动三重效益 守护晚年健康",
+                  "summary": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康 寿命，应从开药到开运动处方 随着人口老龄化加剧，越来越多的老年人开始关注如何延缓衰老、远离疾病、保持高质量的 晚年生活。近日，由全球 34 位老年病学、运动医学等领域顶尖专家联合制定的《老年人健 康长寿最佳运动建议全球共识》正式发布，这份整合了近 20 年循证医学证据的权威指南， 为老年人运动保...",
+                  "level": 2
+                }
+              ]
+            },
+            {
+              "doc_id": "doc_52e2452471eb",
+              "doc_name": "体重管理指导原则（2024 年版）.pdf",
+              "doc_summary": "重点章节包括：体重的分类标准；体重管理相关评估；健康体重的管理与维持；特殊人群的体重管理；规范化体重管理流程；超重肥胖的干预和治疗。适合从这些章节中继续定位与病例相关的建议和标准。",
+              "reason": "该文档为《体重管理指导原则（2024 年版）》，病例中明确提到老人“体重超重；BMI为26.0（超重）”，这是影响关节负担和远期健康的潜在风险。该文档的“体重的分类标准”、“健康体重的管理与维持”、“超重肥胖的干预和治疗”等章节，可为制定结合饮食与运动的综合体重管理方案提供规范指导。",
+              "relevance_to_case": "对应“体重超重”这一主要问题，通过管理体重可间接减轻关节负担、改善代谢健康，并为安全运动创造条件。",
+              "outline_nodes": [
+                {
+                  "node_id": "node_e1e0a076b0e9",
+                  "title": "体重的分类标准",
+                  "path": "体重的分类标准",
+                  "summary": "— 2 — 一、体重的分类标准 体质指数（body mass index，BMI）是衡量人体胖瘦程 度的标准，BMI=体重(kg)/身高(m)2。根据中国 18 岁及以上 成人 BMI 评判标准（见附表 1），我国健康成年人的 BMI 正 常范围为 18.5kg/m2≤BMI<24.0kg/m2，BMI<18.5kg/m2 为体重 过低，24.0kg/...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_f26011c2792d",
+                  "title": "体重管理相关评估",
+                  "path": "体重管理相关评估",
+                  "summary": "— 2 — 一、体重的分类标准 体质指数（body mass index，BMI）是衡量人体胖瘦程 度的标准，BMI=体重(kg)/身高(m)2。根据中国 18 岁及以上 成人 BMI 评判标准（见附表 1），我国健康成年人的 BMI 正 常范围为 18.5kg/m2≤BMI<24.0kg/m2，BMI<18.5kg/m2 为体重 过低，24.0kg/...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_efb0f079f514",
+                  "title": "健康体重的管理与维持",
+                  "path": "健康体重的管理与维持",
+                  "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_b5b0ba4e8bf0",
+                  "title": "特殊人群的体重管理",
+                  "path": "特殊人群的体重管理",
+                  "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_2e963baf5e8f",
+                  "title": "规范化体重管理流程",
+                  "path": "规范化体重管理流程",
+                  "summary": "— 15 — 六、规范化体重管理流程 成年人体重管理规范化流程图 — 16 — 附表 1 中国成人（18 岁及以上）体重判定标准 类别 体质指数（BMI），kg/m2 体重过低 <18.5 体重正常 18.5～23.9 超重 24.0～27.9 肥胖 ≥28.0 引自：《成人体重判定》（WS/T 428—2013）— 17 — 附表 2 根据腰围对成人...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_605a74bddb4b",
+                  "title": "超重肥胖的干预和治疗",
+                  "path": "超重肥胖的干预和治疗",
+                  "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+                  "level": 1
+                },
+                {
+                  "node_id": "node_14bfaf8f60de",
+                  "title": "个人史、既往史等相关病史评估。",
+                  "path": "体重管理相关评估 > 个人史、既往史等相关病史评估。",
+                  "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_46d907701344",
+                  "title": "体格检查、人体成分、能量消耗评估。",
+                  "path": "体重管理相关评估 > 体格检查、人体成分、能量消耗评估。",
+                  "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_bc32daa09417",
+                  "title": "医学检查评估。",
+                  "path": "体重管理相关评估 > 医学检查评估。",
+                  "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_fbdc30093819",
+                  "title": "特定人群评估。",
+                  "path": "体重管理相关评估 > 特定人群评估。",
+                  "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_f94b3f461104",
+                  "title": "生活方式风险评估。",
+                  "path": "体重管理相关评估 > 生活方式风险评估。",
+                  "summary": "— 3 — 1.充分了解减重目的和意愿、个人自律性、可自由支配 时间等相关信息，详细询问家族史、出生史，超重肥胖起始 时间及原因，既往减重方法、次数、效果、持续时间等。 2.超重肥胖相关疾病史和特殊用药史。相关疾病主要包 括心脑血管疾病、高血压、2 型糖尿病、高脂血症、高尿酸 血症及痛风、代谢功能障碍相关性脂肪性肝病、多囊卵巢综 合征、睡眠呼吸暂停综合...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_f74cf1c7bbea",
+                  "title": "运动能力评估。",
+                  "path": "体重管理相关评估 > 运动能力评估。",
+                  "summary": "— 4 — 建议的医学检查评估主要包括血常规、尿常规、血糖、 糖化血红蛋白、血脂、肝功能、肾功能，以及肝脏、胆囊、 胰腺、肾脏 B 超等。必要时，根据病人具体情况可加测胰岛 功能、甲状腺功能、皮质醇、性激素、骨密度等。 （五）运动能力评估。 运动能力的评估包括力量、速度、耐力、柔韧性和协调 性等。评估中需要考虑各个关节的活动范围，肌肉力量在不 同部位的...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_6f4dda69e224",
+                  "title": "合理膳食。",
+                  "path": "健康体重的管理与维持 > 合理膳食。",
+                  "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_e4a3b2620793",
+                  "title": "自我监测。",
+                  "path": "健康体重的管理与维持 > 自我监测。",
+                  "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_64e193a90f24",
+                  "title": "适量运动。",
+                  "path": "健康体重的管理与维持 > 适量运动。",
+                  "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_d821762f522b",
+                  "title": "体重过低人群。",
+                  "path": "特殊人群的体重管理 > 体重过低人群。",
+                  "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_548d9a379856",
+                  "title": "孕前、孕期及产后女性体重管理。",
+                  "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_739eba327f7b",
+                  "title": "学龄儿童（6~17 岁）。",
+                  "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。",
+                  "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_4412cb9cf8a8",
+                  "title": "学龄前儿童（5 岁及以内）。",
+                  "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。",
+                  "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_0bdd2088ee00",
+                  "title": "老年人群（65 岁及以上）。",
+                  "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。",
+                  "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_aa09841de5c0",
+                  "title": "职业人群。",
+                  "path": "特殊人群的体重管理 > 职业人群。",
+                  "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_cc3195bbf254",
+                  "title": "全流程体重管理。",
+                  "path": "超重肥胖的干预和治疗 > 全流程体重管理。",
+                  "summary": "— 9 — 助减重和改善健康状况。（具体药物治疗方法参见《肥胖症 诊疗指南（2024 年版）》） 3. 手 术 治 疗 。 对 于 BMI≥32.5kg/m2 ， 或 者 27.5kg/m2≤BMI<32.5kg/m2 且存在肥胖相关并发症或合并症 的成年人，经改变生活方式和内科治疗无效，综合评估患者 意愿、治疗依从性、手术风险和获益并充分知情后，可考...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_fc9988afbf03",
+                  "title": "医学治疗。",
+                  "path": "超重肥胖的干预和治疗 > 医学治疗。",
+                  "summary": "— 8 — （3）运动干预注意事项。遵循合理的运动流程和科学 的锻炼方案，在运动前做好热身准备，运动中避免关节、肌 肉、韧带损伤和过度训练，运动后进行充分拉伸恢复并及时 补液。 3.精神心理支持。超重肥胖者的精神心理支持主要针对 依从性不强、减重信心不足等问题，其目标是支持个体改变 并维持健康的生活方式，具体技术包括动机访谈、自我监控、 刺激控制、情绪...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_c277a0d03f04",
+                  "title": "生活方式干预。",
+                  "path": "超重肥胖的干预和治疗 > 生活方式干预。",
+                  "summary": "— 5 — 初 始 时 设 立 每 周 减 轻 体 重 约 0.5~1kg 的 目 标 ， 每 月 减 轻 2~4kg，6 个月内减轻当前体重的 5%~15%并维持；对于中、 重度肥胖者（BMI≥32.5kg/m2），建议设立周、月目标，定期 评估，按减轻现体重的 5%、10%、15%划分阶段性减重目标， 周期为 3 至 6 个月。 （一）生活方式干预...",
+                  "level": 2
+                },
+                {
+                  "node_id": "node_083fbd8d674c",
+                  "title": "产后体重管理。",
+                  "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 产后体重管理。",
+                  "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_5c19c14d9f47",
+                  "title": "孕前体重管理。",
+                  "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 孕前体重管理。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_818fb186d47e",
+                  "title": "孕期体重管理。",
+                  "path": "特殊人群的体重管理 > 孕前、孕期及产后女性体重管理。 > 孕期体重管理。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_dfc136da8cd6",
+                  "title": "减少久坐，每日使用电子产品时间限制在 2 小时内。",
+                  "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 减少久坐，每日使用电子产品时间限制在 2 小时内。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_41441268e818",
+                  "title": "睡眠管理及心理支持。",
+                  "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 睡眠管理及心理支持。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_b58e149ceca5",
+                  "title": "膳食管理。",
+                  "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 膳食管理。",
+                  "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_65069d7287fa",
+                  "title": "身体活动。",
+                  "path": "特殊人群的体重管理 > 学龄儿童（6~17 岁）。 > 身体活动。",
+                  "summary": "— 12 — （3）合理减重。不建议节食减重和快速减重。 2.身体活动。建议校内和校外每日至少累计达到 60 分钟 中等至较高强度的运动（见附表 11）。 3.减少久坐，每日使用电子产品时间限制在 2 小时内。 4.睡眠管理及心理支持。确保早睡，避免睡前使用电子 产品。建议 6~12 岁每日睡眠时间 9~12 小时；13~17 岁青少 年每日保持 8~...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_1857eccf7b5a",
+                  "title": "睡眠管理。",
+                  "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 睡眠管理。",
+                  "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_b4ee2ba4809f",
+                  "title": "膳食管理。",
+                  "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 膳食管理。",
+                  "summary": "— 10 — 合理膳食是维持健康体重的基础，应根据个体的年龄、 性别和身体活动水平等因素进行调整，确保摄入足够的能量 和营养素。三餐的食物能量分配及间隔时间要合理，一般早、 晚餐各占 30%，午餐占 40%。充足饮水，减少高糖、高油、 高盐食物。选择蒸、煮、炖、拌，减少煎、烤、炸等烹饪方 式。 （三）适量运动。 遵循 “动则有益、多动更好、适度量力、贵...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_e8cf952d8304",
+                  "title": "身体活动。",
+                  "path": "特殊人群的体重管理 > 学龄前儿童（5 岁及以内）。 > 身体活动。",
+                  "summary": "— 11 — （3）培养健康饮食习惯。增加新鲜果蔬，不吃或少吃 高脂、高钠加工食品和高能量密度食品，控制零食摄入。 2.身体活动。 （1）活动多样化，确保运动时长。1 岁以内鼓励自由活 动，1~5 岁儿童每日至少进行 180 分钟的多样化身体活动， 以户外为主。 （2）超重肥胖儿童应根据个体情况增加运动量。3~5 岁 儿童确保每日至少进行 60 分钟中...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_56db83a33d23",
+                  "title": "健康饮食。",
+                  "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 健康饮食。",
+                  "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_f85c14ff5470",
+                  "title": "心理健康。",
+                  "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 心理健康。",
+                  "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_9692a2213925",
+                  "title": "睡眠改善。",
+                  "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 睡眠改善。",
+                  "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_12e129d424e4",
+                  "title": "身体活动。",
+                  "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。 > 身体活动。",
+                  "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_5fb64ed1ab21",
+                  "title": "健康饮食。",
+                  "path": "特殊人群的体重管理 > 职业人群。 > 健康饮食。",
+                  "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+                  "level": 3
+                },
+                {
+                  "node_id": "node_04e56ed646c9",
+                  "title": "适度运动。",
+                  "path": "特殊人群的体重管理 > 职业人群。 > 适度运动。",
+                  "summary": "— 14 — （1）建议每日保持 7 小时睡眠，午睡时长控制在 1 小 时以内。 （2）睡眠质量差或有睡眠障碍的老年人应及时就医。 4.心理健康。 （1）鼓励积极参与社会活动，家庭成员提供积极情感 支持。 （2）出现情绪问题时，可寻求专业医生的心理辅导和 干预。 （五）职业人群。 支持性环境对于职业人群的体重管理至关重要。单位应 积极组织体重管理科普讲...",
+                  "level": 3
+                }
+              ]
+            }
+          ],
+          "_raw_response": "```json\n{\n  \"selected_docs\": [\n    {\n      \"doc_id\": \"doc_7e04601a37a4\",\n      \"reason\": \"该文档为《老年认知功能障碍慢病管理指南》，其内容直接针对病例中“认知功能轻度受损”、“时间定向错误”及“认知功能下降加速”等核心问题。文档大纲包含健康教育、心理干预等章节，可为夜间定向障碍的照护干预、延缓认知下降提供具体的管理策略和指导原则。\",\n      \"relevance_to_case\": \"直接对应“夜间定向障碍导致跌倒或走失”和“认知功能下降加速，影响日常生活独立性”这两个高优先级风险及主要问题。\"\n    },\n    {\n      \"doc_id\": \"doc_3298433c2a5e\",\n      \"reason\": \"该文档为《老年人失能预防运动干预临床实践指南（2023版）》，其核心目标是通过运动干预预防失能，这与病例中“因锻炼不足导致肌肉力量与平衡能力下降”及“体力活动不足”的需求高度契合。指南中的“临床问题及推荐意见”可直接用于制定改善平衡、增强肌力的个性化运动方案。\",\n      \"relevance_to_case\": \"直接对应“因锻炼不足导致肌肉力量与平衡能力下降”这一中期风险及“体力活动不足”这一主要问题，旨在提升功能、预防跌倒。\"\n    },\n    {\n      \"doc_id\": \"doc_daa908b7dac9\",\n      \"reason\": \"该文档为《老年人健康长寿最佳运动建议全球共识》，内容聚焦于为老年人提供科学、个性化的运动建议。其大纲中“多种运动组合 可满足不同健康需求”、“科学运动 要个性化选择”等章节，可为病例中体力活动不足、需要提升平衡与肌力的老人提供权威、具体的运动类型和组合指导。\",\n      \"relevance_to_case\": \"直接支持解决“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”的问题，是制定安全有效锻炼计划的重要参考。\"\n    },\n    {\n      \"doc_id\": \"doc_52e2452471eb\",\n      \"reason\": \"该文档为《体重管理指导原则（2024 年版）》，病例中明确提到老人“体重超重；BMI为26.0（超重）”，这是影响关节负担和远期健康的潜在风险。该文档的“体重的分类标准”、“健康体重的管理与维持”、“超重肥胖的干预和治疗”等章节，可为制定结合饮食与运动的综合体重管理方案提供规范指导。\",\n      \"relevance_to_case\": \"对应“体重超重”这一主要问题，通过管理体重可间接减轻关节负担、改善代谢健康，并为安全运动创造条件。\"\n    }\n  ]\n}\n```"
+        },
+        "node_selection": {
+          "selected_nodes": [
+            {
+              "node_id": "node_2e69cf864bae",
+              "doc_id": "doc_7e04601a37a4",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "path": "评估 > 认知功能评估",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 一,2019年全 球 约 有 5500 万 人 患 有 痴 呆。 根 据 世 界 卫生组织预测,到2050年痴呆患者将增至1.39亿人。 2001—2003年 我 国 MCI患 病 率 为 7.5%,到 2015— 2018年已上升至...",
+              "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“认知功能评估”章节。病例中老人存在“认知功能轻度受损”和“时间定向错误”，这是夜间定向障碍和认知下降加速的核心问题。阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。",
+              "need": "认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。"
+            },
+            {
+              "node_id": "node_7781224e7770",
+              "doc_id": "doc_7e04601a37a4",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 位 [104](C2)。头 皮 针 针 刺 可 采 取 分 区 丛 刺 长 留 针 法, 针刺部位选择顶区、顶 前 区、额 区、项 区、颞 区,用 毫 针 在相应穴 位 处 向 前 或 向 后 透 刺。 穴 位 埋 线 集 结 了 针...",
+              "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“生活照护”章节。针对老人“夜间定向障碍导致跌倒或走失”这一最紧急的短期风险，此节点很可能包含针对认知障碍患者的具体居家照护策略、环境改造建议（如夜间照明、安全标识）和风险预防措施，直接关系到如何保障老人夜间安全，防止意外发生。",
+              "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。"
+            },
+            {
+              "node_id": "node_d6035b80b325",
+              "doc_id": "doc_7e04601a37a4",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "path": "生活方式干预 > 运动治疗",
+              "summary": "中西医结合研究2025年8月第17卷第4期 ResearchofIntegratedTraditionalChineseand WesternMedicineAug.2025,Vol.17,No.4 对改善认 知 功 能 管 理 依 从 性 至 关 重 要。 开 展 健 康 教 育之 前 需 对 老 年 患 者 进 行 评 估,包 括 基 本 信 息、受 教 育程度、既往治疗状 况、并 发 症、认 知 功 能 及 有 无 照 护...",
+              "reason": "该节点为《老年认知功能障碍慢病管理指南》中的“运动治疗”章节。该指南将运动作为认知障碍管理的重要非药物干预手段。此节点内容可直接将“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”这两个问题，与“延缓认知下降”的目标结合起来，提供针对认知改善的运动类型、频率和强度建议，实现一箭双雕。",
+              "need": "因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；认知功能下降加速。"
+            },
+            {
+              "node_id": "node_0ef2106c2f9a",
+              "doc_id": "doc_3298433c2a5e",
+              "doc_name": "老年人失能预防运动干预临床实践指南（2023版）.pdf",
+              "path": "临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？",
+              "summary": "fmx_T3RoZXJNaXJyb3Jz · 2705 · http://www.chinagp.net E-mail:zgqkyx@chinagp.net.cn 2023年8月 第26卷 第22 期 尼龙绳的平衡运动可以改善老年人的串联站立时间 〔MD=17.38，95%CI（6.45，28.31 ）〕、单腿站立时 间〔MD=2.27，95%CI（0.74，3.79）〕 ［56］ 。 5.13 临床问题 13： 老年人进行平衡运...",
+              "reason": "该节点为《老年人失能预防运动干预临床实践指南》中的“临床问题 13：老年人进行平衡运动时，运动原则是什么？”。病例中老人跌倒风险高，平衡能力是关键。此节点提供基于循证医学的平衡训练原则，是制定个性化、安全有效的平衡训练方案的核心指导，直接针对“肌肉力量与平衡能力下降”和“预防跌倒”的需求。",
+              "need": "因锻炼不足导致肌肉力量与平衡能力下降；夜间定向障碍导致跌倒或走失。"
+            },
+            {
+              "node_id": "node_0937fa3cddb9",
+              "doc_id": "doc_daa908b7dac9",
+              "doc_name": "老年人健康长寿最佳运动建议全球共识.pdf",
+              "path": "《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求",
+              "summary": "那么，怎样运动强身健体的效果最佳？《老年人健康长寿最佳运动建议全球共识》指出，老 年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自 身健康状况灵活调整优先级。 有氧运动是提升心肺耐力的核心基础，其中挥拍运动（羽毛球、乒乓球、网球）效果最优， 对心肺功能与手眼协调能力提升显著，也是降低全因死亡率的“佼佼者”。对于关节不好、 体重超标或高血压的老年人，游泳、水中漫步等低冲击运动是理想选择，能在保护关节的...",
+              "reason": "该节点为《老年人健康长寿最佳运动建议全球共识》中的“多种运动组合 可满足不同健康需求”章节。它提供了“有氧+抗阻+平衡”的组合运动框架，并针对“关节不好、体重超标”等具体情况给出了运动选择建议（如游泳）。这完美契合病例中超重、需提升平衡与肌力、且需考虑关节保护的老人，能指导制定全面、安全、个性化的运动处方。",
+              "need": "因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；体重超重。"
+            },
+            {
+              "node_id": "node_0bdd2088ee00",
+              "doc_id": "doc_52e2452471eb",
+              "doc_name": "体重管理指导原则（2024 年版）.pdf",
+              "path": "特殊人群的体重管理 > 老年人群（65 岁及以上）。",
+              "summary": "— 13 — （4）加强监测。定期监测体重相关指标。 3.产后体重管理。 （1）目标明确，逐步减重。产后 1 年内是体重恢复的 关键时期，可逐步将体重恢复至孕前体重。 （2）膳食多样，不要过量。母乳喂养者在相应年龄阶 段的成年女性能量需要量基础上，每日增加 400 千卡。 （3）循序渐进，提高运动强度。考虑到产后恢复情况， 运动强度可从低至中等逐渐增加。 （四）老年人群（65 岁及以上）。 结合老年人的健康状况和肥胖相关危险因素，...",
+              "reason": "该节点为《体重管理指导原则》中专为“老年人群（65岁及以上）”制定的体重管理方案。病例老人BMI 26.0，属于超重。此节点内容结合了老年人的健康状况，提供了包括饮食、运动、睡眠、心理在内的综合管理策略，而非单纯的减重。这有助于在控制体重、减轻关节负担的同时，确保方案的安全性和可持续性，为安全运动创造条件。",
+              "need": "体重超重；BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。"
+            }
+          ],
+          "_raw_response": "```json\n{\n  \"selected_nodes\": [\n    {\n      \"node_id\": \"node_2e69cf864bae\",\n      \"reason\": \"该节点为《老年认知功能障碍慢病管理指南》中的“认知功能评估”章节。病例中老人存在“认知功能轻度受损”和“时间定向错误”，这是夜间定向障碍和认知下降加速的核心问题。阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。\",\n      \"need\": \"认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。\"\n    },\n    {\n      \"node_id\": \"node_7781224e7770\",\n      \"reason\": \"该节点为《老年认知功能障碍慢病管理指南》中的“生活照护”章节。针对老人“夜间定向障碍导致跌倒或走失”这一最紧急的短期风险，此节点很可能包含针对认知障碍患者的具体居家照护策略、环境改造建议（如夜间照明、安全标识）和风险预防措施，直接关系到如何保障老人夜间安全，防止意外发生。\",\n      \"need\": \"夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\"\n    },\n    {\n      \"node_id\": \"node_d6035b80b325\",\n      \"reason\": \"该节点为《老年认知功能障碍慢病管理指南》中的“运动治疗”章节。该指南将运动作为认知障碍管理的重要非药物干预手段。此节点内容可直接将“体力活动不足”和“因锻炼不足导致肌肉力量与平衡能力下降”这两个问题，与“延缓认知下降”的目标结合起来，提供针对认知改善的运动类型、频率和强度建议，实现一箭双雕。\",\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；认知功能下降加速。\"\n    },\n    {\n      \"node_id\": \"node_0ef2106c2f9a\",\n      \"reason\": \"该节点为《老年人失能预防运动干预临床实践指南》中的“临床问题 13：老年人进行平衡运动时，运动原则是什么？”。病例中老人跌倒风险高，平衡能力是关键。此节点提供基于循证医学的平衡训练原则，是制定个性化、安全有效的平衡训练方案的核心指导，直接针对“肌肉力量与平衡能力下降”和“预防跌倒”的需求。\",\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；夜间定向障碍导致跌倒或走失。\"\n    },\n    {\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"reason\": \"该节点为《老年人健康长寿最佳运动建议全球共识》中的“多种运动组合 可满足不同健康需求”章节。它提供了“有氧+抗阻+平衡”的组合运动框架，并针对“关节不好、体重超标”等具体情况给出了运动选择建议（如游泳）。这完美契合病例中超重、需提升平衡与肌力、且需考虑关节保护的老人，能指导制定全面、安全、个性化的运动处方。\",\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；体重超重。\"\n    },\n    {\n      \"node_id\": \"node_0bdd2088ee00\",\n      \"reason\": \"该节点为《体重管理指导原则》中专为“老年人群（65岁及以上）”制定的体重管理方案。病例老人BMI 26.0，属于超重。此节点内容结合了老年人的健康状况，提供了包括饮食、运动、睡眠、心理在内的综合管理策略，而非单纯的减重。这有助于在控制体重、减轻关节负担的同时，确保方案的安全性和可持续性，为安全运动创造条件。\",\n      \"need\": \"体重超重；BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。\"\n    }\n  ]\n}\n```"
+        },
+        "evidence_extraction": {
+          "evidence_cards": [
+            {
+              "need": "认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+              "recommendation": "建议对老人进行全面的认知功能评估，包括采用MoCA量表等标准化工具，以明确认知受损的具体程度，为后续制定干预和监测方案提供基线依据。",
+              "evidence_quote": "阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_2e69cf864bae",
+              "path": "评估 > 认知功能评估",
+              "applicability": "病例中老人明确存在“认知功能轻度受损”和“时间定向错误”，这是核心问题。进行标准化评估是管理此类问题的科学起点，符合指南推荐的首要步骤。"
+            },
+            {
+              "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+              "recommendation": "建议对老人的居住环境进行安全改造，例如安装难以轻易开启的门锁，并配备门窗感应器、远程警报系统或电子定位器等现代电子设备，以防止走失和意外伤害。",
+              "evidence_quote": "保障周围环境安全，防止患者走失、跌倒以及遭受其他意外伤害，比如安装难以被患者轻易开启的门锁，配备现代电子设备，像门窗感应器、远程警报系统以及电子定位器等。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_7781224e7770",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "applicability": "病例中老人存在“夜间定向障碍导致跌倒或走失”的短期风险，这是最紧急的安全问题。指南中的环境安全建议可直接用于预防此类意外。"
+            },
+            {
+              "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+              "recommendation": "建议在卧室、客厅等主要活动区域的显眼处摆放大型钟表、日历，或制作展示当季和节日的图片，以辅助老人进行时间定向，减少因时间混淆导致的风险。",
+              "evidence_quote": "辅助患者进行时间和空间的定向，例如在卧室、客厅、餐厅等主要活动区域显眼处摆放大型钟表、日历，制作展示当季和节日的图片，以便患者识别时间。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_7781224e7770",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "applicability": "病例中老人存在“时间定向错误”，这是夜间定向障碍的核心表现之一。通过环境中的视觉提示辅助时间定向，是针对该问题的直接、非药物干预措施。"
+            },
+            {
+              "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+              "recommendation": "建议保持老人居住环境的稳定和熟悉感，避免频繁改变家具布局或装饰，以降低其因环境陌生而产生的困惑和不安，从而减少跌倒和走失风险。",
+              "evidence_quote": "保持环境的稳定和熟悉感，避免频繁改变。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_7781224e7770",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "applicability": "对于存在认知功能轻度受损和定向障碍的老人，稳定的环境有助于其建立空间记忆和安全感，是预防因环境混淆导致意外的基础措施。"
+            },
+            {
+              "need": "夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。",
+              "recommendation": "建议在房门上张贴老人熟悉的照片或图案，帮助其在夜间或白天都能轻松识别自己的房间，减少因找错房间导致的混乱和潜在跌倒风险。",
+              "evidence_quote": "给予适度的感官刺激，如在房门上张贴患者熟悉的照片或图案，帮助其识别自己的房间。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_7781224e7770",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "applicability": "此建议针对认知障碍患者的空间定向困难。老人与老伴同住，在卧室门上做个性化标识，能直接辅助其夜间定向，贴合其“夜间定向障碍”的具体需求。"
+            },
+            {
+              "need": "认知功能下降加速，影响日常生活独立性。",
+              "recommendation": "鉴于老人目前生活自理（功能完好），照护策略应以监督和协助为主，避免过度照顾，以尽可能维持其现有的自理能力和自信心。",
+              "evidence_quote": "MCI患者日常生活能自理；轻度痴呆患者日常生活能力部分受损，推荐照护者不给予过度的照顾，主要提供监督、协助作用。",
+              "doc_name": "老年认知功能障碍慢病管理指南.pdf",
+              "node_id": "node_7781224e7770",
+              "path": "疾病管理与自我管理 > 生活照护",
+              "applicability": "病例描述老人“功能完好；生活自理”，且处于“认知功能轻度受损”阶段，与指南中MCI及轻度痴呆的照护原则完全吻合，强调维持独立性的重要性。"
+            }
+          ],
+          "batches": [
+            {
+              "batch_index": 1,
+              "node_ids": [
+                "node_2e69cf864bae",
+                "node_7781224e7770"
+              ],
+              "prompt_chars": 5116,
+              "response": "```json\n{\n  \"evidence_cards\": [\n    {\n      \"need\": \"认知功能轻度受损；时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。\",\n      \"recommendation\": \"建议对老人进行全面的认知功能评估，包括采用MoCA量表等标准化工具，以明确认知受损的具体程度，为后续制定干预和监测方案提供基线依据。\",\n      \"evidence_quote\": \"阅读此节点可以获取标准化的认知评估方法（如MoCA量表），为后续制定干预方案、监测进展提供科学依据，是管理认知问题的首要步骤。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_2e69cf864bae\",\n      \"path\": \"评估 > 认知功能评估\",\n      \"applicability\": \"病例中老人明确存在“认知功能轻度受损”和“时间定向错误”，这是核心问题。进行标准化评估是管理此类问题的科学起点，符合指南推荐的首要步骤。\"\n    },\n    {\n      \"need\": \"夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\",\n      \"recommendation\": \"建议对老人的居住环境进行安全改造，例如安装难以轻易开启的门锁，并配备门窗感应器、远程警报系统或电子定位器等现代电子设备，以防止走失和意外伤害。\",\n      \"evidence_quote\": \"保障周围环境安全，防止患者走失、跌倒以及遭受其他意外伤害，比如安装难以被患者轻易开启的门锁，配备现代电子设备，像门窗感应器、远程警报系统以及电子定位器等。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_7781224e7770\",\n      \"path\": \"疾病管理与自我管理 > 生活照护\",\n      \"applicability\": \"病例中老人存在“夜间定向障碍导致跌倒或走失”的短期风险，这是最紧急的安全问题。指南中的环境安全建议可直接用于预防此类意外。\"\n    },\n    {\n      \"need\": \"夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\",\n      \"recommendation\": \"建议在卧室、客厅等主要活动区域的显眼处摆放大型钟表、日历，或制作展示当季和节日的图片，以辅助老人进行时间定向，减少因时间混淆导致的风险。\",\n      \"evidence_quote\": \"辅助患者进行时间和空间的定向，例如在卧室、客厅、餐厅等主要活动区域显眼处摆放大型钟表、日历，制作展示当季和节日的图片，以便患者识别时间。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_7781224e7770\",\n      \"path\": \"疾病管理与自我管理 > 生活照护\",\n      \"applicability\": \"病例中老人存在“时间定向错误”，这是夜间定向障碍的核心表现之一。通过环境中的视觉提示辅助时间定向，是针对该问题的直接、非药物干预措施。\"\n    },\n    {\n      \"need\": \"夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\",\n      \"recommendation\": \"建议保持老人居住环境的稳定和熟悉感，避免频繁改变家具布局或装饰，以降低其因环境陌生而产生的困惑和不安，从而减少跌倒和走失风险。\",\n      \"evidence_quote\": \"保持环境的稳定和熟悉感，避免频繁改变。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_7781224e7770\",\n      \"path\": \"疾病管理与自我管理 > 生活照护\",\n      \"applicability\": \"对于存在认知功能轻度受损和定向障碍的老人，稳定的环境有助于其建立空间记忆和安全感，是预防因环境混淆导致意外的基础措施。\"\n    },\n    {\n      \"need\": \"夜间定向障碍导致跌倒或走失；认知功能下降加速，影响日常生活独立性。\",\n      \"recommendation\": \"建议在房门上张贴老人熟悉的照片或图案，帮助其在夜间或白天都能轻松识别自己的房间，减少因找错房间导致的混乱和潜在跌倒风险。\",\n      \"evidence_quote\": \"给予适度的感官刺激，如在房门上张贴患者熟悉的照片或图案，帮助其识别自己的房间。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_7781224e7770\",\n      \"path\": \"疾病管理与自我管理 > 生活照护\",\n      \"applicability\": \"此建议针对认知障碍患者的空间定向困难。老人与老伴同住，在卧室门上做个性化标识，能直接辅助其夜间定向，贴合其“夜间定向障碍”的具体需求。\"\n    },\n    {\n      \"need\": \"认知功能下降加速，影响日常生活独立性。\",\n      \"recommendation\": \"鉴于老人目前生活自理（功能完好），照护策略应以监督和协助为主，避免过度照顾，以尽可能维持其现有的自理能力和自信心。\",\n      \"evidence_quote\": \"MCI患者日常生活能自理；轻度痴呆患者日常生活能力部分受损，推荐照护者不给予过度的照顾，主要提供监督、协助作用。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_7781224e7770\",\n      \"path\": \"疾病管理与自我管理 > 生活照护\",\n      \"applicability\": \"病例描述老人“功能完好；生活自理”，且处于“认知功能轻度受损”阶段，与指南中MCI及轻度痴呆的照护原则完全吻合，强调维持独立性的重要性。\"\n    }\n  ]\n}\n```"
+            },
+            {
+              "batch_index": 2,
+              "node_ids": [
+                "node_d6035b80b325",
+                "node_0ef2106c2f9a"
+              ],
+              "prompt_chars": 5141,
+              "response": "```json\n{\n  \"evidence_cards\": [\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；夜间定向障碍导致跌倒或走失\",\n      \"recommendation\": \"为预防跌倒，应为老人制定从稳定到不稳定、从静态到动态的渐进式平衡训练方案，例如从双脚站立逐步过渡到单腿站立或闭眼站立。\",\n      \"evidence_quote\": \"推荐从稳定体位开始逐渐进展到不稳定体位、逐步缩小人体支撑面积和提高身体重心、从睁眼状态过渡到闭眼状态、从静态平衡进展到动态平衡。\",\n      \"doc_name\": \"老年人失能预防运动干预临床实践指南（2023版）.pdf\",\n      \"node_id\": \"node_0ef2106c2f9a\",\n      \"path\": \"临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？\",\n      \"applicability\": \"病例中老人存在夜间定向障碍导致的跌倒高风险，且锻炼不足导致平衡能力下降。此推荐提供了具体、安全的平衡训练进阶原则，直接针对提升平衡能力以预防跌倒。\"\n    },\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；夜间定向障碍导致跌倒或走失\",\n      \"recommendation\": \"建议老人每周进行1-7次平衡运动，每次1-2组，每组包含4-10种不同练习，并务必在栏杆等安全环境下进行。\",\n      \"evidence_quote\": \"建议老年人进行平衡运动每周1~7次，每次1~2组，每组4~10种不同的练习。对于老年人，平衡运动应每周安排，但其也是相对风险较高的运动，因此，应在栏杆或双杠附近进行练习，确保可以抓住以保证安全。\",\n      \"doc_name\": \"老年人失能预防运动干预临床实践指南（2023版）.pdf\",\n      \"node_id\": \"node_0ef2106c2f9a\",\n      \"path\": \"临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？\",\n      \"applicability\": \"病例中老人体力活动不足，锻炼频率仅为‘有时’，且存在跌倒风险。此推荐提供了明确的平衡运动频率和内容安排，并强调了安全措施，适合用于制定具体、可执行的锻炼计划。\"\n    },\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足；认知功能下降加速\",\n      \"recommendation\": \"应将运动治疗作为延缓该老人认知功能下降的核心非药物干预手段，并将其纳入日常家庭实践中。\",\n      \"evidence_quote\": \"应该将生活方式干预纳入日常家庭实践，生活方式医学属于循证方法，通过用健康的行为取代不健康的行为来预防、治疗和促进疾病的转归。\",\n      \"doc_name\": \"老年认知功能障碍慢病管理指南.pdf\",\n      \"node_id\": \"node_d6035b80b325\",\n      \"path\": \"生活方式干预 > 运动治疗\",\n      \"applicability\": \"病例中老人同时存在体力活动不足、肌肉力量与平衡能力下降以及认知功能下降加速的风险。此推荐将运动提升为一种需要长期坚持的“生活方式医学”，能同时应对其体力与认知两方面的风险。\"\n    },\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足\",\n      \"recommendation\": \"建议在运动前后安排柔韧性运动，对颈、肩、髋、膝、踝等主要关节进行缓慢牵拉，以感觉轻微不适为度，以提高活动安全性和灵活性。\",\n      \"evidence_quote\": \"推荐老年人进行柔韧性运动，可安排在运动前后，包含对各个关节的牵拉，动作缓慢，穿插放松环节，过程中始终保持轻微的不适感。柔韧性运动可提高运动和日常生活过程中的安全性和灵活性。\",\n      \"doc_name\": \"老年人失能预防运动干预临床实践指南（2023版）.pdf\",\n      \"node_id\": \"node_0ef2106c2f9a\",\n      \"path\": \"临床问题及推荐意见 > 临床问题 13：老年人进行平衡运动时，运动原则是什么？\",\n      \"applicability\": \"病例中老人锻炼不足，肌肉力量和平衡能力下降，进行运动时存在损伤风险。此推荐提供了具体、安全的柔韧性运动方法，能帮助老人减少运动损伤，是制定完整运动方案的必要组成部分。\"\n    }\n  ]\n}\n```"
+            },
+            {
+              "batch_index": 3,
+              "node_ids": [
+                "node_0937fa3cddb9",
+                "node_0bdd2088ee00"
+              ],
+              "prompt_chars": 3200,
+              "response": "```json\n{\n  \"evidence_cards\": [\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体力活动不足\",\n      \"recommendation\": \"为该老人制定包含有氧、抗阻和平衡训练的组合运动方案，以全面提升心肺耐力、肌肉力量和平衡能力，降低跌倒风险。\",\n      \"evidence_quote\": \"老年人运动需遵循“有氧运动+抗阻训练+平衡训练”的组合原则，三者缺一不可，可根据自身健康状况灵活调整优先级。\",\n      \"doc_name\": \"老年人健康长寿最佳运动建议全球共识.pdf\",\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"path\": \"《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求\",\n      \"applicability\": \"病例老人存在体力活动不足、锻炼不足导致肌力与平衡下降的风险，该组合原则提供了全面的运动干预框架，直接针对其功能短板。\"\n    },\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降；体重超重\",\n      \"recommendation\": \"建议老人选择游泳、水中漫步等低冲击有氧运动，在保护关节的同时达到锻炼和控制体重的目的。\",\n      \"evidence_quote\": \"对于关节不好、体重超标或高血压的老年人，游泳、水中漫步等低冲击运动是理想选择，能在保护关节的同时达到锻炼目的。\",\n      \"doc_name\": \"老年人健康长寿最佳运动建议全球共识.pdf\",\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"path\": \"《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求\",\n      \"applicability\": \"病例老人BMI为26.0（超重），存在关节负担加重的潜在风险，低冲击运动建议能兼顾其体重状况和关节保护需求。\"\n    },\n    {\n      \"need\": \"因锻炼不足导致肌肉力量与平衡能力下降\",\n      \"recommendation\": \"为老人安排每周2-3天的抗阻训练（如深蹲、靠墙静蹲），以预防肌肉流失，维持独立生活能力。\",\n      \"evidence_quote\": \"抗阻训练是预防肌肉流失的关键运动，肌肉量的维持直接关系到老年人的独立生活能力。居家练习者则适合深蹲、靠墙静蹲、跪姿俯卧撑、平板支撑等徒手训练。建议每周开展 2~3 天。\",\n      \"doc_name\": \"老年人健康长寿最佳运动建议全球共识.pdf\",\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"path\": \"《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求\",\n      \"applicability\": \"病例老人存在肌肉力量下降的中期风险，抗阻训练建议可直接用于制定居家肌力训练计划，对抗肌肉流失。\"\n    },\n    {\n      \"need\": \"夜间定向障碍导致跌倒或走失；因锻炼不足导致肌肉力量与平衡能力下降\",\n      \"recommendation\": \"将单腿站立、太极等平衡训练纳入每日活动，并可结合行走时数步数等认知任务，以针对性预防跌倒。\",\n      \"evidence_quote\": \"平衡训练可选择单腿站立、脚跟走/脚尖走、太极、八段锦等，还可搭配认知任务（如行走时数步数、做简单算术）提升综合协调能力；平衡训练是预防跌倒的重点。\",\n      \"doc_name\": \"老年人健康长寿最佳运动建议全球共识.pdf\",\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"path\": \"《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求\",\n      \"applicability\": \"病例老人有夜间定向障碍导致的跌倒风险，平衡训练是预防跌倒的核心，结合认知任务的训练方式还能同时刺激其认知功能。\"\n    },\n    {\n      \"need\": \"体重超重；因锻炼不足导致肌肉力量与平衡能力下降\",\n      \"recommendation\": \"结合老人健康状况，制定综合性的体重管理方案，方案应包含营养、运动、睡眠等多方面，并鼓励其在熟悉环境中规律活动。\",\n      \"evidence_quote\": \"结合老年人的健康状况和肥胖相关危险因素，全面评估体重管理对改善老年人机体功能的作用，制定相应营养和运动方案。在身体允许的情况下，鼓励在熟悉环境中进行规律活动，减少静坐时间。\",\n      \"doc_name\": \"体重管理指导原则（2024 年版）.pdf\",\n      \"node_id\": \"node_0bdd2088ee00\",\n      \"path\": \"特殊人群的体重管理 > 老年人群（65 岁及以上）\",\n      \"applicability\": \"病例老人BMI 26.0属于超重，此原则强调结合健康状况制定综合方案，而非单纯减重，符合老年人安全、可持续的管理需求，并为运动干预提供支持。\"\n    },\n    {\n      \"need\": \"认知功能轻度受损；时间定向错误；夜间定向障碍导致跌倒或走失\",\n      \"recommendation\": \"在平衡训练（如行走）中，设计搭配数步数、简单算术等认知任务，以同步锻炼其平衡能力和认知功能。\",\n      \"evidence_quote\": \"平衡训练……还可搭配认知任务（如行走时数步数、做简单算术）提升综合协调能力。\",\n      \"doc_name\": \"老年人健康长寿最佳运动建议全球共识.pdf\",\n      \"node_id\": \"node_0937fa3cddb9\",\n      \"path\": \"《老年人健康长寿最佳运动建议全球共识》发布 | 延长健康寿命，应从开药到开运动处方 > 多种运动组合 可满足不同健康需求\",\n      \"applicability\": \"病例老人存在认知功能轻度受损和时间定向错误，将认知任务融入平衡训练，是一种针对性的双重任务训练，有助于改善其认知-运动协调能力。\"\n    }\n  ]\n}\n```"
+            }
+          ]
+        }
+      },
+      "risk_prevention": {
+        "hits": [],
+        "context": ""
+      },
+      "disease_management": {
+        "hits": [],
+        "context": ""
+      },
+      "functional_training": {
+        "hits": [],
+        "context": ""
+      }
+    },
+    "actions": {
+      "actions": [
+        {
+          "action_id": "A1",
+          "title": "建立认知功能评估基线",
+          "subtitle": "明确认知受损程度，为后续管理提供依据",
+          "how_to_do": [
+            "由老伴或保姆陪同，前往社区卫生服务中心或综合医院老年科/神经内科挂号",
+            "向医生说明老人存在时间定向错误的情况，并请求进行一次标准化的认知功能评估（如医生建议的MoCA量表等）",
+            "记录医生给出的评估结果和后续建议"
+          ],
+          "completion_criteria": "获得并保留一份由医疗机构出具的认知功能评估报告或记录单",
+          "timeframe": "本月",
+          "difficulty": "中",
+          "cost": "低",
+          "impact": "高",
+          "category": "医疗保障与就医通道"
+        },
+        {
+          "action_id": "A2",
+          "title": "固定一位家庭医生或老年科医生",
+          "subtitle": "建立长期、稳定的医疗咨询关系",
+          "how_to_do": [
+            "在完成认知评估的社区卫生服务中心或医院，询问是否可以签约家庭医生服务或固定一位老年科医生",
+            "记录该医生的姓名、科室、出诊时间及联系方式",
+            "将信息告知老伴和保姆"
+          ],
+          "completion_criteria": "获得并记录下固定医生的联系方式和下次复诊预约凭证",
+          "timeframe": "本月",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "高",
+          "category": "医疗保障与就医通道"
+        },
+        {
+          "action_id": "A3",
+          "title": "安装卧室到卫生间的地脚夜灯",
+          "subtitle": "消除夜间路径上的黑暗区域，预防跌倒",
+          "how_to_do": [
+            "测量从床边到卫生间门口的路径长度",
+            "购买3-4个插电或充电式、光线柔和的自动感应地脚夜灯",
+            "由老伴或保姆协助，将夜灯间隔安装在床边、走廊和卫生间门口的地面或墙脚"
+          ],
+          "completion_criteria": "在完全黑暗环境下，从床边到卫生间门口全程有夜灯自动照亮，无黑暗死角，并拍照记录",
+          "timeframe": "本周",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "高",
+          "category": "居家安全"
+        },
+        {
+          "action_id": "A4",
+          "title": "制作并张贴卧室与卫生间标识",
+          "subtitle": "辅助夜间空间定向，减少慌乱",
+          "how_to_do": [
+            "选择老人熟悉、喜欢的图案或照片（如个人照、风景画）打印成A4大小",
+            "将图案分别贴在卧室门和卫生间门的显眼位置（高度约1.5米）",
+            "向老人解释标识的用途：“晚上起来，看到这个画就是卧室/厕所”"
+          ],
+          "completion_criteria": "卧室门和卫生间门上各贴有一张醒目的标识图案，并拍照记录",
+          "timeframe": "48小时内",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "中",
+          "category": "居家安全"
+        },
+        {
+          "action_id": "A5",
+          "title": "在客厅放置大型电子钟和日历",
+          "subtitle": "提供清晰的时间视觉提示，辅助时间定向",
+          "how_to_do": [
+            "购买一个数字大、带日期和星期显示的大型电子钟，以及一本单页日期清晰的台历",
+            "将电子钟和台历放置在客厅老人常坐位置的正前方，确保视线无遮挡",
+            "每天早晨由老伴或保姆与老人一起核对并翻动日历页"
+          ],
+          "completion_criteria": "客厅老人常坐位置前方，摆放好大型电子钟和翻到正确日期的台历，并拍照记录",
+          "timeframe": "本周",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "中",
+          "category": "居家安全"
+        },
+        {
+          "action_id": "A6",
+          "title": "建立每日“认知训练+散步”固定日程",
+          "subtitle": "将认知训练融入生活，并增加规律活动",
+          "how_to_do": [
+            "与老人商定每日固定时间（如上午10点）进行两项活动",
+            "认知训练：进行10分钟简单的认知游戏，如拼图、找不同、回忆昨天三餐",
+            "体力活动：随后进行15-20分钟的户外散步，由老伴或保姆陪同",
+            "由保姆负责在日历上每日勾选完成情况"
+          ],
+          "completion_criteria": "连续一周，日历上每天都有“认知游戏”和“散步”两项活动的完成勾选记录",
+          "timeframe": "两周内",
+          "difficulty": "中",
+          "cost": "低",
+          "impact": "高",
+          "category": "活动与营养"
+        },
+        {
+          "action_id": "A7",
+          "title": "调整晚餐主食份量并记录体重",
+          "subtitle": "控制总热量摄入，管理超重",
+          "how_to_do": [
+            "与老伴和保姆沟通，将老人晚餐的主食（米饭、面条等）份量减少约1/4",
+            "确保午餐和晚餐蔬菜摄入量增加，以增加饱腹感",
+            "每周固定一天早晨，如厕后、早餐前，由老伴或保姆协助用家用体重秤测量并记录体重"
+          ],
+          "completion_criteria": "连续四周，每周有一张记录有具体日期和体重的数据纸条或手机截图",
+          "timeframe": "1-3个月",
+          "difficulty": "中",
+          "cost": "低",
+          "impact": "中",
+          "category": "活动与营养"
+        },
+        {
+          "action_id": "A8",
+          "title": "组织每周一次的家庭社交活动",
+          "subtitle": "维持社交互动，提供情感支持",
+          "how_to_do": [
+            "与老伴、子女（如可能）商定每周一个固定晚上（如周六晚）为家庭活动时间",
+            "活动内容可以是：一起看老照片并讲述故事、合作完成一顿简单的晚餐、玩简单的棋牌游戏",
+            "由老伴或子女提前一天提醒老人活动安排"
+          ],
+          "completion_criteria": "连续一个月，每周有至少一次家庭社交活动的照片或简短文字记录",
+          "timeframe": "本月",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "中",
+          "category": "情绪与社交"
+        },
+        {
+          "action_id": "A9",
+          "title": "为保姆提供认知照护要点培训",
+          "subtitle": "确保日常照护方法科学、一致",
+          "how_to_do": [
+            "由老伴或子女收集本次行动计划中关于认知辅助和安全改造的要点（如使用标识、固定日程）",
+            "与保姆进行一次正式沟通，逐条解释这些做法的目的和具体操作方式",
+            "将要点打印成简易清单，贴在厨房或客厅醒目处供保姆日常参考"
+          ],
+          "completion_criteria": "完成一次与保姆的培训沟通，并有一份张贴在公共区域的照护要点清单照片",
+          "timeframe": "两周内",
+          "difficulty": "中",
+          "cost": "低",
+          "impact": "高",
+          "category": "照护资源对接"
+        },
+        {
+          "action_id": "A10",
+          "title": "了解并记录社区养老服务资源",
+          "subtitle": "为未来可能的需求提前准备",
+          "how_to_do": [
+            "由老伴或子女致电或前往社区居委会，询问本社区是否提供日间照料、上门护理、老年餐等服务",
+            "记录相关服务的名称、联系方式、申请条件和大致费用",
+            "将信息整理后告知老伴和保姆"
+          ],
+          "completion_criteria": "获得一份手写或打印的社区养老服务资源清单，包含至少两项服务的联系信息",
+          "timeframe": "本月",
+          "difficulty": "低",
+          "cost": "低",
+          "impact": "中",
+          "category": "照护资源对接"
+        }
+      ]
+    },
+    "priority": {
+      "weights": {
+        "urgency": 0.4,
+        "preventability": 0.3,
+        "feasibility": 0.25,
+        "cost_effectiveness": 0.05
+      },
+      "priority_a": [
+        {
+          "action_id": "A3",
+          "rank": 1,
+          "scores": {
+            "risk_severity": 9,
+            "time_criticality": 9,
+            "urgency": 9.0,
+            "preventability": 9,
+            "feasibility": 10,
+            "cost_effectiveness": 10
+          },
+          "weighted_score": 9.2,
+          "reason": "根据规则4，urgency=9.0≥9.0，属于短期重大风险对策（预防夜间跌倒），必须进入A类并排在前列。"
+        },
+        {
+          "action_id": "A4",
+          "rank": 2,
+          "scores": {
+            "risk_severity": 8,
+            "time_criticality": 10,
+            "urgency": 9.0,
+            "preventability": 8,
+            "feasibility": 10,
+            "cost_effectiveness": 10
+          },
+          "weighted_score": 8.9,
+          "reason": "根据规则4，urgency=9.0≥9.0，属于短期重大风险对策（预防夜间走失/慌乱），必须进入A类并排在前列。"
+        },
+        {
+          "action_id": "A1",
+          "rank": 3,
+          "scores": {
+            "risk_severity": 8,
+            "time_criticality": 8,
+            "urgency": 8.0,
+            "preventability": 9,
+            "feasibility": 7,
+            "cost_effectiveness": 8
+          },
+          "weighted_score": 8.0,
+          "reason": "常规排序：加权得分8.0分，在非紧急类中最高。这是所有认知管理的基础，可预防性高（明确受损程度才能有效干预），虽然可行性中等（需就医），但成本效益好。"
+        }
+      ],
+      "priority_b": [
+        {
+          "action_id": "A9",
+          "rank": 4,
+          "scores": {
+            "risk_severity": 7,
+            "time_criticality": 7,
+            "urgency": 7.0,
+            "preventability": 9,
+            "feasibility": 7,
+            "cost_effectiveness": 9
+          },
+          "weighted_score": 7.6,
+          "reason": "常规排序：加权得分7.6分。确保照护一致性对预防风险至关重要，可预防性高，成本极低，但可行性受沟通效果影响。"
+        },
+        {
+          "action_id": "A2",
+          "rank": 5,
+          "scores": {
+            "risk_severity": 7,
+            "time_criticality": 7,
+            "urgency": 7.0,
+            "preventability": 8,
+            "feasibility": 9,
+            "cost_effectiveness": 9
+          },
+          "weighted_score": 7.6,
+          "reason": "常规排序：加权得分7.6分。建立稳定的医疗关系是长期健康管理的基础，可预防性高，可行性高（难度低），成本效益好。"
+        },
+        {
+          "action_id": "A5",
+          "rank": 6,
+          "scores": {
+            "risk_severity": 6,
+            "time_criticality": 7,
+            "urgency": 6.5,
+            "preventability": 8,
+            "feasibility": 10,
+            "cost_effectiveness": 10
+          },
+          "weighted_score": 7.5,
+          "reason": "常规排序：加权得分7.5分。直接针对时间定向错误进行环境干预，可预防性良好，可行性极高（极易实施），成本极低。"
+        },
+        {
+          "action_id": "A6",
+          "rank": 7,
+          "scores": {
+            "risk_severity": 6,
+            "time_criticality": 6,
+            "urgency": 6.0,
+            "preventability": 9,
+            "feasibility": 6,
+            "cost_effectiveness": 9
+          },
+          "weighted_score": 7.0,
+          "reason": "常规排序：加权得分7.0分。针对中期认知下降和锻炼不足风险，可预防性高，但可行性中等（需建立并坚持习惯）。"
+        }
+      ],
+      "priority_c": [
+        {
+          "action_id": "A8",
+          "rank": 8,
+          "scores": {
+            "risk_severity": 5,
+            "time_criticality": 5,
+            "urgency": 5.0,
+            "preventability": 8,
+            "feasibility": 8,
+            "cost_effectiveness": 9
+          },
+          "weighted_score": 6.5,
+          "reason": "常规排序：加权得分6.5分。属于长期情绪与社交支持，对认知有积极影响但非紧急，可行性高。"
+        },
+        {
+          "action_id": "A7",
+          "rank": 9,
+          "scores": {
+            "risk_severity": 4,
+            "time_criticality": 3,
+            "urgency": 3.5,
+            "preventability": 7,
+            "feasibility": 6,
+            "cost_effectiveness": 8
+          },
+          "weighted_score": 5.2,
+          "reason": "常规排序：加权得分5.2分。属于长期生活方式调整（体重管理），紧迫性低，需要较长时间才能看到效果，可行性中等。"
+        },
+        {
+          "action_id": "A10",
+          "rank": 10,
+          "scores": {
+            "risk_severity": 3,
+            "time_criticality": 3,
+            "urgency": 3.0,
+            "preventability": 6,
+            "feasibility": 9,
+            "cost_effectiveness": 8
+          },
+          "weighted_score": 5.0,
+          "reason": "常规排序：加权得分5.0分。属于前瞻性资源储备，对当前风险无直接缓解作用，紧迫性最低，但可行性高。"
+        }
+      ]
+    },
+    "review": {
+      "consistency_check": {
+        "passed": true,
+        "issues": []
+      },
+      "safety_check": {
+        "urgent": false,
+        "urgent_reason": "",
+        "red_flags": [],
+        "high_attention": [
+          "夜间定向障碍导致跌倒或走失",
+          "认知功能下降加速"
+        ]
+      },
+      "executability_check": {
+        "passed": true,
+        "issues": []
+      },
+      "completeness_check": {
+        "passed": true,
+        "missing": [],
+        "coverage": {
+          "action_count": 10,
+          "categories_present": [
+            "医疗保障与就医通道",
+            "居家安全",
+            "活动与营养",
+            "情绪与社交",
+            "照护资源对接"
+          ],
+          "categories_missing": [
+            "慢性病管理"
+          ]
+        }
+      },
+      "format_check": {
+        "passed": true,
+        "issues": []
+      },
+      "safety_language_check": {
+        "passed": true,
+        "issues": []
+      },
+      "suggestions": [
+        "行动计划共10条，略低于建议的8-12条范围，可考虑增加1-2条以增强全面性。",
+        "行动计划类别中缺少‘慢性病管理’。虽然当前无慢性病，但考虑到超重（BMI 26.0）是未来慢性病风险因素，可增加一条关于定期监测血压/血糖或营养咨询的行动，以完善类别覆盖。",
+        "优先级排序中，A类有3条（符合≤3），B类有4条（符合4-7），C类有3条，分布合理。rank从1到10连续递增，无重复。"
+      ],
+      "overall_quality": "优",
+      "approved": true,
+      "input_quality": {
+        "completeness_score": 97,
+        "confidence_level": "高",
+        "notes": "信息完整度为100%，结论与建议可信度最高。"
+      }
+    },
+    "report": "# 健康评估与照护行动计划\n\n## 0. 报告说明\n本报告基于您/家属提供的信息进行风险提示与照护建议，不能替代医生面诊；涉及用药与检查，请以医生意见为准。\n\n## 1. 健康报告总结\n1.  您目前身体功能很好，生活上完全能够自己照顾自己，这是非常棒的基础。\n2.  当前最需要关注的是，您有时会搞不清楚时间，这可能会在晚上起床时带来一些安全风险，同时，身体活动量还可以再增加一些。\n3.  我们的计划是，首先确保您晚上起夜时的安全，然后通过一些简单的方法来帮助您保持头脑清晰和身体活力，咱们一步一步来。\n\n## 2. 您的健康画像（现在“好在哪里、短板在哪里”）\n### （1）功能状态：功能完好\n您能自己完成所有日常活动，比如穿衣、吃饭、出门买东西、管理家务等，健康状况良好，完全能够自理。\n\n### （2）优势（需要继续保持）\n*   **生活能力强**：您能把自己的生活打理得井井有条，非常独立。\n*   **心态好**：您平时心情不错，很少感到孤单、焦虑或情绪低落。\n*   **生活习惯好**：您不抽烟也不喝酒，这对健康非常有益。\n*   **家庭支持好**：和老伴一起住，经济条件也好，这些都是您健康的坚实后盾。\n\n### （3）主要问题（本报告重点要解决的）\n1.  **头脑有时会“迷糊”**：主要是对时间的判断偶尔会出错。这虽然现在不影响生活，但如果不注意，可能会增加晚上起床时跌倒或走错路的风险，长期来看也可能让头脑的灵活性下降。\n2.  **活动量不太够**：锻炼身体只是“有时”进行，这可能会让肌肉力量和身体平衡感慢慢变弱。\n3.  **体重有点超标**：目前的体重指数属于超重范围，长期来看可能会增加关节负担和一些慢性病的风险。\n\n## 3. 风险因素\n### 近期（1-4周）重点风险：\n*   **晚上起床时跌倒或走错路**：因为对时间判断不清，晚上起夜去厕所或喝水时，可能会因为一时迷糊、找不到方向而慌乱，增加摔倒或走失的风险。\n\n### 中期（1-6月）重点风险：\n*   **头脑灵活性下降，影响独立生活**：如果时间判断不清的问题持续存在，可能会慢慢影响到其他方面的思考能力，比如管理药物、处理财务等更复杂的事情，从而影响您独立生活的能力。\n*   **肌肉力量和平衡感变差**：如果身体活动一直不足，肌肉力量和保持平衡的能力会慢慢下降，摔倒的风险会一点点累积起来。\n\n**注：** 风险提示不代表一定会发生，而是提醒优先把“最要命、最可防”的环节补上。\n\n## 4. 健康建议\n\n### A. 第一优先级（本周/本月内完成，解决最紧急的安全问题）\n**1）安装卧室到卫生间的地脚夜灯**\n*   **怎么做**：\n    *   量一下从床边到卫生间门口有多远。\n    *   买3-4个插电或充电的、光线柔和的自动感应小夜灯。\n    *   请老伴或保姆帮忙，把这些小夜灯间隔着安装在床边、走廊和卫生间门口的地面或墙脚。\n*   **完成标准**：晚上关灯后，从床边走到卫生间门口，一路上都有小夜灯自动亮起来照亮，没有黑漆漆的角落。可以拍张照片记录一下。\n\n**2）制作并张贴卧室与卫生间标识**\n*   **怎么做**：\n    *   选您熟悉、喜欢的图案或照片（比如您自己的照片、喜欢的风景画），打印成A4纸大小。\n    *   把图案分别贴在卧室门和卫生间门显眼的位置（大概和您视线平齐的高度）。\n    *   跟您解释一下：“晚上起来，看到这个画就是卧室/厕所。”\n*   **完成标准**：卧室门和卫生间门上各贴好了一张醒目的标识图案。可以拍张照片记录一下。\n\n**3）去医院做一次头脑功能检查**\n*   **怎么做**：\n    *   请老伴或保姆陪着，去社区卫生服务中心或者大医院的老年科、神经内科挂个号。\n    *   告诉医生您有时会搞不清时间，请医生帮忙做一个标准的头脑功能评估（比如医生可能会用一些简单的问卷或小测试）。\n    *   记下医生给的检查结果和建议。\n*   **完成标准**：拿到一份医院出具的头脑功能评估报告或记录单，并保管好。\n\n### B. 第二优先级（两周内/本月内启动，巩固基础管理）\n**1）给保姆讲讲怎么更好地照顾您**\n*   **怎么做**：\n    *   请老伴或子女把这份计划里关于头脑辅助和安全改造的要点（比如用标识、固定日程）整理出来。\n    *   和保姆正式聊一次，一条一条告诉她这些做法的目的和具体怎么操作。\n    *   把这些要点打印成一张简单的清单，贴在厨房或客厅显眼的地方，方便保姆随时看。\n*   **完成标准**：已经和保姆培训沟通了一次，并且有一张照护要点清单贴在了家里的公共区域。可以拍张清单的照片。\n\n**2）固定一位您信得过的医生**\n*   **怎么做**：\n    *   在做完头脑检查的社区医院或大医院，问问能不能签约家庭医生，或者固定找一位老年科的医生。\n    *   记下这位医生的姓名、科室、什么时候上班以及联系方式。\n    *   把这个信息告诉老伴和保姆。\n*   **完成标准**：拿到了固定医生的联系方式和下次复诊的预约凭证，并记录了下来。\n\n**3）在客厅放一个大钟和一本日历**\n*   **怎么做**：\n    *   买一个数字很大、能显示日期和星期的大型电子钟，再买一本每页日期都印得很清楚的台历。\n    *   把大钟和台历放在客厅您常坐位置的正前方，确保您一抬头就能清楚地看到。\n    *   每天早晨，请老伴或保姆和您一起核对一下日期，并把日历翻到新的一页。\n*   **完成标准**：客厅您常坐的位置前方，已经摆好了大电子钟和翻到正确日期的台历。可以拍张照片记录一下。\n\n**4）每天固定时间动动脑、散散步**\n*   **怎么做**：\n    *   和您商量好，每天固定一个时间（比如上午10点）做两件事。\n    *   **动脑游戏**：先花10分钟玩点简单的游戏，比如拼拼图、找找两幅画哪里不一样、回忆一下昨天三餐吃了什么。\n    *   **散步活动**：接着出门散步15-20分钟，请老伴或保姆陪着。\n    *   请保姆负责每天在日历上勾选这两项活动是否完成。\n*   **完成标准**：连续一个星期，日历上每天都有“动脑游戏”和“散步”这两项的完成勾选记录。\n\n### C. 第三优先级（本月内/1-3个月内规划，着眼长期健康）\n**1）每周安排一次家庭聚会**\n*   **怎么做**：\n    *   和老伴、子女（如果方便的话）商量好，每周固定一个晚上（比如周六晚上）作为家庭活动时间。\n    *   活动内容可以是一起看看老照片讲讲过去的故事、合作做一顿简单的晚饭、或者玩点简单的棋牌游戏。\n    *   请老伴或子女提前一天提醒您有这个安排。\n*   **完成标准**：连续一个月，每周都至少有一次家庭聚会的照片或简短文字记录。\n\n**2）调整晚饭主食，每周记一次体重**\n*   **怎么做**：\n    *   和老伴、保姆说好，把您晚饭的主食（米饭、面条等）的量减少大约四分之一。\n    *   保证午餐和晚餐多吃点蔬菜，这样肚子更饱。\n    *   每周固定一天早上，上完厕所后、吃早饭前，请老伴或保姆帮忙用家里的体重秤称一下体重，并记录下来。\n*   **完成标准**：连续四个星期，每周都有一张写着具体日期和体重的记录条（或手机截图）。\n\n**3）提前了解一下社区能提供的养老服务**\n*   **怎么做**：\n    *   请老伴或子女给社区居委会打个电话或者去一趟，问问咱们社区有没有提供比如白天托管、上门帮忙护理、送老年餐这类服务。\n    *   记下这些服务的名字、怎么联系、大概要什么条件、费用多少。\n    *   把了解到的信息整理好，告诉老伴和保姆。\n*   **完成标准**：拿到一份手写或打印的社区养老服务清单，上面至少有两项服务的联系信息。\n\n## 5. 温馨寄语\n大爷，看到您身体底子这么好，心态也积极，真的为您高兴。这份计划看起来内容不少，但您千万别有压力。咱们的核心就两点：一是保证您晚上起夜平平安安，二是让您的头脑和身体都保持活力。很多事情，比如贴个画、放个钟，都是举手之劳。您和老伴、保姆一起，挑着最前面、最容易的先做起来。健康管理就像散步，不用跑，只要方向对，一步一步走，就能稳稳当当地走向更好的状态。您已经做得很棒了，咱们一起再接再厉！\n\n## 6. 报告参考价值\n本次生成报告参考价值**高**：信息完整，结论与建议可信度高。"
+  },
+  "report_data": {
+    "summary": "1.  您目前身体功能很好，生活上完全能够自己照顾自己，这是非常棒的基础。 2.  当前最需要关注的是，您有时会搞不清楚时间，这可能会在晚上起床时带来一些安全风险，同时，身体活动量还可以再增加一些。 3.  我们的计划是，首先确保您晚上起夜时的安全，然后通过一些简单的方法来帮助您保持头脑清晰和身体活力，咱们一步一步来。",
+    "healthPortrait": {
+      "functionalStatus": "老人所有基本生活活动和工具性活动都能独立完成，健康状况良好，完全能够自理。",
+      "strengths": [
+        "BADL与IADL完全自理（BADL受限: []， IADL受限: []）",
+        "无慢性病（慢性病总问: 没有）",
+        "心理状态良好（抑郁感: 从不，焦虑感: 从不，孤独感: 从不）",
+        "无不良嗜好（吸烟: 从不，饮酒: 从不）",
+        "社会支持良好（居住: 和老伴，经济: 好）"
+      ],
+      "problems": [
+        "认知功能轻度受损: 时间定向错误，是夜间定向障碍导致跌倒或走失的中等风险因素，也是认知功能下降加速的中期风险因素。",
+        "体力活动不足: 锻炼频率为‘有时’，是导致肌肉力量与平衡能力下降的低风险因素。",
+        "体重超重: BMI为26.0（超重），是未来发生代谢性疾病和关节负担加重的潜在风险。"
+      ]
+    },
+    "riskFactors": {
+      "shortTerm": [
+        {
+          "name": "夜间定向障碍导致跌倒或走失",
+          "level": "medium",
+          "description": "夜间起床如厕、饮水时，因时间定向错误而慌乱或迷失方向；加强夜间照明与安全引导，设置清晰路径标识",
+          "timeframe": "1-4周"
+        }
+      ],
+      "midTerm": [
+        {
+          "name": "认知功能下降加速，影响日常生活独立性",
+          "level": "medium",
+          "description": "时间定向错误（孤立认知缺陷）→ 可能发展为更广泛的定向或执行功能障碍 → 影响IADL（如管理药物、财务）→ 独立性下降；定期认知训练与评估，建立规律生活日程，老伴/保姆协助监督关键事务",
+          "timeframe": "1-6月"
+        },
+        {
+          "name": "因锻炼不足导致肌肉力量与平衡能力下降",
+          "level": "low",
+          "description": "锻炼频率“有时”→ 身体活动量可能不足 → 肌肉力量与平衡能力渐进性下降 → 跌倒风险累积性增加；制定并执行规律的中等强度锻炼计划（如散步、太极），增强肌力与平衡",
+          "timeframe": "1-6月"
+        }
+      ]
+    },
+    "recommendations": {
+      "priority1": [
+        {
+          "id": "A1",
+          "title": "安装卧室到卫生间的地脚夜灯",
+          "description": "怎么做：量一下从床边到卫生间门口有多远。；买34个插电或充电的、光线柔和的自动感应小夜灯。；请老伴或保姆帮忙，把这些小夜灯间隔着安装在床边、走廊和卫生间门口的地面或墙脚。；完成标准：晚上关灯后，从床边走到卫生间门口，一路上都有小夜灯自动亮起来照亮，没有黑漆漆的角落。可以拍张照片记录一下。",
+          "category": "第一优先级",
+          "completed": false
+        },
+        {
+          "id": "A2",
+          "title": "制作并张贴卧室与卫生间标识",
+          "description": "怎么做：选您熟悉、喜欢的图案或照片（比如您自己的照片、喜欢的风景画），打印成A4纸大小。；把图案分别贴在卧室门和卫生间门显眼的位置（大概和您视线平齐的高度）。；跟您解释一下：“晚上起来，看到这个画就是卧室/厕所。”；完成标准：卧室门和卫生间门上各贴好了一张醒目的标识图案。可以拍张照片记录一下。",
+          "category": "第一优先级",
+          "completed": false
+        },
+        {
+          "id": "A3",
+          "title": "去医院做一次头脑功能检查",
+          "description": "怎么做：请老伴或保姆陪着，去社区卫生服务中心或者大医院的老年科、神经内科挂个号。；告诉医生您有时会搞不清时间，请医生帮忙做一个标准的头脑功能评估（比如医生可能会用一些简单的问卷或小测试）。；记下医生给的检查结果和建议。；完成标准：拿到一份医院出具的头脑功能评估报告或记录单，并保管好。",
+          "category": "第一优先级",
+          "completed": false
+        }
+      ],
+      "priority2": [
+        {
+          "id": "B1",
+          "title": "给保姆讲讲怎么更好地照顾您",
+          "description": "怎么做：请老伴或子女把这份计划里关于头脑辅助和安全改造的要点（比如用标识、固定日程）整理出来。；和保姆正式聊一次，一条一条告诉她这些做法的目的和具体怎么操作。；把这些要点打印成一张简单的清单，贴在厨房或客厅显眼的地方，方便保姆随时看。；完成标准：已经和保姆培训沟通了一次，并且有一张照护要点清单贴在了家里的公共区域。可以拍张清单的照片。",
+          "category": "第二优先级",
+          "completed": false
+        },
+        {
+          "id": "B2",
+          "title": "固定一位您信得过的医生",
+          "description": "怎么做：在做完头脑检查的社区医院或大医院，问问能不能签约家庭医生，或者固定找一位老年科的医生。；记下这位医生的姓名、科室、什么时候上班以及联系方式。；把这个信息告诉老伴和保姆。；完成标准：拿到了固定医生的联系方式和下次复诊的预约凭证，并记录了下来。",
+          "category": "第二优先级",
+          "completed": false
+        },
+        {
+          "id": "B3",
+          "title": "在客厅放一个大钟和一本日历",
+          "description": "怎么做：买一个数字很大、能显示日期和星期的大型电子钟，再买一本每页日期都印得很清楚的台历。；把大钟和台历放在客厅您常坐位置的正前方，确保您一抬头就能清楚地看到。；每天早晨，请老伴或保姆和您一起核对一下日期，并把日历翻到新的一页。；完成标准：客厅您常坐的位置前方，已经摆好了大电子钟和翻到正确日期的台历。可以拍张照片记录一下。",
+          "category": "第二优先级",
+          "completed": false
+        },
+        {
+          "id": "B4",
+          "title": "每天固定时间动动脑、散散步",
+          "description": "怎么做：和您商量好，每天固定一个时间（比如上午10点）做两件事。；动脑游戏：先花10分钟玩点简单的游戏，比如拼拼图、找找两幅画哪里不一样、回忆一下昨天三餐吃了什么。；散步活动：接着出门散步1520分钟，请老伴或保姆陪着。；请保姆负责每天在日历上勾选这两项活动是否完成。；完成标准：连续一个星期，日历上每天都有“动脑游戏”和“散步”这两项的完成勾选记录。",
+          "category": "第二优先级",
+          "completed": false
+        }
+      ],
+      "priority3": [
+        {
+          "id": "C1",
+          "title": "每周安排一次家庭聚会",
+          "description": "怎么做：和老伴、子女（如果方便的话）商量好，每周固定一个晚上（比如周六晚上）作为家庭活动时间。；活动内容可以是一起看看老照片讲讲过去的故事、合作做一顿简单的晚饭、或者玩点简单的棋牌游戏。；请老伴或子女提前一天提醒您有这个安排。；完成标准：连续一个月，每周都至少有一次家庭聚会的照片或简短文字记录。",
+          "category": "第三优先级",
+          "completed": false
+        },
+        {
+          "id": "C2",
+          "title": "调整晚饭主食，每周记一次体重",
+          "description": "怎么做：和老伴、保姆说好，把您晚饭的主食（米饭、面条等）的量减少大约四分之一。；保证午餐和晚餐多吃点蔬菜，这样肚子更饱。；每周固定一天早上，上完厕所后、吃早饭前，请老伴或保姆帮忙用家里的体重秤称一下体重，并记录下来。；完成标准：连续四个星期，每周都有一张写着具体日期和体重的记录条（或手机截图）。",
+          "category": "第三优先级",
+          "completed": false
+        },
+        {
+          "id": "C3",
+          "title": "提前了解一下社区能提供的养老服务",
+          "description": "怎么做：请老伴或子女给社区居委会打个电话或者去一趟，问问咱们社区有没有提供比如白天托管、上门帮忙护理、送老年餐这类服务。；记下这些服务的名字、怎么联系、大概要什么条件、费用多少。；把了解到的信息整理好，告诉老伴和保姆。；完成标准：拿到一份手写或打印的社区养老服务清单，上面至少有两项服务的联系信息。",
+          "category": "第三优先级",
+          "completed": false
+        }
+      ]
+    },
+    "warmMessage": "大爷，看到您身体底子这么好，心态也积极，真的为您高兴。这份计划看起来内容不少，但您千万别有压力。咱们的核心就两点：一是保证您晚上起夜平平安安，二是让您的头脑和身体都保持活力。很多事情，比如贴个画、放个钟，都是举手之劳。您和老伴、保姆一起，挑着最前面、最容易的先做起来。健康管理就像散步，不用跑，只要方向对，一步一步走，就能稳稳当当地走向更好的状态。您已经做得很棒了，咱们一起再接再厉！",
+    "generatedAt": "2026-03-27T10:50:35.916592"
+  }
+}
