@@ -45,6 +45,7 @@ from doctor_routes import doctor_router
 from doctor_service import DoctorService
 from elderly_routes import elderly_router
 from family_routes import family_router
+from tts import router as tts_router
 from mappers import to_backend_profile, to_frontend_report_data
 from memory.conversation_manager import ConversationManager, SessionState
 from memory.family_caregiver_manager import FamilyCaregiverManager
@@ -1010,7 +1011,7 @@ app.include_router(family_router)
 app.include_router(elderly_router)
 app.include_router(doctor_router)
 app.include_router(counseling_router)
-
+app.include_router(tts_router) 
 
 def main():
     """启动服务器。"""
