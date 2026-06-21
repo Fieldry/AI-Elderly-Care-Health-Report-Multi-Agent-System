@@ -24,8 +24,11 @@ async def get_my_profile(request: Request):
     profile = conversation_manager.store.get_profile(actor.subject_id)
     if profile is None:
         raise HTTPException(status_code=404, detail="未找到老人画像")
+    bind_code = conversation_manager.store.get_bind_code(actor.subject_id)
     return {
         "elderly_id": actor.subject_id,
+        "bind_code": bind_code,
+        "bindCode": bind_code,
         "profile": asdict(profile),
     }
 

@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import sqlite3
+import re
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -80,6 +81,12 @@ _DEFAULT_SYSTEM_PROMPT = """\
   **回应**：“您之前说最近总有点不踏实，这其实很多老人都会经历。今天咱们专门聊聊，您具体担心什么呢？我们一起想想办法。”
 
 请始终以温和、真诚的态度，成为老人可以信任的倾听者。
+
+### 输出格式要求
+1. 直接输出正文回复，不要以任何括号内容开头。
+2. 不要写动作描写、语气描写、神态描写、旁白、括号说明或舞台提示。
+3. 不要使用类似“（微笑）”“（轻声）”“（点头）”这样的表达。
+4. 只输出可以直接朗读给老人听的内容。
 """
 
 COUNSELING_SYSTEM_PROMPT = os.getenv("COUNSELING_SYSTEM_PROMPT", _DEFAULT_SYSTEM_PROMPT)
@@ -95,6 +102,12 @@ PROFILE_SENTINEL_VALUES = {
     "未提供",
     "未知",
 }
+
+_LEADING_STAGE_DIRECTIONS_RE = re.compile(
+    r'^\s*(?:[（(【\[][^）)\]】\n]{1,40}[）)\]】]\s*)+'
+)
+
+_INLINE_STAGE_DIRECTIONS_RE = re.compile(r'[（(【\[][^）)\]】\n]{1,40}[）)\]】]')
 
 class CounselingService:
     """心理咨询服务：管理咨询会话、调用 LLM、持久化消息。"""
@@ -295,6 +308,22 @@ class CounselingService:
                     merged[key] = cleaned_value
         return merged
 
+    @staticmethod
+    def _clean_counseling_reply_text(text: str) -> str:
+        cleaned = (text or "").strip()
+        if not cleaned:
+            return cleaned
+
+        for _ in range(3):
+            next_cleaned = _LEADING_STAGE_DIRECTIONS_RE.sub("", cleaned).strip()
+            if next_cleaned == cleaned:
+                break
+            cleaned = next_cleaned
+
+        cleaned = _INLINE_STAGE_DIRECTIONS_RE.sub("", cleaned)
+        cleaned = re.sub(r'\s{2,}', ' ', cleaned).strip()
+        return cleaned
+
     def _load_profile_from_table(self, table_name: str, column_name: str, user_id: str) -> Dict[str, Any]:
         try:
             with self._conn() as conn:
@@ -427,6 +456,8 @@ class CounselingService:
             logger.exception("Counseling LLM call failed for session=%s", session_id)
             raise RuntimeError(f"LLM 调用失败: {exc}") from exc
 
+        reply = self._clean_counseling_reply_text(reply)
+
         # 持久化助手回复
         now = datetime.now(timezone.utc).isoformat()
         message_id = self._save_message(session_id, "assistant", reply)
@@ -473,6 +504,6 @@ class CounselingService:
             raise RuntimeError(f"LLM 流式调用失败: {exc}") from exc
 
         # 持久化完整助手回复
-        full_reply = "".join(full_reply_parts)
+        full_reply = self._clean_counseling_reply_text("".join(full_reply_parts))
         if full_reply:
             self._save_message(session_id, "assistant", full_reply)

@@ -10,6 +10,7 @@ import json
 import logging
 import os
 import sys
+import tempfile
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from datetime import datetime
@@ -25,7 +26,8 @@ except ImportError:
 
 from fastapi import APIRouter, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.websockets import WebSocketState
 
 
@@ -95,6 +97,14 @@ except Exception as exc:  # pragma: no cover - optional dependency
     class GoogleSpeechStreamError(RuntimeError):
         """Google STT 不可用时的占位异常。"""
 
+try:
+    import edge_tts
+
+    EDGE_TTS_IMPORT_ERROR: Exception | None = None
+except Exception as exc:  # pragma: no cover - optional dependency
+    edge_tts = None
+    EDGE_TTS_IMPORT_ERROR = exc
+
 
 def _resolve_project_path(env_name: str, default_relative_path: str) -> Path:
     raw_value = (os.getenv(env_name) or "").strip()
@@ -111,6 +121,20 @@ DB_PATH = str(_resolve_project_path("DB_PATH", "data/users.db"))
 REPORTS_DIR = base_dir / "data" / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 RAG_ENABLED = os.getenv("RAG_ENABLED", "").strip().lower() in {"1", "true", "yes", "on"}
+FRONTEND_DIST_DIR = base_dir.parent / "AI-Elderly-Care-Health-Report-Frontend" / "dist"
+FRONTEND_INDEX_FILE = FRONTEND_DIST_DIR / "index.html"
+API_FALLBACK_PREFIXES = (
+    "/api",
+    "/auth",
+    "/chat",
+    "/counseling",
+    "/doctor",
+    "/elderly",
+    "/family",
+    "/report",
+    "/tts",
+    "/ws",
+)
 
 STATE_MAP = {
     SessionState.GREETING: "greeting",
@@ -393,6 +417,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+if FRONTEND_DIST_DIR.exists():
+    assets_dir = FRONTEND_DIST_DIR / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="frontend-assets")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -404,6 +433,57 @@ app.add_middleware(
 api_router = APIRouter(prefix="/api")
 chat_router = APIRouter(prefix="/chat")
 report_router = APIRouter(prefix="/report")
+tts_router = APIRouter(prefix="/tts")
+
+
+@tts_router.post("/synthesize")
+async def synthesize_tts(request: Request):
+    """使用 Edge TTS 合成晓晓音色。"""
+    if edge_tts is None:
+        raise HTTPException(status_code=500, detail=f"edge-tts 依赖不可用: {EDGE_TTS_IMPORT_ERROR}")
+
+    body = await request.body()
+    if not body:
+        raise HTTPException(status_code=400, detail="TTS 请求体不能为空")
+
+    raw_text = body.decode("utf-8", errors="ignore").strip()
+    if not raw_text:
+        raise HTTPException(status_code=400, detail="TTS 请求体不能为空")
+
+    voice_name = "zh-CN-XiaoxiaoNeural"
+    text = raw_text
+
+    if "<voice" in raw_text and "<speak" in raw_text:
+        try:
+            import xml.etree.ElementTree as ET
+
+            root = ET.fromstring(raw_text)
+            voice_node = root.find(".//{*}voice")
+            if voice_node is not None:
+                voice_name = voice_node.attrib.get("name", voice_name)
+                text = "".join(voice_node.itertext()).strip() or text
+            else:
+                text = "".join(root.itertext()).strip() or text
+        except Exception:
+            text = raw_text
+
+    if not text:
+        raise HTTPException(status_code=400, detail="TTS 文本不能为空")
+
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp_file:
+        temp_path = Path(tmp_file.name)
+
+    try:
+        communicate = edge_tts.Communicate(text=text, voice=voice_name)
+        await communicate.save(str(temp_path))
+        audio_bytes = temp_path.read_bytes()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"TTS 合成失败: {exc}") from exc
+    finally:
+        if temp_path.exists():
+            temp_path.unlink(missing_ok=True)
+
+    return Response(content=audio_bytes, media_type="audio/mpeg")
 
 
 @chat_router.post("/start", response_model=ChatStartResponse)
@@ -418,6 +498,7 @@ async def start_chat(request: Request) -> ChatStartResponse:
     result = conversation_manager.start_session(session_id)
     history = conversation_manager.get_history(session_id)
     issued_token = auth_service.issue_elderly_token(user_id)
+    bind_code = conversation_manager.store.get_bind_code(user_id)
 
     _persist_workspace_snapshot(
         workspace_manager,
@@ -433,6 +514,7 @@ async def start_chat(request: Request) -> ChatStartResponse:
         welcomeMessage=result.get("reply", "您好！我是AI养老健康助手。"),
         interaction=result.get("interaction"),
         accessToken=issued_token.token,
+        bindCode=bind_code,
         userType=ELDERLY_ROLE,
         expiresAt=issued_token.expires_at,
     )
@@ -1005,11 +1087,37 @@ async def health_check():
 app.include_router(api_router)
 app.include_router(chat_router)
 app.include_router(report_router)
+app.include_router(tts_router)
 app.include_router(auth_router)
 app.include_router(family_router)
 app.include_router(elderly_router)
 app.include_router(doctor_router)
 app.include_router(counseling_router)
+
+
+@app.get("/", include_in_schema=False)
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_frontend_spa(request: Request, full_path: str = ""):
+    """为前端 history 路由提供 SPA fallback，API 路由仍由上方优先匹配。"""
+    path = f"/{full_path}" if full_path else "/"
+    accepts_html = "text/html" in request.headers.get("accept", "").lower()
+    if not accepts_html and any(path == prefix or path.startswith(f"{prefix}/") for prefix in API_FALLBACK_PREFIXES):
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    if not FRONTEND_INDEX_FILE.exists():
+        raise HTTPException(status_code=404, detail="前端静态资源未构建")
+
+    requested_file = (FRONTEND_DIST_DIR / full_path).resolve()
+    dist_root = FRONTEND_DIST_DIR.resolve()
+    if full_path and requested_file.is_file():
+        if dist_root not in requested_file.parents and requested_file != dist_root:
+            raise HTTPException(status_code=404, detail="Not Found")
+        return FileResponse(requested_file)
+
+    if not accepts_html:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    return FileResponse(FRONTEND_INDEX_FILE)
 
 
 def main():

@@ -3,6 +3,7 @@
 使用 SQLite 存储用户画像，支持跨会话保留
 """
 
+import secrets
 import sqlite3
 import json
 import uuid
@@ -53,6 +54,7 @@ class UserProfileStore:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS users (
                     user_id     TEXT PRIMARY KEY,
+                    bind_code   TEXT UNIQUE,
                     profile     TEXT NOT NULL,       -- UserProfile JSON
                     created_at  TEXT NOT NULL,
                     updated_at  TEXT NOT NULL
@@ -77,6 +79,13 @@ class UserProfileStore:
             if "context" not in session_columns:
                 conn.execute("ALTER TABLE sessions ADD COLUMN context TEXT NOT NULL DEFAULT '{}'")
 
+            user_columns = {
+                row["name"] for row in conn.execute("PRAGMA table_info(users)").fetchall()
+            }
+            if "bind_code" not in user_columns:
+                conn.execute("ALTER TABLE users ADD COLUMN bind_code TEXT")
+            conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_users_bind_code ON users(bind_code)")
+
     def _conn(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
@@ -96,11 +105,71 @@ class UserProfileStore:
         empty_profile = asdict(UserProfile())
 
         with self._conn() as conn:
-            conn.execute(
-                "INSERT INTO users (user_id, profile, created_at, updated_at) VALUES (?, ?, ?, ?)",
-                (user_id, json.dumps(empty_profile, ensure_ascii=False), now, now)
-            )
+            while True:
+                bind_code = self._generate_bind_code()
+                try:
+                    conn.execute(
+                        "INSERT INTO users (user_id, bind_code, profile, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+                        (user_id, bind_code, json.dumps(empty_profile, ensure_ascii=False), now, now)
+                    )
+                    break
+                except sqlite3.IntegrityError:
+                    continue
         return user_id
+
+    def _generate_bind_code(self) -> str:
+        """生成 6 位纯数字绑定码，并确保唯一。"""
+        with self._conn() as conn:
+            while True:
+                code = f"{secrets.randbelow(900000) + 100000:06d}"
+                row = conn.execute(
+                    "SELECT 1 FROM users WHERE bind_code = ?",
+                    (code,),
+                ).fetchone()
+                if row is None:
+                    return code
+
+    def get_bind_code(self, user_id: str) -> Optional[str]:
+        """获取用户绑定码；如果旧数据缺失则自动补齐。"""
+        with self._conn() as conn:
+            row = conn.execute(
+                "SELECT bind_code FROM users WHERE user_id = ?",
+                (user_id,),
+            ).fetchone()
+            if row is None:
+                return None
+
+            bind_code = row["bind_code"]
+            if bind_code:
+                return str(bind_code)
+
+            while True:
+                candidate = f"{secrets.randbelow(900000) + 100000:06d}"
+                exists = conn.execute(
+                    "SELECT 1 FROM users WHERE bind_code = ?",
+                    (candidate,),
+                ).fetchone()
+                if exists is not None:
+                    continue
+
+                conn.execute(
+                    "UPDATE users SET bind_code = ?, updated_at = ? WHERE user_id = ?",
+                    (candidate, datetime.now().isoformat(), user_id),
+                )
+                return candidate
+
+    def resolve_user_id_by_bind_code(self, bind_code: str) -> Optional[str]:
+        """根据绑定码反查用户 ID。"""
+        normalized = (bind_code or "").strip()
+        if not normalized:
+            return None
+
+        with self._conn() as conn:
+            row = conn.execute(
+                "SELECT user_id FROM users WHERE bind_code = ?",
+                (normalized,),
+            ).fetchone()
+        return row["user_id"] if row is not None else None
 
     def get_profile(self, user_id: str) -> Optional[UserProfile]:
         """根据 user_id 加载 UserProfile，不存在返回 None"""

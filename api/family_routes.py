@@ -144,7 +144,8 @@ async def get_elderly_detail(request: Request, elderly_id: str):
 @family_router.put("/elderly/{elderly_id}")
 async def update_elderly_info(request: Request, elderly_id: str, updates: Dict[str, Any]):
     """更新已绑定老人的画像。"""
-    require_family_elderly_access(request, elderly_id)
+    actor = require_family_elderly_access(request, elderly_id)
+    auth_service = require_state(request, "auth_service", "认证服务未初始化")
     conversation_manager = require_state(request, "conversation_manager", "对话管理器未初始化")
     workspace_manager = require_state(request, "workspace_manager", "工作区管理器未初始化")
     store = conversation_manager.store
@@ -153,7 +154,31 @@ async def update_elderly_info(request: Request, elderly_id: str, updates: Dict[s
         raise HTTPException(status_code=404, detail="老年人不存在")
 
     try:
-        store.update_profile(elderly_id, updates)
+        profile_updates = {
+            key: value for key, value in updates.items() if key != "relation"
+        }
+        relation_value = updates.get("relation")
+
+        if profile_updates:
+            store.update_profile(elderly_id, profile_updates)
+
+        if relation_value is not None:
+            relation = str(relation_value).strip()
+            if not relation:
+                raise HTTPException(status_code=400, detail="与老人关系不能为空")
+
+            with sqlite3.connect(auth_service.db_path) as conn:
+                result = conn.execute(
+                    """
+                    UPDATE family_elderly_relation
+                    SET relation = ?
+                    WHERE family_id = ? AND elderly_user_id = ?
+                    """,
+                    (relation, actor.subject_id, elderly_id),
+                )
+                if result.rowcount == 0:
+                    raise HTTPException(status_code=404, detail="绑定关系不存在")
+
         latest_session = store.get_latest_session(elderly_id)
         if latest_session is not None:
             workspace_manager.save_user_profile(
@@ -162,8 +187,27 @@ async def update_elderly_info(request: Request, elderly_id: str, updates: Dict[s
             )
             workspace_manager.update_metadata(latest_session["session_id"], {"has_profile": True})
         return {"success": True}
+    except HTTPException:
+        raise
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"更新失败: {exc}") from exc
+
+
+@family_router.delete("/elderly/{elderly_id}/binding")
+async def unbind_elderly(request: Request, elderly_id: str):
+    """解除当前家属账号与指定老人的绑定关系。"""
+    actor = require_family_elderly_access(request, elderly_id)
+    auth_service = require_state(request, "auth_service", "认证服务未初始化")
+
+    success, message = auth_service.unbind_family_elderly(actor.subject_id, elderly_id)
+    if not success:
+        raise HTTPException(status_code=404, detail=message)
+
+    return {
+        "success": True,
+        "elderly_id": elderly_id,
+        "elderly_ids": auth_service.list_family_elderly_ids(actor.subject_id),
+    }
 
 
 @family_router.get("/reports/{elderly_id}")

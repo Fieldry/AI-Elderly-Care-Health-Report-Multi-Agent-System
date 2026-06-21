@@ -238,6 +238,33 @@ class AuthService:
             ).fetchone()
         return row is not None
 
+    def get_elderly_bind_code(self, elderly_user_id: str) -> Optional[str]:
+        """获取老人对应的短数字绑定码。"""
+        with self._conn() as conn:
+            row = conn.execute(
+                "SELECT bind_code FROM users WHERE user_id = ?",
+                (elderly_user_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        return str(row["bind_code"]) if row["bind_code"] else None
+
+    def resolve_elderly_user_id(self, identifier: str) -> Optional[str]:
+        """兼容 UUID 与短数字绑定码，统一解析成老人 user_id。"""
+        normalized = (identifier or "").strip()
+        if not normalized:
+            return None
+
+        if self._elderly_exists(normalized):
+            return normalized
+
+        with self._conn() as conn:
+            row = conn.execute(
+                "SELECT user_id FROM users WHERE bind_code = ?",
+                (normalized,),
+            ).fetchone()
+        return row["user_id"] if row is not None else None
+
     def issue_elderly_token(self, elderly_user_id: str, expires_in_days: int = 180) -> IssuedToken:
         return self.token_service.issue(elderly_user_id, ELDERLY_ROLE, expires_in_days)
 
@@ -308,7 +335,8 @@ class AuthService:
         elderly_user_id: str,
         relation: str = "家属",
     ) -> tuple[bool, str]:
-        if not self._elderly_exists(elderly_user_id):
+        resolved_elderly_user_id = self.resolve_elderly_user_id(elderly_user_id)
+        if resolved_elderly_user_id is None:
             return False, "关联的老年人不存在"
 
         relation_id = str(uuid.uuid4())
@@ -322,11 +350,24 @@ class AuthService:
                     )
                     VALUES (?, ?, ?, ?, ?)
                     """,
-                    (relation_id, family_id, elderly_user_id, relation, created_at),
+                    (relation_id, family_id, resolved_elderly_user_id, relation, created_at),
                 )
             return True, "绑定成功"
         except sqlite3.IntegrityError:
             return False, "绑定关系已存在"
+
+    def unbind_family_elderly(self, family_id: str, elderly_user_id: str) -> tuple[bool, str]:
+        with self._conn() as conn:
+            result = conn.execute(
+                """
+                DELETE FROM family_elderly_relation
+                WHERE family_id = ? AND elderly_user_id = ?
+                """,
+                (family_id, elderly_user_id),
+            )
+        if result.rowcount == 0:
+            return False, "绑定关系不存在"
+        return True, "解除绑定成功"
 
     def register_family(
         self,
@@ -336,7 +377,8 @@ class AuthService:
         elderly_user_id: str,
         relation: str = "家属",
     ) -> tuple[bool, str, Optional[Dict[str, Any]]]:
-        if not self._elderly_exists(elderly_user_id):
+        resolved_elderly_user_id = self.resolve_elderly_user_id(elderly_user_id)
+        if resolved_elderly_user_id is None:
             return False, "关联的老年人不存在", None
 
         family_id = str(uuid.uuid4())
@@ -361,7 +403,7 @@ class AuthService:
                     )
                     VALUES (?, ?, ?, ?, ?)
                     """,
-                    (str(uuid.uuid4()), family_id, elderly_user_id, relation, now),
+                    (str(uuid.uuid4()), family_id, resolved_elderly_user_id, relation, now),
                 )
         except sqlite3.IntegrityError:
             return False, "手机号已被注册", None
