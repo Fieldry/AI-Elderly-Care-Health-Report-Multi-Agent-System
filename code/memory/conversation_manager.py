@@ -261,7 +261,7 @@ class ConversationManager:
                 return error_message, SessionState.COLLECTING, {"interaction": interaction}
             return "这题我先给您做成选项，您直接点选会更方便。", SessionState.COLLECTING, {"interaction": interaction}
 
-        updates = self._extract_chat_step(interaction, user_message, history)
+        updates = self._extract_chat_step(interaction, user_message, history, session_id)
         if not updates:
             return "我先没完全听明白，这部分您可以按刚才的问题再说得具体一点。", SessionState.COLLECTING, {"interaction": interaction}
 
@@ -370,14 +370,22 @@ class ConversationManager:
             updates: Dict[str, Any] = {}
             valid_options = {option["value"] for option in interaction.get("options", [])}
             parts: List[str] = []
+            has_skipped_field = False
             for item in interaction.get("items", []):
                 field_name = item["key"]
                 value = values.get(field_name)
+                if value == SKIP_VALUE:
+                    has_skipped_field = True
+                    parts.append(f"{item['label']}：跳过")
+                    continue
                 if value not in valid_options:
                     return False, "", f"{item['label']} 还没有选择。"
                 updates[field_name] = value
                 parts.append(f"{item['label']}：{value}")
-            self._apply_profile_updates(user_id, interaction["id"], updates, session_id)
+            if updates:
+                self._apply_profile_updates(user_id, interaction["id"], updates, session_id)
+            if has_skipped_field:
+                self._mark_step_skipped(session_id, interaction["id"])
             return True, "；".join(parts), ""
 
         if kind == "multi_select":
@@ -404,9 +412,14 @@ class ConversationManager:
         if kind == "form_card":
             updates = {}
             parts: List[str] = []
+            has_skipped_field = False
             for field in interaction.get("fields", []):
                 field_name = field["key"]
                 raw_value = values.get(field_name)
+                if raw_value == SKIP_VALUE:
+                    has_skipped_field = True
+                    parts.append(f"{field['label']}：跳过")
+                    continue
                 if field.get("type") == "select":
                     valid_options = {option["value"] for option in field.get("options", [])}
                     if raw_value not in valid_options:
@@ -430,7 +443,10 @@ class ConversationManager:
                         parts.append(f"{field['label']}：{raw_value}")
                     continue
 
-            self._apply_profile_updates(user_id, interaction["id"], updates, session_id)
+            if updates:
+                self._apply_profile_updates(user_id, interaction["id"], updates, session_id)
+            if has_skipped_field:
+                self._mark_step_skipped(session_id, interaction["id"])
             return True, "；".join(parts), ""
 
         if kind == "confirm":
@@ -471,6 +487,7 @@ class ConversationManager:
         interaction: Dict[str, Any],
         user_message: str,
         history: List[Dict[str, Any]],
+        session_id: str,
     ) -> Dict[str, Any]:
         step_id = interaction["id"]
         if step_id == "g7_time":
@@ -482,7 +499,7 @@ class ConversationManager:
         if step_id == "g7_place":
             return {"cognition_place": self._evaluate_place_answer(user_message)}
         if step_id in {"g7_calc_1", "g7_calc_2", "g7_calc_3"}:
-            return {"cognition_calc": [self._evaluate_calc_answer(step_id, user_message)]}
+            return {"cognition_calc": [self._evaluate_calc_answer(session_id, step_id, user_message)]}
 
         target_fields = interaction.get("fields", [])
         return self.extractor.extract(user_message, target_fields, history[-8:])
@@ -515,12 +532,30 @@ class ConversationManager:
             return "正确"
         return "错误" if normalized else "不知道"
 
-    def _evaluate_calc_answer(self, step_id: str, text: str) -> str:
+    def _evaluate_calc_answer(self, session_id: str, step_id: str, text: str) -> str:
         if self._is_unsure_text(text):
             return "不知道"
+        ctx = self._get_ctx(session_id)
+        raw_answers = ctx.get("calc_numeric_answers") or []
+        if not isinstance(raw_answers, list):
+            raw_answers = []
+
+        step_index = int(step_id.rsplit("_", 1)[-1]) - 1
+        numbers = self._extract_numbers(text)
+        answer_number = numbers[-1] if numbers else None
+        while len(raw_answers) <= step_index:
+            raw_answers.append(None)
+        raw_answers[step_index] = answer_number
+        ctx["calc_numeric_answers"] = raw_answers[:3]
+        self._persist_ctx(session_id, ctx)
+
         expected_map = {"g7_calc_1": 93, "g7_calc_2": 86, "g7_calc_3": 79}
         expected = expected_map[step_id]
-        numbers = self._extract_numbers(text)
+        if step_index > 0:
+            previous_answer = raw_answers[step_index - 1] if len(raw_answers) > step_index - 1 else None
+            if isinstance(previous_answer, int):
+                expected = previous_answer - 7
+
         return "正确" if expected in numbers else "错误"
 
     @staticmethod
@@ -1032,6 +1067,7 @@ class ConversationManager:
             "current_group_id": None,
             "current_step_id": None,
             "calc_answers": [],
+            "calc_numeric_answers": [],
             "manual_edit_mode": False,
             "needs_other_chronic_note": False,
             "announced_group_ids": [],
