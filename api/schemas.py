@@ -10,6 +10,7 @@ class ChatStartResponse(BaseModel):
     welcomeMessage: str
     interaction: Optional[Dict[str, Any]] = None
     accessToken: Optional[str] = None
+    bindCode: Optional[str] = None
     userType: Optional[str] = None
     expiresAt: Optional[str] = None
 

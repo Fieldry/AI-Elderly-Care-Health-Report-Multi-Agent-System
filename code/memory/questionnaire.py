@@ -501,7 +501,7 @@ QUESTION_GROUPS: List[Dict[str, Any]] = [
             {"id": "g7_season", "kind": "chat", "fields": ["cognition_season"], "prompt": "您觉得现在是什么季节？"},
             {"id": "g7_place", "kind": "chat", "fields": ["cognition_place"], "prompt": "您现在是在什么地方？比如在家里、医院，还是别的地方？"},
             {"id": "g7_calc_1", "kind": "chat", "fields": ["cognition_calc"], "prompt": "下面我想请您做一道简单的算术题。不着急，您慢慢想。100 减 7 等于多少？"},
-            {"id": "g7_calc_2", "kind": "chat", "fields": ["cognition_calc"], "prompt": "那个答案再减 7 呢？"},
+            {"id": "g7_calc_2", "kind": "chat", "fields": ["cognition_calc"], "prompt": "这个答案再减 7 呢？"},
             {"id": "g7_calc_3", "kind": "chat", "fields": ["cognition_calc"], "prompt": "再减一次 7 呢？"},
         ],
     },
@@ -608,4 +608,3 @@ def filter_chronic_items_by_sex(sex: str | None) -> List[Dict[str, Any]]:
             continue
         items.append(item)
     return items
-

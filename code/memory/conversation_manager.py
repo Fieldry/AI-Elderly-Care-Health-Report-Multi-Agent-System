@@ -42,6 +42,11 @@ WELCOME_MESSAGE = (
     "那我们先从一些基本情况开始了解吧。"
 )
 
+CARD_INTERACTION_NOTICE = "这几道题为方便您回答，会直接弹出一个小卡片，请点击下方按钮打开卡片，您可以根据实际情况进行选择。"
+CONFIRM_INTERACTION_NOTICE = "信息已经收集得差不多了。请点击下方按钮打开确认卡片，确认无误后就可以生成报告。"
+SKIP_VALUE = "__SKIPPED__"
+SKIP_TEXT_TOKENS = ("跳过", "先跳过", "记不清", "不记得", "不知道", "忘了", "想不起来", "不清楚")
+
 
 class SessionState(str, Enum):
     GREETING = "GREETING"
@@ -95,11 +100,11 @@ class ConversationManager:
         if interaction:
             ctx["current_group_id"] = interaction["groupId"]
             ctx["current_step_id"] = interaction["id"]
-        self._persist_ctx(session_id, ctx)
 
         reply = WELCOME_MESSAGE
         if interaction:
-            reply = f"{WELCOME_MESSAGE}\n\n{self._build_prompt_with_title(interaction)}"
+            reply = f"{WELCOME_MESSAGE}\n\n{self._build_prompt_with_title(interaction, ctx)}"
+        self._persist_ctx(session_id, ctx)
 
         self.store.append_message(session_id, "assistant", reply)
         return self._build_response(
@@ -208,9 +213,14 @@ class ConversationManager:
                 return "修改阶段请直接输入文字说明。", SessionState.COLLECTING, {"interaction": interaction}
             if not user_message.strip():
                 return "请直接告诉我哪项信息需要修改。", SessionState.COLLECTING, {"interaction": interaction}
+            if self._is_cancel_manual_edit_text(user_message):
+                ctx["manual_edit_mode"] = False
+                ctx["state"] = SessionState.CONFIRMING.value
+                self._persist_ctx(session_id, ctx)
+                return CONFIRM_INTERACTION_NOTICE, SessionState.CONFIRMING, {"interaction": self._build_confirm_interaction()}
             updates = self.extractor.extract(user_message, list(FIELD_META.keys()), history[-8:])
             if not updates:
-                return "我先没完全听明白，您可以直接说哪项要改成什么。", SessionState.COLLECTING, {"interaction": interaction}
+                return "我没听明白，您可以直接说哪项要改成什么。", SessionState.COLLECTING, {"interaction": interaction}
             self.store.update_profile(user_id, updates)
             ctx["manual_edit_mode"] = False
             self._persist_ctx(session_id, ctx)
@@ -227,6 +237,10 @@ class ConversationManager:
                 return error_message, SessionState.COLLECTING, {"interaction": interaction}
             if user_history_message:
                 self.store.append_message(session_id, "user", user_history_message)
+            return self._reply_for_next_step(user_id, session_id)
+
+        if self._is_skip_text(user_message):
+            self._mark_step_skipped(session_id, interaction["id"])
             return self._reply_for_next_step(user_id, session_id)
 
         if interaction["kind"] != "chat":
@@ -339,6 +353,10 @@ class ConversationManager:
             return False, "", "提交的答案格式不正确，请重新选择。"
 
         kind = interaction["kind"]
+        if self._is_skip_answer(interaction, values):
+            self._mark_step_skipped(session_id, interaction["id"])
+            return True, f"跳过：{interaction['prompt']}", ""
+
         if kind == "single_choice":
             field_name = interaction["field"]
             value = values.get(field_name)
@@ -513,12 +531,86 @@ class ConversationManager:
                 numbers.append(int(match))
             except ValueError:
                 continue
+        for match in re.findall(r"[零〇一二两三四五六七八九十百]+", text):
+            parsed = ConversationManager._parse_chinese_number(match)
+            if parsed is not None:
+                numbers.append(parsed)
         return numbers
+
+    @staticmethod
+    def _parse_chinese_number(text: str) -> Optional[int]:
+        normalized = text.replace("两", "二").replace("〇", "零")
+        digit_map = {
+            "零": 0,
+            "一": 1,
+            "二": 2,
+            "三": 3,
+            "四": 4,
+            "五": 5,
+            "六": 6,
+            "七": 7,
+            "八": 8,
+            "九": 9,
+        }
+        if not normalized:
+            return None
+        if normalized in digit_map:
+            return digit_map[normalized]
+        if normalized == "十":
+            return 10
+        if "百" in normalized:
+            left, _, right = normalized.partition("百")
+            hundred = digit_map.get(left, 1 if left == "" else None)
+            if hundred is None:
+                return None
+            if not right:
+                return hundred * 100
+            tail = ConversationManager._parse_chinese_number(right)
+            return None if tail is None else hundred * 100 + tail
+        if "十" in normalized:
+            left, _, right = normalized.partition("十")
+            tens = digit_map.get(left, 1 if left == "" else None)
+            if tens is None:
+                return None
+            ones = 0 if not right else digit_map.get(right)
+            return None if ones is None else tens * 10 + ones
+        if all(char in digit_map for char in normalized):
+            try:
+                return int("".join(str(digit_map[char]) for char in normalized))
+            except ValueError:
+                return None
+        return None
 
     @staticmethod
     def _is_unsure_text(text: str) -> bool:
         lowered = text.strip().lower()
         return any(token in lowered for token in ["不知道", "不记得", "记不清", "忘了", "想不起来"])
+
+    @staticmethod
+    def _is_skip_text(text: str) -> bool:
+        lowered = text.strip().lower()
+        return any(token in lowered for token in SKIP_TEXT_TOKENS)
+
+    @staticmethod
+    def _is_cancel_manual_edit_text(text: str) -> bool:
+        normalized = re.sub(r"\s+", "", text.strip().lower())
+        if not normalized:
+            return False
+        cancel_tokens = (
+            "不改了",
+            "不用改了",
+            "不用修改了",
+            "不修改了",
+            "没有了",
+            "没了",
+            "没有要改的",
+            "没有需要改的",
+            "没什么要改",
+            "没什么需要改",
+            "先不改",
+            "算了",
+        )
+        return any(token in normalized for token in cancel_tokens)
 
     # ─────────────────────────────────────────────
     # 画像更新与跳题
@@ -532,6 +624,7 @@ class ConversationManager:
         session_id: str,
     ):
         ctx = self._get_ctx(session_id)
+        self._mark_step_reviewed_if_needed(ctx, interaction_id)
         if interaction_id in {"g7_calc_1", "g7_calc_2", "g7_calc_3"}:
             calc_values = ctx.get("calc_answers") or []
             if not isinstance(calc_values, list):
@@ -612,6 +705,43 @@ class ConversationManager:
 
         self._persist_ctx(session_id, ctx)
 
+    def _mark_step_skipped(self, session_id: str, step_id: str):
+        ctx = self._get_ctx(session_id)
+        skipped_steps = ctx.get("skipped_steps") or []
+        if not isinstance(skipped_steps, list):
+            skipped_steps = []
+        if step_id not in skipped_steps:
+            skipped_steps.append(step_id)
+        ctx["skipped_steps"] = skipped_steps
+        self._mark_step_reviewed_if_needed(ctx, step_id)
+        self._persist_ctx(session_id, ctx)
+
+    @staticmethod
+    def _mark_step_reviewed_if_needed(ctx: Dict[str, Any], step_id: str):
+        if not ctx.get("reviewing_skipped"):
+            return
+        reviewed_steps = ctx.get("reviewed_skipped_steps") or []
+        if not isinstance(reviewed_steps, list):
+            reviewed_steps = []
+        if step_id not in reviewed_steps:
+            reviewed_steps.append(step_id)
+        ctx["reviewed_skipped_steps"] = reviewed_steps
+
+    @staticmethod
+    def _is_skip_answer(interaction: Dict[str, Any], values: Dict[str, Any]) -> bool:
+        kind = interaction["kind"]
+        if kind == "single_choice":
+            return values.get(interaction.get("field", "")) == SKIP_VALUE
+        if kind == "matrix_single_choice":
+            items = interaction.get("items", [])
+            return bool(items) and all(values.get(item["key"]) == SKIP_VALUE for item in items)
+        if kind == "multi_select":
+            return values.get("selected") == SKIP_VALUE
+        if kind == "form_card":
+            fields = interaction.get("fields", [])
+            return bool(fields) and all(values.get(field["key"]) == SKIP_VALUE for field in fields)
+        return False
+
     # ─────────────────────────────────────────────
     # 下一步交互
     # ─────────────────────────────────────────────
@@ -626,11 +756,11 @@ class ConversationManager:
         if interaction is None:
             return self._ready_to_confirm(user_id, session_id)
 
-        prompt = self._build_prompt_with_title(interaction)
-
         if interaction["kind"] != "chat" and interaction["groupId"] != "MANUAL_EDIT":
-            hint = "这几道题为方便您回答，会直接弹出一个小卡片，您可以根据实际情况进行选择。"
-            prompt = f"{hint}\n\n{prompt}"
+            prompt = CARD_INTERACTION_NOTICE
+        else:
+            prompt = self._build_prompt_with_title(interaction, ctx)
+        self._persist_ctx(session_id, ctx)
 
         return (
             prompt,
@@ -670,6 +800,12 @@ class ConversationManager:
         ctx: Dict[str, Any],
     ) -> bool:
         step_id = step["id"]
+        skipped_steps = set(ctx.get("skipped_steps") or [])
+        reviewed_skipped_steps = set(ctx.get("reviewed_skipped_steps") or [])
+        if step_id in skipped_steps:
+            if ctx.get("reviewing_skipped"):
+                return step_id in reviewed_skipped_steps
+            return True
 
         if step_id == "g6_detail":
             if profile_dict.get("chronic_disease_any") == "没有":
@@ -776,9 +912,17 @@ class ConversationManager:
 
         return interaction
 
-    def _build_prompt_with_title(self, interaction: Dict[str, Any]) -> str:
+    def _build_prompt_with_title(self, interaction: Dict[str, Any], ctx: Optional[Dict[str, Any]] = None) -> str:
         if interaction["groupId"] == "MANUAL_EDIT":
             return interaction["prompt"]
+        if ctx is not None:
+            announced_group_ids = ctx.get("announced_group_ids") or []
+            if not isinstance(announced_group_ids, list):
+                announced_group_ids = []
+            if interaction["groupId"] in announced_group_ids:
+                return interaction["prompt"]
+            announced_group_ids.append(interaction["groupId"])
+            ctx["announced_group_ids"] = announced_group_ids
         group_idx = next(
             (index + 1 for index, group in enumerate(QUESTION_GROUPS) if group["group_id"] == interaction["groupId"]),
             0,
@@ -791,7 +935,7 @@ class ConversationManager:
             "groupId": "CONFIRM",
             "groupName": "确认生成",
             "kind": "confirm",
-            "prompt": "如果信息都没问题，我就开始生成报告；如果还想改，先选修改。",
+            "prompt": "请您确认当前信息是否无误。确认无误后，就可以生成报告。",
             "allowFreeText": True,
             "submitLabel": "确认",
             "options": [
@@ -805,42 +949,22 @@ class ConversationManager:
     # ─────────────────────────────────────────────
 
     def _ready_to_confirm(self, user_id: str, session_id: str) -> Tuple[str, SessionState, Dict[str, Any]]:
+        ctx = self._get_ctx(session_id)
+        skipped_steps = [step_id for step_id in (ctx.get("skipped_steps") or []) if isinstance(step_id, str)]
+        if skipped_steps and not ctx.get("reviewed_skipped_done"):
+            if not ctx.get("reviewing_skipped"):
+                ctx["reviewing_skipped"] = True
+                self._persist_ctx(session_id, ctx)
+                return self._reply_for_next_step(user_id, session_id)
+            ctx["reviewing_skipped"] = False
+            ctx["reviewed_skipped_done"] = True
+            self._persist_ctx(session_id, ctx)
+
         profile = self.store.get_profile(user_id)
-        progress = self.store.get_completion_rate(user_id, self._get_ctx(session_id))
         if profile is None:
             return "找不到用户信息，请重新开始。", SessionState.GREETING, {"interaction": None}
 
-        summary_parts = []
-        if profile.age:
-            summary_parts.append(f"{profile.age}岁")
-        if profile.sex:
-            summary_parts.append(profile.sex)
-        if profile.residence:
-            summary_parts.append(profile.residence)
-        if profile.health_limitation:
-            summary_parts.append(f"健康限制：{profile.health_limitation}")
-
-        chronic_labels = []
-        chronic_map = {
-            "hypertension": "高血压",
-            "coronary_heart_disease": "冠心病",
-            "stroke": "中风或脑血管疾病",
-            "diabetes": "糖尿病",
-            "cancer": "癌症或恶性肿瘤",
-        }
-        profile_dict = asdict(profile)
-        for field_name, label in chronic_map.items():
-            if profile_dict.get(field_name) == "是":
-                chronic_labels.append(label)
-        if chronic_labels:
-            summary_parts.append("慢性病：" + "、".join(chronic_labels[:5]))
-
-        reply = (
-            f"好了，信息都收集完了！（完成度 {progress * 100:.0f}%）\n\n"
-            f"目前整理到的摘要：{'；'.join(summary_parts) if summary_parts else '信息已整理完毕'}。\n\n"
-            "确认信息无误后，我马上开始分析并生成健康评估与照护行动计划。"
-        )
-        return reply, SessionState.CONFIRMING, {"interaction": self._build_confirm_interaction()}
+        return CONFIRM_INTERACTION_NOTICE, SessionState.CONFIRMING, {"interaction": self._build_confirm_interaction()}
 
     def _run_agent_workflow(
         self,
@@ -857,7 +981,7 @@ class ConversationManager:
         self.store.update_session_status(session_id, "GENERATING")
 
         waiting_msg = (
-            "好的，信息都收集齐了！现在开始帮您分析，大概需要1-2分钟，请稍候。\n\n"
+            "好的，智能体正在思考，大概需要1-2分钟，请稍候。\n\n"
             "正在进行：① 失能状态判定 → ② 风险预测 → ③ 健康画像 "
             f"{'→ ④ 知识检索 ' if RAG_ENABLED else ''}"
             "→ ⑤ 行动计划 → ⑥ 优先级排序 → ⑦ 报告生成..."
@@ -910,6 +1034,11 @@ class ConversationManager:
             "calc_answers": [],
             "manual_edit_mode": False,
             "needs_other_chronic_note": False,
+            "announced_group_ids": [],
+            "skipped_steps": [],
+            "reviewing_skipped": False,
+            "reviewed_skipped_steps": [],
+            "reviewed_skipped_done": False,
         }
 
     def _serialize_ctx(self, ctx: Dict[str, Any]) -> Dict[str, Any]:

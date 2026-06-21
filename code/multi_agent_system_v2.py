@@ -106,6 +106,7 @@ def _json_response_kwargs(model: str) -> Dict[str, Any]:
 class UserProfile:
     """用户画像数据结构"""
     # 人口学
+    name: str = None
     age: int = None
     sex: str = None
     residence: str = None

@@ -51,7 +51,11 @@ async def bind_family_to_elderly(request: Request, payload: FamilyBindRequest):
     if not success:
         status_code = 404 if "老年人不存在" in message else 400
         raise HTTPException(status_code=status_code, detail=message)
-    return {"success": True}
+    return {
+        "success": True,
+        "elderly_id": auth_service.resolve_elderly_user_id(payload.elderlyId.strip()),
+        "elderly_ids": auth_service.list_family_elderly_ids(actor.subject_id),
+    }
 
 
 @auth_router.post("/login", response_model=AuthResponse)

@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
     "fastapi>=0.104.0",
+    "edge-tts>=6.1.17",
     "google-cloud-speech>=2.35.0",
     "uvicorn[standard]>=0.24.0",
     "pydantic>=2.5.0",
