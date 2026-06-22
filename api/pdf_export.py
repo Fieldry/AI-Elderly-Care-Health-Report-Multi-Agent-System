@@ -1,15 +1,24 @@
 """
-PDF 导出：将报告 payload 转为 PDF bytes（基于 fpdf2）。
+PDF 导出：将报告 payload 转为 PDF bytes（基于 ReportLab）。
 """
 
 from __future__ import annotations
 
+import html
+from io import BytesIO
 import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
-from fpdf import FPDF
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.units import mm
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import HRFlowable, Paragraph, SimpleDocTemplate, Spacer
 
 from report_utils import generate_markdown_report
 
@@ -23,16 +32,110 @@ _FONT_SEARCH_PATHS: List[Path] = [
     Path("/System/Library/Fonts/Supplemental/Arial Unicode.ttf"),
     Path("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc"),
     Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
+    Path("/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc"),
+    Path("/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.otf"),
+    Path("/usr/share/fonts/google-noto-cjk/NotoSerifCJK-Regular.ttc"),
 ]
 
 _BUILTIN_FONT = "Helvetica"
+_CJK_FONT_NAME = "CJKHealthReport"
+_CID_CJK_FONT_NAME = "STSong-Light"
+_FONT_SEARCH_DIRS: List[Path] = [
+    Path("/usr/share/fonts/google-noto-cjk"),
+    Path("/usr/share/fonts/truetype/noto"),
+    Path("/usr/share/fonts/opentype/noto"),
+    Path("/usr/share/fonts"),
+]
+_FONT_NAME_PATTERNS = [
+    "NotoSansCJK*Regular*.otf",
+    "NotoSansCJK*Regular*.ttf",
+    "NotoSerifCJK*Regular*.otf",
+    "NotoSerifCJK*Regular*.ttf",
+    "SourceHanSans*Regular*.otf",
+    "SourceHanSans*Regular*.ttf",
+    "SourceHanSerif*Regular*.otf",
+    "SourceHanSerif*Regular*.ttf",
+    "wqy-microhei*.ttc",
+    "wqy-zenhei*.ttc",
+    "NotoSansCJK*Regular*.ttc",
+    "NotoSerifCJK*Regular*.ttc",
+]
+_TTC_SIMPLIFIED_CHINESE_MARKERS = (
+    "cjk sc",
+    "simplified chinese",
+    "简体",
+    "sc",
+)
+_FONT_CACHE_DIR = Path("/tmp/ai_elderly_pdf_fonts")
 
 
 def _find_cjk_font() -> Path | None:
     for path in _FONT_SEARCH_PATHS:
         if path.exists():
-            return path
+            return _prepare_font_for_pdf(path)
+    for directory in _FONT_SEARCH_DIRS:
+        if not directory.exists():
+            continue
+        for pattern in _FONT_NAME_PATTERNS:
+            match = next(directory.rglob(pattern), None)
+            if match and match.exists():
+                return _prepare_font_for_pdf(match)
     return None
+
+
+def _prepare_font_for_pdf(font_path: Path) -> Path:
+    """Return a single-font file that the PDF engine can embed reliably."""
+    if font_path.suffix.lower() != ".ttc":
+        return font_path
+
+    extracted = _extract_simplified_chinese_font_from_ttc(font_path)
+    return extracted or font_path
+
+
+def _extract_simplified_chinese_font_from_ttc(font_path: Path) -> Path | None:
+    """Extract one SC face from a TTC collection for stable PDF embedding."""
+    try:
+        from fontTools.ttLib import TTCollection
+    except ImportError:
+        return None
+
+    try:
+        collection = TTCollection(str(font_path))
+    except Exception:
+        return None
+
+    selected_index = 0
+    for index, font in enumerate(collection.fonts):
+        names = _font_name_candidates(font)
+        if any(marker in name for name in names for marker in _TTC_SIMPLIFIED_CHINESE_MARKERS):
+            selected_index = index
+            break
+
+    cache_path = _FONT_CACHE_DIR / f"{font_path.stem}-{selected_index}.ttf"
+    try:
+        _FONT_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        if not cache_path.exists() or cache_path.stat().st_mtime < font_path.stat().st_mtime:
+            collection.fonts[selected_index].save(str(cache_path))
+    except Exception:
+        return None
+    return cache_path
+
+
+def _font_name_candidates(font: Any) -> List[str]:
+    names: List[str] = []
+    try:
+        name_table = font["name"]
+    except Exception:
+        return names
+
+    for record in name_table.names:
+        if record.nameID not in {1, 2, 4, 16, 17}:
+            continue
+        try:
+            names.append(record.toUnicode().lower())
+        except Exception:
+            continue
+    return names
 
 
 # -- Markdown → PDF 渲染 ---------------------------------------------------
@@ -44,156 +147,156 @@ _ORDERED_RE = re.compile(r"^\d+[.)、]\s*(.*)")
 _UNORDERED_RE = re.compile(r"^[-*]\s+(.*)")
 
 # Colors
-_H1_COLOR = (42, 100, 150)
-_H2_COLOR = (42, 100, 150)
-_H3_COLOR = (51, 51, 51)
-_BODY_COLOR = (34, 34, 34)
-_MUTED_COLOR = (102, 102, 102)
+_H1_COLOR = colors.HexColor("#2A6496")
+_H2_COLOR = colors.HexColor("#2A6496")
+_H3_COLOR = colors.HexColor("#333333")
+_BODY_COLOR = colors.HexColor("#222222")
+_MUTED_COLOR = colors.HexColor("#666666")
 
 
-class _ReportPDF(FPDF):
-    """FPDF subclass with helpers for the health report layout."""
+def _register_pdf_font(font_path: Path | None) -> str:
+    if font_path:
+        try:
+            pdfmetrics.getFont(_CJK_FONT_NAME)
+            return _CJK_FONT_NAME
+        except KeyError:
+            pass
 
-    def __init__(self, font_path: Path | None):
-        super().__init__(orientation="P", unit="mm", format="A4")
-        self.set_auto_page_break(auto=True, margin=20)
-        self._font_name = _BUILTIN_FONT
-        if font_path:
-            name = "CJK"
-            self.add_font(name, fname=str(font_path), uni=True)
-            self.add_font(name, style="B", fname=str(font_path), uni=True)
-            self.add_font(name, style="I", fname=str(font_path), uni=True)
-            self._font_name = name
+        try:
+            pdfmetrics.registerFont(TTFont(_CJK_FONT_NAME, str(font_path)))
+            return _CJK_FONT_NAME
+        except Exception:
+            pass
 
-    def _set_font(self, style: str = "", size: int = 11):
-        self.set_font(self._font_name, style=style, size=size)
+    try:
+        pdfmetrics.getFont(_CID_CJK_FONT_NAME)
+    except KeyError:
+        try:
+            pdfmetrics.registerFont(UnicodeCIDFont(_CID_CJK_FONT_NAME))
+        except Exception:
+            return _BUILTIN_FONT
+    return _CID_CJK_FONT_NAME
 
-    def _colored_text(self, r: int, g: int, b: int):
-        self.set_text_color(r, g, b)
 
-    def render_markdown(self, md_text: str):
-        """Parse markdown line by line and render into the PDF."""
-        self.add_page()
-        lines = md_text.split("\n")
-        i = 0
-        while i < len(lines):
-            line = lines[i]
-            stripped = line.strip()
+def _build_styles(font_name: str) -> Dict[str, ParagraphStyle]:
+    base = ParagraphStyle(
+        "ReportBody",
+        fontName=font_name,
+        fontSize=11,
+        leading=18,
+        textColor=_BODY_COLOR,
+        wordWrap="CJK",
+        spaceAfter=4,
+    )
+    return {
+        "body": base,
+        "h1": ParagraphStyle(
+            "ReportH1",
+            parent=base,
+            fontSize=18,
+            leading=26,
+            alignment=1,
+            textColor=_H1_COLOR,
+            spaceBefore=8,
+            spaceAfter=8,
+        ),
+        "h2": ParagraphStyle(
+            "ReportH2",
+            parent=base,
+            fontSize=14,
+            leading=22,
+            textColor=_H2_COLOR,
+            leftIndent=6,
+            borderColor=_H2_COLOR,
+            borderWidth=0,
+            borderPadding=0,
+            spaceBefore=10,
+            spaceAfter=4,
+        ),
+        "h3": ParagraphStyle(
+            "ReportH3",
+            parent=base,
+            fontSize=12,
+            leading=19,
+            textColor=_H3_COLOR,
+            spaceBefore=6,
+            spaceAfter=2,
+        ),
+        "list": ParagraphStyle(
+            "ReportList",
+            parent=base,
+            leftIndent=14,
+            firstLineIndent=-10,
+            spaceAfter=3,
+        ),
+        "muted": ParagraphStyle(
+            "ReportMuted",
+            parent=base,
+            fontSize=9,
+            leading=14,
+            textColor=_MUTED_COLOR,
+        ),
+    }
 
-            # Blank line → small gap
-            if not stripped:
-                self.ln(2)
-                i += 1
-                continue
 
-            # Horizontal rule
-            if stripped in ("---", "***", "___"):
-                y = self.get_y()
-                self.set_draw_color(200, 200, 200)
-                self.line(self.l_margin, y, self.w - self.r_margin, y)
-                self.ln(4)
-                i += 1
-                continue
+def _render_markdown_to_flowables(md_text: str, styles: Dict[str, ParagraphStyle]) -> List[Any]:
+    flowables: List[Any] = []
+    for line in md_text.split("\n"):
+        stripped = line.strip()
+        if not stripped:
+            flowables.append(Spacer(1, 4))
+            continue
 
-            # Headings
-            heading_match = _HEADING_RE.match(stripped)
-            if heading_match:
-                level = len(heading_match.group(1))
-                text = heading_match.group(2).strip()
-                self._render_heading(text, level)
-                i += 1
-                continue
+        if stripped in ("---", "***", "___"):
+            flowables.append(HRFlowable(width="100%", thickness=0.6, color=colors.HexColor("#C8C8C8")))
+            flowables.append(Spacer(1, 6))
+            continue
 
-            # Ordered list
-            ordered_match = _ORDERED_RE.match(stripped)
-            if ordered_match:
-                self._render_list_item(ordered_match.group(1), ordered=True)
-                i += 1
-                continue
-
-            # Unordered list
-            unordered_match = _UNORDERED_RE.match(stripped)
-            if unordered_match:
-                self._render_list_item(unordered_match.group(1), ordered=False)
-                i += 1
-                continue
-
-            # Normal paragraph
-            self._render_paragraph(stripped)
-            i += 1
-
-    def _render_heading(self, text: str, level: int):
-        if level == 1:
-            self.ln(3)
-            self._colored_text(*_H1_COLOR)
-            self._set_font("B", 18)
-            self.cell(0, 12, text, align="C", new_x="LMARGIN", new_y="NEXT")
-            # underline
-            y = self.get_y()
-            self.set_draw_color(*_H1_COLOR)
-            self.set_line_width(0.5)
-            self.line(self.l_margin, y, self.w - self.r_margin, y)
-            self.ln(5)
-        elif level == 2:
-            self.ln(4)
-            self._colored_text(*_H2_COLOR)
-            self._set_font("B", 14)
-            # left accent bar
-            y = self.get_y()
-            self.set_fill_color(*_H2_COLOR)
-            self.rect(self.l_margin, y, 1.2, 7, "F")
-            self.set_x(self.l_margin + 4)
-            self.cell(0, 7, text, new_x="LMARGIN", new_y="NEXT")
-            self.ln(2)
-        else:
-            self.ln(2)
-            self._colored_text(*_H3_COLOR)
-            self._set_font("B", 12)
-            self.cell(0, 7, text, new_x="LMARGIN", new_y="NEXT")
-            self.ln(1)
-
-    def _render_list_item(self, text: str, ordered: bool):
-        self._colored_text(*_BODY_COLOR)
-        self._set_font(size=11)
-        bullet = "·  " if not ordered else ""
-        indent = self.l_margin + 6
-        self.set_x(indent)
-        self._write_rich_text(bullet + text, line_height=6)
-        self.ln(1)
-
-    def _render_paragraph(self, text: str):
-        self._colored_text(*_BODY_COLOR)
-        self._set_font(size=11)
-        # Check if it's an italic-only line (footer)
-        if text.startswith("*") and text.endswith("*") and not text.startswith("**"):
-            self._colored_text(*_MUTED_COLOR)
-            self._set_font("I", 9)
-            clean = text.strip("*").strip()
-            self.multi_cell(0, 5, clean)
-            self.ln(1)
-            return
-        self._write_rich_text(text, line_height=6)
-        self.ln(1)
-
-    def _write_rich_text(self, text: str, line_height: float = 6):
-        """Write text with **bold** inline formatting via multi_cell."""
-        # For simplicity, strip markdown bold/italic markers and render plain
-        # fpdf2 doesn't support inline style switching inside multi_cell easily,
-        # so we render bold segments by splitting.
-        segments = _split_bold_segments(text)
-        if len(segments) == 1 and not segments[0][1]:
-            # All plain text
-            self.multi_cell(0, line_height, segments[0][0])
-            return
-
-        # Mix of bold and normal — use write() for inline rendering
-        for content, is_bold in segments:
-            if is_bold:
-                self._set_font("B", 11)
+        heading_match = _HEADING_RE.match(stripped)
+        if heading_match:
+            level = len(heading_match.group(1))
+            text = _markdown_inline_to_reportlab(heading_match.group(2).strip())
+            if level == 1:
+                flowables.append(Paragraph(text, styles["h1"]))
+                flowables.append(HRFlowable(width="100%", thickness=0.8, color=_H1_COLOR))
+                flowables.append(Spacer(1, 8))
+            elif level == 2:
+                flowables.append(Paragraph(text, styles["h2"]))
             else:
-                self._set_font(size=11)
-            self.write(line_height, content)
-        self.ln(line_height)
+                flowables.append(Paragraph(text, styles["h3"]))
+            continue
+
+        ordered_match = _ORDERED_RE.match(stripped)
+        if ordered_match:
+            flowables.append(Paragraph(_markdown_inline_to_reportlab(ordered_match.group(1)), styles["list"]))
+            continue
+
+        unordered_match = _UNORDERED_RE.match(stripped)
+        if unordered_match:
+            flowables.append(Paragraph("• " + _markdown_inline_to_reportlab(unordered_match.group(1)), styles["list"]))
+            continue
+
+        if stripped.startswith("*") and stripped.endswith("*") and not stripped.startswith("**"):
+            flowables.append(Paragraph(_markdown_inline_to_reportlab(stripped.strip("*").strip()), styles["muted"]))
+            continue
+
+        flowables.append(Paragraph(_markdown_inline_to_reportlab(stripped), styles["body"]))
+    return flowables
+
+
+def _markdown_inline_to_reportlab(text: str) -> str:
+    pieces: List[str] = []
+    last_end = 0
+    for match in _BOLD_RE.finditer(text):
+        if match.start() > last_end:
+            plain = _ITALIC_RE.sub(r"\1", text[last_end : match.start()])
+            pieces.append(html.escape(plain))
+        pieces.append(f"<b>{html.escape(match.group(1))}</b>")
+        last_end = match.end()
+    if last_end < len(text):
+        remaining = _ITALIC_RE.sub(r"\1", text[last_end:])
+        pieces.append(html.escape(remaining))
+    return "".join(pieces) if pieces else html.escape(text)
 
 
 def _split_bold_segments(text: str) -> List[tuple[str, bool]]:
@@ -232,7 +335,17 @@ def generate_report_pdf(payload: Dict[str, Any]) -> bytes:
 
     markdown_text = generate_markdown_report(profile, results, report_data, timestamp)
 
-    font_path = _find_cjk_font()
-    pdf = _ReportPDF(font_path)
-    pdf.render_markdown(markdown_text)
-    return bytes(pdf.output())
+    font_name = _register_pdf_font(_find_cjk_font())
+    styles = _build_styles(font_name)
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        leftMargin=18 * mm,
+        rightMargin=18 * mm,
+        topMargin=18 * mm,
+        bottomMargin=18 * mm,
+        title="健康评估与照护行动计划",
+    )
+    doc.build(_render_markdown_to_flowables(markdown_text, styles))
+    return buffer.getvalue()
