@@ -1,5 +1,11 @@
 fastapi>=0.104.0
-edge-tts>=6.1.17
-uvicorn>=0.24.0
-python-dotenv>=1.0.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+python-dotenv>=1.2.2
 python-multipart>=0.0.6
+openai>=2.30.0
+edge-tts>=6.1.17
+google-cloud-speech>=2.35.0
+reportlab>=4.2.0
+fonttools>=4.0.0
+pypdf>=6.6.2
